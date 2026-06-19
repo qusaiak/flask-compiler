@@ -1,5 +1,10 @@
 package com.flaskcompiler;
 
+import com.flaskcompiler.ast.AstPrinter;
+import com.flaskcompiler.ast.jinja.JinjaAstBuilder;
+import com.flaskcompiler.ast.jinja.TemplateNode;
+import com.flaskcompiler.ast.python.ProgramNode;
+import com.flaskcompiler.ast.python.PythonAstBuilder;
 import com.flaskcompiler.grammar.CssLexer;
 import com.flaskcompiler.grammar.CssParser;
 import com.flaskcompiler.grammar.HtmlLexer;
@@ -11,80 +16,90 @@ import com.flaskcompiler.grammar.PythonParser;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Parser;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.Trees;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Flask Compiler entry point.
  *
- * M1: parse Python (minimal Flask subset) and print its parse tree.
- * M2: parse Jinja templates (HTML kept as embedded TEXT) and print their parse trees.
- * M3: parse a standalone HTML document (independent of Jinja) and print its parse tree.
- * M4: parse a standalone CSS stylesheet (independent of HTML/Jinja) and print its parse tree.
- * Later milestones add: AST, symbol table, semantic analysis, data transfer and code generation.
+ * M1-M4: lexers/parsers for Python, Jinja, HTML, CSS (grammar validation).
+ * M5: build and print the two AST trees -> Python AST (app.py) and Jinja AST (products.html).
  */
 public final class Main {
 
     private Main() { }
 
     public static void main(String[] args) throws Exception {
-        Path projectRoot = Paths.get("examples", "input-project");
-        Path pySource = projectRoot.resolve("app.py");
-        Path templatesDir = projectRoot.resolve("templates");
-        Path htmlSample = projectRoot.resolve("static").resolve("sample.html");
-        Path cssSample = projectRoot.resolve("static").resolve("style.css");
+        Path root = Paths.get("examples", "input-project");
+        Path appPy = root.resolve("app.py");
+        Path templates = root.resolve("templates");
+        Path productsTpl = templates.resolve("products.html");
+        Path sampleHtml = root.resolve("static").resolve("sample.html");
+        Path styleCss = root.resolve("static").resolve("style.css");
 
-        // ---- Python (M1) ----
-        banner("M1 :: Python lexer + parser");
-        System.out.println("Parsing: " + pySource.toAbsolutePath());
-        CharStream pyInput = CharStreams.fromPath(pySource);
-        PythonLexer pyLexer = new PythonLexer(pyInput);
-        PythonParser pyParser = new PythonParser(new CommonTokenStream(pyLexer));
-        report(pyParser, pyParser.file_input());
+        // ---- Grammar validation (M1-M4): parse everything, report error counts ----
+        banner("Grammar validation (M1-M4)");
+        validatePython(appPy);
+        validateJinja(templates.resolve("base.html"));
+        validateJinja(productsTpl);
+        validateJinja(templates.resolve("add_product.html"));
+        validateJinja(templates.resolve("product_details.html"));
+        validateJinja(templates.resolve("delete_product.html"));
+        validateHtml(sampleHtml);
+        validateCss(styleCss);
 
-        // ---- Jinja (M2) ----
-        banner("M2 :: Jinja lexer + parser");
-        try (Stream<Path> files = Files.list(templatesDir)) {
-            List<Path> templates = files
-                    .filter(p -> p.toString().endsWith(".html"))
-                    .sorted()
-                    .toList();
-            for (Path template : templates) {
-                System.out.println();
-                System.out.println("Parsing: " + template.getFileName());
-                System.out.println("-".repeat(60));
-                CharStream tplInput = CharStreams.fromPath(template);
-                JinjaLexer jLexer = new JinjaLexer(tplInput);
-                JinjaParser jParser = new JinjaParser(new CommonTokenStream(jLexer));
-                report(jParser, jParser.template());
-            }
-        }
+        // ---- M5: Python AST ----
+        banner("M5 :: Python AST  (source: app.py)");
+        ProgramNode program = new PythonAstBuilder().build(pythonParser(appPy).file_input());
+        AstPrinter.print("PYTHON AST:", program);
 
-        // ---- HTML (M3) ----
-        banner("M3 :: HTML lexer + parser (standalone)");
-        System.out.println("Parsing: " + htmlSample.getFileName());
-        System.out.println("-".repeat(60));
-        CharStream htmlInput = CharStreams.fromPath(htmlSample);
-        HtmlLexer htmlLexer = new HtmlLexer(htmlInput);
-        HtmlParser htmlParser = new HtmlParser(new CommonTokenStream(htmlLexer));
-        report(htmlParser, htmlParser.document());
+        // ---- M5: Jinja AST ----
+        banner("M5 :: Jinja AST  (source: products.html)");
+        TemplateNode template = new JinjaAstBuilder().build(jinjaParser(productsTpl).template());
+        AstPrinter.print("JINJA AST:", template);
+    }
 
-        // ---- CSS (M4) ----
-        banner("M4 :: CSS lexer + parser (standalone)");
-        System.out.println("Parsing: " + cssSample.getFileName());
-        System.out.println("-".repeat(60));
-        CharStream cssInput = CharStreams.fromPath(cssSample);
-        CssLexer cssLexer = new CssLexer(cssInput);
-        CssParser cssParser = new CssParser(new CommonTokenStream(cssLexer));
-        report(cssParser, cssParser.stylesheet());
+    // ---------- parser factories ----------
+    private static PythonParser pythonParser(Path file) throws Exception {
+        CharStream in = CharStreams.fromPath(file);
+        return new PythonParser(new CommonTokenStream(new PythonLexer(in)));
+    }
+
+    private static JinjaParser jinjaParser(Path file) throws Exception {
+        CharStream in = CharStreams.fromPath(file);
+        return new JinjaParser(new CommonTokenStream(new JinjaLexer(in)));
+    }
+
+    // ---------- validation helpers (parse + print error count) ----------
+    private static void validatePython(Path file) throws Exception {
+        PythonParser p = pythonParser(file);
+        p.file_input();
+        printCount(file, p.getNumberOfSyntaxErrors());
+    }
+
+    private static void validateJinja(Path file) throws Exception {
+        JinjaParser p = jinjaParser(file);
+        p.template();
+        printCount(file, p.getNumberOfSyntaxErrors());
+    }
+
+    private static void validateHtml(Path file) throws Exception {
+        CharStream in = CharStreams.fromPath(file);
+        HtmlParser p = new HtmlParser(new CommonTokenStream(new HtmlLexer(in)));
+        p.document();
+        printCount(file, p.getNumberOfSyntaxErrors());
+    }
+
+    private static void validateCss(Path file) throws Exception {
+        CharStream in = CharStreams.fromPath(file);
+        CssParser p = new CssParser(new CommonTokenStream(new CssLexer(in)));
+        p.stylesheet();
+        printCount(file, p.getNumberOfSyntaxErrors());
+    }
+
+    private static void printCount(Path file, int errors) {
+        System.out.printf("  %-24s %d syntax error(s)%n", file.getFileName(), errors);
     }
 
     private static void banner(String title) {
@@ -92,27 +107,5 @@ public final class Main {
         System.out.println("=".repeat(60));
         System.out.println(title);
         System.out.println("=".repeat(60));
-    }
-
-    private static void report(Parser parser, ParseTree tree) {
-        int errors = parser.getNumberOfSyntaxErrors();
-        System.out.println("Syntax errors: " + errors);
-        System.out.println("PARSE TREE:");
-        System.out.print(prettyTree(tree, parser, 0));
-        if (errors > 0) {
-            System.exit(1);
-        }
-    }
-
-    /** Indented, human-readable parse-tree printer. */
-    private static String prettyTree(ParseTree tree, Parser parser, int depth) {
-        StringBuilder sb = new StringBuilder();
-        String text = Trees.getNodeText(tree, Arrays.asList(parser.getRuleNames()));
-        String trimmed = text.replace("\r", "\\r").replace("\n", "\\n");
-        sb.append("  ".repeat(depth)).append(trimmed).append(System.lineSeparator());
-        for (int i = 0; i < tree.getChildCount(); i++) {
-            sb.append(prettyTree(tree.getChild(i), parser, depth + 1));
-        }
-        return sb.toString();
     }
 }
