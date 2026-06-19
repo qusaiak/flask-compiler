@@ -4,10 +4,16 @@ import com.flaskcompiler.ast.jinja.JinjaAstBuilder;
 import com.flaskcompiler.ast.jinja.TemplateNode;
 import com.flaskcompiler.ast.python.ProgramNode;
 import com.flaskcompiler.ast.python.PythonAstBuilder;
+import com.flaskcompiler.codegen.FlaskGenerator;
 import com.flaskcompiler.grammar.JinjaLexer;
 import com.flaskcompiler.grammar.JinjaParser;
 import com.flaskcompiler.grammar.PythonLexer;
 import com.flaskcompiler.grammar.PythonParser;
+import com.flaskcompiler.semantic.SemanticAnalyzer;
+import com.flaskcompiler.semantic.SemanticError;
+import com.flaskcompiler.symbol.JinjaSymbolCollector;
+import com.flaskcompiler.symbol.PythonSymbolCollector;
+import com.flaskcompiler.symbol.SymbolTable;
 import com.flaskcompiler.transfer.BoundTemplate;
 import com.flaskcompiler.transfer.ContextModel;
 import com.flaskcompiler.transfer.DataExtractor;
@@ -16,15 +22,19 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Stream;
 
 /**
- * Flask Compiler entry point.
- *
- * M1-M4: lexers/parsers. M5: ASTs. M6: symbol tables. M7: semantic analysis.
- * M8: Python -> Jinja data transfer (DataExtractor -> ContextModel -> JinjaContextBinder -> BoundTemplate).
+ * Flask Compiler - full pipeline:
+ *   Input -> Lexer -> Parser -> AST -> Symbol Table -> Semantic Analysis
+ *         -> Data Transfer -> Code Generation -> Generated Flask Project
  */
 public final class Main {
 
@@ -33,47 +43,56 @@ public final class Main {
     public static void main(String[] args) throws Exception {
         Path root = Paths.get("examples", "input-project");
         Path appPy = root.resolve("app.py");
-        Path productsTpl = root.resolve("templates").resolve("products.html");
+        Path templatesDir = root.resolve("templates");
+        Path productsTpl = templatesDir.resolve("products.html");
+        Path outDir = Paths.get("generated");
 
-        ProgramNode program = new PythonAstBuilder().build(pythonParser(appPy).file_input());
+        banner("Flask Compiler pipeline");
 
-        // ---- Extract data contexts from Python ----
-        banner("M8 :: Data extraction (Python render_template calls)");
-        List<ContextModel> models = new DataExtractor().extract(program);
-        for (ContextModel m : models) {
-            System.out.println();
-            System.out.println(m.getRouteName() + "  ->  render_template(\"" + m.getTemplateName() + "\")");
-            if (m.getVariables().isEmpty()) {
-                System.out.println("  (no variables)");
-            }
-            m.getVariables().forEach((k, v) ->
-                    System.out.println("  " + k + " -> " + BoundTemplate.describe(v)));
+        // 1) Lexer + Parser
+        PythonParser pythonParser = pythonParser(appPy);
+        JinjaParser jinjaParser = jinjaParser(productsTpl);
+        System.out.println("[1] Lexer + Parser     : app.py, products.html parsed");
+
+        // 2) AST
+        ProgramNode program = new PythonAstBuilder().build(pythonParser.file_input());
+        TemplateNode template = new JinjaAstBuilder().build(jinjaParser.template());
+        System.out.println("[2] AST                : Python AST + Jinja AST built");
+
+        // 3) Symbol tables
+        SymbolTable pyTable = new PythonSymbolCollector().collect(program);
+        SymbolTable jinjaTable = new JinjaSymbolCollector().collect(template, "products.html");
+        System.out.println("[3] Symbol Table       : Python + Jinja symbol tables built");
+
+        // 4) Semantic analysis
+        Set<String> knownTemplates = listTemplates(templatesDir);
+        SemanticAnalyzer analyzer = new SemanticAnalyzer();
+        List<SemanticError> errors = analyzer.analyze(program, null, pyTable, null, knownTemplates, null, null);
+        errors.addAll(analyzer.analyze(null, template, null, jinjaTable, null,
+                Set.of("products"), Map.of("products", "list")));
+        System.out.println("[4] Semantic Analysis  : " + errors.size() + " error(s)");
+        if (!errors.isEmpty()) {
+            errors.forEach(System.out::println);
+            System.out.println("Aborting code generation due to semantic errors.");
+            return;
         }
 
-        // ---- Bind the products array into products.html ----
-        ContextModel productsModel = models.stream()
+        // 5) Data transfer
+        List<ContextModel> contexts = new DataExtractor().extract(program);
+        ContextModel productsModel = contexts.stream()
                 .filter(m -> "products.html".equals(m.getTemplateName()))
-                .findFirst()
-                .orElseThrow();
+                .findFirst().orElseThrow();
+        BoundTemplate bound = new JinjaContextBinder().bind(productsModel, template);
+        System.out.println("[5] Data Transfer      : products -> "
+                + BoundTemplate.describe(bound.getContext().get("products")));
 
-        TemplateNode productsTemplate = new JinjaAstBuilder().build(jinjaParser(productsTpl).template());
-        BoundTemplate bound = new JinjaContextBinder().bind(productsModel, productsTemplate);
+        // 6) Code generation
+        FlaskGenerator generator = new FlaskGenerator();
+        generator.generate(outDir, program, template, bound);
+        System.out.println("[6] Code Generation    : Flask project written to " + outDir + "/");
 
-        banner("M8 :: Transfer chain");
-        System.out.println("app.py");
-        System.out.println("  v");
-        System.out.println("products = [ ... ]            (" + BoundTemplate.describe(productsModel.getVariables().get("products")) + ")");
-        System.out.println("  v");
-        System.out.println("render_template(\"products.html\", products=products)   [route: " + productsModel.getRouteName() + "]");
-        System.out.println("  v");
-        System.out.println("products.html");
-        for (String node : bound.getBoundNodes()) {
-            System.out.println("  v");
-            System.out.println(node);
-        }
-
-        banner("M8 :: Binding");
-        bound.printBinding(productsModel.getTemplateName());
+        banner("Generated project");
+        generator.printGeneratedFiles(outDir);
     }
 
     private static PythonParser pythonParser(Path file) throws Exception {
@@ -84,6 +103,15 @@ public final class Main {
     private static JinjaParser jinjaParser(Path file) throws Exception {
         CharStream in = CharStreams.fromPath(file);
         return new JinjaParser(new CommonTokenStream(new JinjaLexer(in)));
+    }
+
+    private static Set<String> listTemplates(Path dir) throws Exception {
+        Set<String> names = new TreeSet<>();
+        try (Stream<Path> files = Files.list(dir)) {
+            files.filter(p -> p.toString().endsWith(".html"))
+                 .forEach(p -> names.add(p.getFileName().toString()));
+        }
+        return names;
     }
 
     private static void banner(String title) {
