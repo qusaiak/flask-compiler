@@ -1,5 +1,7 @@
 package com.flaskcompiler;
 
+import com.flaskcompiler.grammar.HtmlLexer;
+import com.flaskcompiler.grammar.HtmlParser;
 import com.flaskcompiler.grammar.JinjaLexer;
 import com.flaskcompiler.grammar.JinjaParser;
 import com.flaskcompiler.grammar.PythonLexer;
@@ -23,7 +25,8 @@ import java.util.stream.Stream;
  *
  * M1: parse Python (minimal Flask subset) and print its parse tree.
  * M2: parse Jinja templates (HTML kept as embedded TEXT) and print their parse trees.
- * Later milestones add: HTML/CSS grammars, AST, symbol table, semantic analysis,
+ * M3: parse a standalone HTML document (independent of Jinja) and print its parse tree.
+ * Later milestones add: CSS grammar, AST, symbol table, semantic analysis,
  * data transfer and Flask code generation.
  */
 public final class Main {
@@ -34,6 +37,7 @@ public final class Main {
         Path projectRoot = Paths.get("examples", "input-project");
         Path pySource = projectRoot.resolve("app.py");
         Path templatesDir = projectRoot.resolve("templates");
+        Path htmlSample = projectRoot.resolve("static").resolve("sample.html");
 
         // ---- Python (M1) ----
         banner("M1 :: Python lexer + parser");
@@ -41,8 +45,7 @@ public final class Main {
         CharStream pyInput = CharStreams.fromPath(pySource);
         PythonLexer pyLexer = new PythonLexer(pyInput);
         PythonParser pyParser = new PythonParser(new CommonTokenStream(pyLexer));
-        ParseTree pyTree = pyParser.file_input();
-        report(pyParser, pyTree);
+        report(pyParser, pyParser.file_input());
 
         // ---- Jinja (M2) ----
         banner("M2 :: Jinja lexer + parser");
@@ -58,10 +61,18 @@ public final class Main {
                 CharStream tplInput = CharStreams.fromPath(template);
                 JinjaLexer jLexer = new JinjaLexer(tplInput);
                 JinjaParser jParser = new JinjaParser(new CommonTokenStream(jLexer));
-                ParseTree jTree = jParser.template();
-                report(jParser, jTree);
+                report(jParser, jParser.template());
             }
         }
+
+        // ---- HTML (M3) ----
+        banner("M3 :: HTML lexer + parser (standalone)");
+        System.out.println("Parsing: " + htmlSample.getFileName());
+        System.out.println("-".repeat(60));
+        CharStream htmlInput = CharStreams.fromPath(htmlSample);
+        HtmlLexer htmlLexer = new HtmlLexer(htmlInput);
+        HtmlParser htmlParser = new HtmlParser(new CommonTokenStream(htmlLexer));
+        report(htmlParser, htmlParser.document());
     }
 
     private static void banner(String title) {

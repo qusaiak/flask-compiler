@@ -1,0 +1,32 @@
+<html>
+<head></head>
+<body>
+<div>
+<ul>
+<li><a href="/">Home</a></li>
+<li><a href="/products">Products</a></li>
+<li><a href="/add">Add Product</a></li>
+</ul>
+</div>
+<div>
+<p>Product List</p>
+<ul>
+<li><span>Laptop</span><img src="/static/laptop.png" /></li>
+<li><span>Phone</span><img src="/static/phone.png" /></li>
+</ul>
+</div>
+<div>
+<form action="/add" method="post">
+<input type="text" name="name" />
+<input type="text" name="price" />
+<button type="submit">Add</button>
+</form>
+</div>
+<div>
+<p>Product Details</p>
+<span>Name: Laptop</span>
+<span>Price: 1200</span>
+<a href="/delete">Delete</a>
+</div>
+</body>
+</html>
