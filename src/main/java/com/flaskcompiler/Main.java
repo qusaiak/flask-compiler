@@ -1,18 +1,15 @@
 package com.flaskcompiler;
 
-import com.flaskcompiler.ast.AstPrinter;
 import com.flaskcompiler.ast.jinja.JinjaAstBuilder;
 import com.flaskcompiler.ast.jinja.TemplateNode;
 import com.flaskcompiler.ast.python.ProgramNode;
 import com.flaskcompiler.ast.python.PythonAstBuilder;
-import com.flaskcompiler.grammar.CssLexer;
-import com.flaskcompiler.grammar.CssParser;
-import com.flaskcompiler.grammar.HtmlLexer;
-import com.flaskcompiler.grammar.HtmlParser;
 import com.flaskcompiler.grammar.JinjaLexer;
 import com.flaskcompiler.grammar.JinjaParser;
 import com.flaskcompiler.grammar.PythonLexer;
 import com.flaskcompiler.grammar.PythonParser;
+import com.flaskcompiler.semantic.SemanticAnalyzer;
+import com.flaskcompiler.semantic.SemanticError;
 import com.flaskcompiler.symbol.JinjaSymbolCollector;
 import com.flaskcompiler.symbol.PythonSymbolCollector;
 import com.flaskcompiler.symbol.SymbolTable;
@@ -20,15 +17,20 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Stream;
 
 /**
  * Flask Compiler entry point.
  *
- * M1-M4: lexers/parsers for Python, Jinja, HTML, CSS (grammar validation).
- * M5: build and print the two AST trees (Python AST, Jinja AST).
- * M6: build and print the two symbol tables (Python, Jinja). No semantic analysis.
+ * M1-M4: lexers/parsers. M5: ASTs. M6: symbol tables.
+ * M7: semantic analysis over AST + symbol tables (5 checks + bonus).
  */
 public final class Main {
 
@@ -37,39 +39,64 @@ public final class Main {
     public static void main(String[] args) throws Exception {
         Path root = Paths.get("examples", "input-project");
         Path appPy = root.resolve("app.py");
-        Path templates = root.resolve("templates");
-        Path productsTpl = templates.resolve("products.html");
-        Path sampleHtml = root.resolve("static").resolve("sample.html");
-        Path styleCss = root.resolve("static").resolve("style.css");
+        Path templatesDir = root.resolve("templates");
+        Path productsTpl = templatesDir.resolve("products.html");
+        Path errors = Paths.get("examples", "errors");
 
-        // ---- Grammar validation (M1-M4) ----
-        banner("Grammar validation (M1-M4)");
-        validatePython(appPy);
-        validateJinja(templates.resolve("base.html"));
-        validateJinja(productsTpl);
-        validateJinja(templates.resolve("add_product.html"));
-        validateJinja(templates.resolve("product_details.html"));
-        validateJinja(templates.resolve("delete_product.html"));
-        validateHtml(sampleHtml);
-        validateCss(styleCss);
+        Set<String> knownTemplates = listTemplates(templatesDir);
+        SemanticAnalyzer analyzer = new SemanticAnalyzer();
 
-        // ---- M5: ASTs ----
+        // ===== Clean project (expect 0 errors) =====
+        banner("M7 :: Semantic analysis - clean project");
         ProgramNode program = new PythonAstBuilder().build(pythonParser(appPy).file_input());
-        TemplateNode template = new JinjaAstBuilder().build(jinjaParser(productsTpl).template());
+        SymbolTable pyTable = new PythonSymbolCollector().collect(program);
+        List<SemanticError> e1 = analyzer.analyze(program, null, pyTable, null, knownTemplates, null, null);
 
-        banner("M5 :: Python AST  (source: app.py)");
-        AstPrinter.print("PYTHON AST:", program);
-        banner("M5 :: Jinja AST  (source: products.html)");
-        AstPrinter.print("JINJA AST:", template);
+        TemplateNode products = new JinjaAstBuilder().build(jinjaParser(productsTpl).template());
+        SymbolTable jinjaTable = new JinjaSymbolCollector().collect(products, "products.html");
+        // context derived for products.html: render_template("products.html", products=products), products is a list
+        List<SemanticError> e2 = analyzer.analyze(null, products, null, jinjaTable, null,
+                Set.of("products"), Map.of("products", "list"));
+        reportErrors("app.py + products.html", concat(e1, e2));
 
-        // ---- M6: Symbol tables ----
-        banner("M6 :: Python symbol table  (source: app.py)");
-        SymbolTable pythonSymbols = new PythonSymbolCollector().collect(program);
-        pythonSymbols.print();
+        // ===== Error examples (each expected to produce its targeted error) =====
+        banner("M7 :: Semantic analysis - error examples");
+        analyzePython(analyzer, errors.resolve("undefined_variable.py"), knownTemplates);
+        analyzePython(analyzer, errors.resolve("duplicate_route.py"), knownTemplates);
+        analyzePython(analyzer, errors.resolve("missing_template.py"), knownTemplates);
+        analyzeJinja(analyzer, errors.resolve("invalid_jinja_variable.html"));
+        analyzeJinja(analyzer, errors.resolve("invalid_loop.html"));
+    }
 
-        banner("M6 :: Jinja symbol table  (source: products.html)");
-        SymbolTable jinjaSymbols = new JinjaSymbolCollector().collect(template, "products.html");
-        jinjaSymbols.print();
+    // ---------- error-file drivers ----------
+    private static void analyzePython(SemanticAnalyzer analyzer, Path file, Set<String> knownTemplates) throws Exception {
+        ProgramNode ast = new PythonAstBuilder().build(pythonParser(file).file_input());
+        SymbolTable table = new PythonSymbolCollector().collect(ast);
+        List<SemanticError> errs = analyzer.analyze(ast, null, table, null, knownTemplates, null, null);
+        reportErrors(file.getFileName().toString(), errs);
+    }
+
+    private static void analyzeJinja(SemanticAnalyzer analyzer, Path file) throws Exception {
+        TemplateNode ast = new JinjaAstBuilder().build(jinjaParser(file).template());
+        SymbolTable table = new JinjaSymbolCollector().collect(ast, file.getFileName().toString());
+        // standalone templates: no Python context is supplied
+        List<SemanticError> errs = analyzer.analyze(null, ast, null, table, null, Set.of(), Map.of());
+        reportErrors(file.getFileName().toString(), errs);
+    }
+
+    // ---------- reporting ----------
+    private static void reportErrors(String label, List<SemanticError> errors) {
+        System.out.println();
+        System.out.println(">> " + label + "  ->  " + errors.size() + " error(s)");
+        for (SemanticError e : errors) {
+            System.out.println(e);
+        }
+    }
+
+    private static List<SemanticError> concat(List<SemanticError> a, List<SemanticError> b) {
+        java.util.List<SemanticError> all = new java.util.ArrayList<>(a);
+        all.addAll(b);
+        return all;
     }
 
     // ---------- parser factories ----------
@@ -83,35 +110,13 @@ public final class Main {
         return new JinjaParser(new CommonTokenStream(new JinjaLexer(in)));
     }
 
-    // ---------- validation helpers ----------
-    private static void validatePython(Path file) throws Exception {
-        PythonParser p = pythonParser(file);
-        p.file_input();
-        printCount(file, p.getNumberOfSyntaxErrors());
-    }
-
-    private static void validateJinja(Path file) throws Exception {
-        JinjaParser p = jinjaParser(file);
-        p.template();
-        printCount(file, p.getNumberOfSyntaxErrors());
-    }
-
-    private static void validateHtml(Path file) throws Exception {
-        CharStream in = CharStreams.fromPath(file);
-        HtmlParser p = new HtmlParser(new CommonTokenStream(new HtmlLexer(in)));
-        p.document();
-        printCount(file, p.getNumberOfSyntaxErrors());
-    }
-
-    private static void validateCss(Path file) throws Exception {
-        CharStream in = CharStreams.fromPath(file);
-        CssParser p = new CssParser(new CommonTokenStream(new CssLexer(in)));
-        p.stylesheet();
-        printCount(file, p.getNumberOfSyntaxErrors());
-    }
-
-    private static void printCount(Path file, int errors) {
-        System.out.printf("  %-24s %d syntax error(s)%n", file.getFileName(), errors);
+    private static Set<String> listTemplates(Path dir) throws Exception {
+        Set<String> names = new TreeSet<>();
+        try (Stream<Path> files = Files.list(dir)) {
+            files.filter(p -> p.toString().endsWith(".html"))
+                 .forEach(p -> names.add(p.getFileName().toString()));
+        }
+        return names;
     }
 
     private static void banner(String title) {
