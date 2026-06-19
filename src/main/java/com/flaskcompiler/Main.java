@@ -1,5 +1,7 @@
 package com.flaskcompiler;
 
+import com.flaskcompiler.grammar.CssLexer;
+import com.flaskcompiler.grammar.CssParser;
 import com.flaskcompiler.grammar.HtmlLexer;
 import com.flaskcompiler.grammar.HtmlParser;
 import com.flaskcompiler.grammar.JinjaLexer;
@@ -26,8 +28,8 @@ import java.util.stream.Stream;
  * M1: parse Python (minimal Flask subset) and print its parse tree.
  * M2: parse Jinja templates (HTML kept as embedded TEXT) and print their parse trees.
  * M3: parse a standalone HTML document (independent of Jinja) and print its parse tree.
- * Later milestones add: CSS grammar, AST, symbol table, semantic analysis,
- * data transfer and Flask code generation.
+ * M4: parse a standalone CSS stylesheet (independent of HTML/Jinja) and print its parse tree.
+ * Later milestones add: AST, symbol table, semantic analysis, data transfer and code generation.
  */
 public final class Main {
 
@@ -38,6 +40,7 @@ public final class Main {
         Path pySource = projectRoot.resolve("app.py");
         Path templatesDir = projectRoot.resolve("templates");
         Path htmlSample = projectRoot.resolve("static").resolve("sample.html");
+        Path cssSample = projectRoot.resolve("static").resolve("style.css");
 
         // ---- Python (M1) ----
         banner("M1 :: Python lexer + parser");
@@ -73,6 +76,15 @@ public final class Main {
         HtmlLexer htmlLexer = new HtmlLexer(htmlInput);
         HtmlParser htmlParser = new HtmlParser(new CommonTokenStream(htmlLexer));
         report(htmlParser, htmlParser.document());
+
+        // ---- CSS (M4) ----
+        banner("M4 :: CSS lexer + parser (standalone)");
+        System.out.println("Parsing: " + cssSample.getFileName());
+        System.out.println("-".repeat(60));
+        CharStream cssInput = CharStreams.fromPath(cssSample);
+        CssLexer cssLexer = new CssLexer(cssInput);
+        CssParser cssParser = new CssParser(new CommonTokenStream(cssLexer));
+        report(cssParser, cssParser.stylesheet());
     }
 
     private static void banner(String title) {
