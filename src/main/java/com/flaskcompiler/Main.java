@@ -13,6 +13,9 @@ import com.flaskcompiler.grammar.JinjaLexer;
 import com.flaskcompiler.grammar.JinjaParser;
 import com.flaskcompiler.grammar.PythonLexer;
 import com.flaskcompiler.grammar.PythonParser;
+import com.flaskcompiler.symbol.JinjaSymbolCollector;
+import com.flaskcompiler.symbol.PythonSymbolCollector;
+import com.flaskcompiler.symbol.SymbolTable;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -24,7 +27,8 @@ import java.nio.file.Paths;
  * Flask Compiler entry point.
  *
  * M1-M4: lexers/parsers for Python, Jinja, HTML, CSS (grammar validation).
- * M5: build and print the two AST trees -> Python AST (app.py) and Jinja AST (products.html).
+ * M5: build and print the two AST trees (Python AST, Jinja AST).
+ * M6: build and print the two symbol tables (Python, Jinja). No semantic analysis.
  */
 public final class Main {
 
@@ -38,7 +42,7 @@ public final class Main {
         Path sampleHtml = root.resolve("static").resolve("sample.html");
         Path styleCss = root.resolve("static").resolve("style.css");
 
-        // ---- Grammar validation (M1-M4): parse everything, report error counts ----
+        // ---- Grammar validation (M1-M4) ----
         banner("Grammar validation (M1-M4)");
         validatePython(appPy);
         validateJinja(templates.resolve("base.html"));
@@ -49,15 +53,23 @@ public final class Main {
         validateHtml(sampleHtml);
         validateCss(styleCss);
 
-        // ---- M5: Python AST ----
-        banner("M5 :: Python AST  (source: app.py)");
+        // ---- M5: ASTs ----
         ProgramNode program = new PythonAstBuilder().build(pythonParser(appPy).file_input());
-        AstPrinter.print("PYTHON AST:", program);
-
-        // ---- M5: Jinja AST ----
-        banner("M5 :: Jinja AST  (source: products.html)");
         TemplateNode template = new JinjaAstBuilder().build(jinjaParser(productsTpl).template());
+
+        banner("M5 :: Python AST  (source: app.py)");
+        AstPrinter.print("PYTHON AST:", program);
+        banner("M5 :: Jinja AST  (source: products.html)");
         AstPrinter.print("JINJA AST:", template);
+
+        // ---- M6: Symbol tables ----
+        banner("M6 :: Python symbol table  (source: app.py)");
+        SymbolTable pythonSymbols = new PythonSymbolCollector().collect(program);
+        pythonSymbols.print();
+
+        banner("M6 :: Jinja symbol table  (source: products.html)");
+        SymbolTable jinjaSymbols = new JinjaSymbolCollector().collect(template, "products.html");
+        jinjaSymbols.print();
     }
 
     // ---------- parser factories ----------
@@ -71,7 +83,7 @@ public final class Main {
         return new JinjaParser(new CommonTokenStream(new JinjaLexer(in)));
     }
 
-    // ---------- validation helpers (parse + print error count) ----------
+    // ---------- validation helpers ----------
     private static void validatePython(Path file) throws Exception {
         PythonParser p = pythonParser(file);
         p.file_input();
