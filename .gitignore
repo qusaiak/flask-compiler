@@ -32,3 +32,10 @@ __pycache__/
 
 # IDE
 .idea/
+
+# Generated Flask project
+generated/
+.devin/
+
+# IntelliJ IDEA project files
+*.iml
