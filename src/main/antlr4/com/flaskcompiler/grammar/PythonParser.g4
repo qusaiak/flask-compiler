@@ -1,127 +1,192 @@
-parser grammar PythonParser;
+parser grammar pythonParser;
 
-options { tokenVocab=PythonLexer; }
+options { tokenVocab = pythonLexer; }
 
-// Entry point: a Python module (minimal Flask subset)
-file_input
-    : (NEWLINE | statement)* EOF
-    ;
+program : (NEWLINE | statement)* EOF ;
 
 statement
-    : import_stmt
-    | function_def
-    | simple_stmt
+    : simpleStmt (NEWLINE | EOF)
+    | compoundStmt
+    ;
+simpleStmt
+    : importStmt
+    | fromImportStmt
+    | assignStmt
+    | augAssignStmt
+    | returnStmt
+    | deleteStmt
+    | assertStmt
+    | globalStmt
+    | nonlocalStmt
+    | passStmt
+    | breakStmt
+    | continueStmt
+    | raiseStmt
+    | yieldStmt
+    | exprStmt
     ;
 
-// --- imports ---
-import_stmt
-    : FROM dotted_name IMPORT import_list NEWLINE
-    | IMPORT dotted_name NEWLINE
+importStmt     : KW_IMPORT dottedName (COMMA dottedName)* ;
+fromImportStmt : KW_FROM dottedName KW_IMPORT importNames ;
+importNames    : STAR | importName (COMMA importName)* ;
+importName     : IDENT (KW_AS IDENT)? ;
+dottedName     : IDENT (DOT IDENT)* ;
+
+assignStmt    : target (EQ target)* EQ expression ;
+augAssignStmt : target AUGASSIGN expression ;
+target        : IDENT (DOT IDENT | LBRACKET expression RBRACKET)* ;
+
+returnStmt   : KW_RETURN   expression? ;
+deleteStmt   : KW_DEL      target (COMMA target)* ;
+assertStmt   : KW_ASSERT   expression (COMMA expression)? ;
+globalStmt   : KW_GLOBAL   IDENT (COMMA IDENT)* ;
+nonlocalStmt : KW_NONLOCAL IDENT (COMMA IDENT)* ;
+passStmt     : KW_PASS     ;
+breakStmt    : KW_BREAK    ;
+continueStmt : KW_CONTINUE ;
+raiseStmt    : KW_RAISE    expression (KW_FROM expression)? ;
+yieldStmt    : KW_YIELD    expression? ;
+exprStmt     : expression  ;
+
+compoundStmt
+    : funcDef
+    | asyncFuncDef
+    | classDef
+    | ifStmt
+    | forStmt
+    | whileStmt
+    | withStmt
+    | tryStmt
+    | decoratedDef
     ;
 
-import_list
-    : NAME (COMMA NAME)*
-    | STAR
+decoratedDef : decorator+ (funcDef | asyncFuncDef | classDef) ;
+decorator    : AT dottedName (LPAREN argList? RPAREN)? NEWLINE ;
+
+funcDef
+    : KW_DEF IDENT LPAREN paramList? RPAREN
+      (ARROW expression)? COLON suite
     ;
 
-dotted_name
-    : NAME (DOT NAME)*
+asyncFuncDef
+    : KW_ASYNC KW_DEF IDENT LPAREN paramList? RPAREN
+      (ARROW expression)? COLON suite
     ;
 
-// --- function / route definitions ---
-function_def
-    : decorator* DEF NAME parameters COLON suite
+paramList
+    : param (COMMA param)*
+      (COMMA STAR IDENT? (COMMA kwParam)*)?
+      (COMMA DOUBLESTAR IDENT)? COMMA?
+    | STAR IDENT? (COMMA kwParam)* (COMMA DOUBLESTAR IDENT)? COMMA?
+    | DOUBLESTAR IDENT COMMA?
+    ;
+param   : IDENT (COLON expression)? (EQ expression)? ;
+kwParam : IDENT (COLON expression)? (EQ expression)? ;
+
+classDef : KW_CLASS IDENT (LPAREN baseList? RPAREN)? COLON suite ;
+baseList : IDENT (COMMA IDENT)* ;
+
+ifStmt
+    : KW_IF expression COLON suite
+      (KW_ELIF expression COLON suite)*
+      (KW_ELSE COLON suite)?
     ;
 
-decorator
-    : AT dotted_name (OPEN_PAREN arglist? CLOSE_PAREN)? NEWLINE
+forStmt
+    : KW_FOR target KW_IN expression COLON suite
+      (KW_ELSE COLON suite)?
     ;
 
-parameters
-    : OPEN_PAREN param_list? CLOSE_PAREN
+whileStmt
+    : KW_WHILE expression COLON suite
+      (KW_ELSE COLON suite)?
     ;
 
-param_list
-    : NAME (COMMA NAME)*
+withStmt : KW_WITH withItem (COMMA withItem)* COLON suite ;
+withItem : expression (KW_AS target)? ;
+
+tryStmt
+    : KW_TRY COLON suite
+      exceptClause+
+      (KW_ELSE    COLON suite)?
+      (KW_FINALLY COLON suite)?
+    | KW_TRY COLON suite
+      KW_FINALLY COLON suite
+    ;
+exceptClause
+    : KW_EXCEPT (expression (KW_AS IDENT)?)? COLON suite
     ;
 
 suite
-    : simple_stmt
-    | NEWLINE INDENT statement+ DEDENT
+    : NEWLINE INDENT (NEWLINE | statement)+ DEDENT
     ;
 
-// --- simple statements ---
-simple_stmt
-    : small_stmt NEWLINE
+expression
+    : lambdaExpr
+    | orExpr (KW_IF orExpr KW_ELSE orExpr)?
     ;
 
-small_stmt
-    : assignment
-    | return_stmt
-    | expr
+lambdaExpr : KW_LAMBDA paramList? COLON expression ;
+
+orExpr  : andExpr (KW_OR  andExpr)* ;
+andExpr : notExpr (KW_AND notExpr)* ;
+notExpr : KW_NOT notExpr | comparison ;
+
+comparison : arith (compOp arith)* ;
+compOp
+    : EQEQ | NEQ | LT | GT | LTE | GTE
+    | KW_IN | KW_NOT KW_IN
+    | KW_IS | KW_IS  KW_NOT
     ;
 
-assignment
-    : NAME ASSIGN expr
-    ;
-
-return_stmt
-    : RETURN expr?
-    ;
-
-// --- expressions (simple) ---
-expr
-    : additive
-    ;
-
-additive
-    : multiplicative ((PLUS | MINUS) multiplicative)*
-    ;
-
-multiplicative
-    : postfix ((STAR | SLASH) postfix)*
-    ;
-
-postfix
-    : atom trailer*
-    ;
+arith  : term   ((PLUS  | MINUS) term)*   ;
+term   : factor ((STAR | SLASH | DOUBLESLASH | PERCENT) factor)* ;
+factor : (PLUS | MINUS | TILDE) factor | power ;
+power  : awaitExpr (DOUBLESTAR factor)? ;
+awaitExpr : KW_AWAIT? atom trailer* ;
 
 trailer
-    : DOT NAME
-    | OPEN_PAREN arglist? CLOSE_PAREN
-    | OPEN_BRACK expr CLOSE_BRACK
+    : LPAREN argList? RPAREN
+    | LBRACKET expression RBRACKET
+    | DOT IDENT
     ;
 
 atom
-    : OPEN_PAREN expr CLOSE_PAREN
-    | list_literal
-    | dict_literal
-    | NAME
-    | STRING+
-    | FLOAT_NUMBER
-    | INTEGER
-    | TRUE
-    | FALSE
-    | NONE
+    : IDENT | NUMBER | STRING+
+    | TRUE  | FALSE  | NONE | ELLIPSIS
+    | LPAREN expression RPAREN
+    | LBRACKET listContent? RBRACKET
+    | LBRACE dictContent? RBRACE
     ;
 
-list_literal
-    : OPEN_BRACK (expr (COMMA expr)* COMMA?)? CLOSE_BRACK
+listContent
+    : expression compFor+                        # comprehension
+    | expression (COMMA expression)* COMMA?     # literal
     ;
 
-dict_literal
-    : OPEN_BRACE (dict_entry (COMMA dict_entry)* COMMA?)? CLOSE_BRACE
+dictContent
+    : dictItem compFor+                          # dictComprehension
+    | dictItem (COMMA dictItem)* COMMA?          # dictLiteral
     ;
 
-dict_entry
-    : expr COLON expr
+compFor
+    : KW_FOR target KW_IN orExpr (compIf)*
     ;
 
-arglist
+compIf
+    : KW_IF orExpr
+    ;
+
+dictItem
+    : expression COLON expression
+    ;
+
+argList
     : argument (COMMA argument)* COMMA?
     ;
 
 argument
-    : NAME ASSIGN expr
-    | expr
+    : (IDENT EQ)? expression
+    | STAR expression
+    | DOUBLESTAR expression
     ;

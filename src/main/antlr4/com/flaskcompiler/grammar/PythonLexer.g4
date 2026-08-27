@@ -1,129 +1,169 @@
-lexer grammar PythonLexer;
-
-tokens { INDENT, DEDENT }
+lexer grammar pythonLexer;
+@lexer::header { package org.example.gen.python; }
 
 @lexer::members {
-    // Buffer of extra tokens (INDENT/DEDENT/NEWLINE) to emit.
-    private final java.util.LinkedList<Token> pendingTokens = new java.util.LinkedList<>();
-    // Indentation level stack.
-    private final java.util.Deque<Integer> indents = new java.util.ArrayDeque<>();
-    // Depth of () [] {} so newlines inside brackets are ignored.
-    private int opened = 0;
+
+    private final java.util.Deque<Integer> indentStack =
+        new java.util.ArrayDeque<>();
+    private final java.util.Queue<org.antlr.v4.runtime.Token> pending =
+        new java.util.LinkedList<>();
+
+    private int openBrackets = 0;
+
+    { indentStack.push(0); }
 
     @Override
-    public void emit(Token t) {
-        super.setToken(t);
-        pendingTokens.offer(t);
-    }
-
-    @Override
-    public Token nextToken() {
-        if (_input.LA(1) == EOF && !indents.isEmpty()) {
-            for (int i = pendingTokens.size() - 1; i >= 0; i--) {
-                if (pendingTokens.get(i).getType() == EOF) {
-                    pendingTokens.remove(i);
-                }
-            }
-            emit(makeToken(NEWLINE, "\n"));
-            while (!indents.isEmpty()) {
-                emit(makeToken(DEDENT, ""));
-                indents.pop();
-            }
-            emit(makeToken(EOF, "<EOF>"));
+    public org.antlr.v4.runtime.Token nextToken() {
+        if (!pending.isEmpty()) return pending.poll();
+        org.antlr.v4.runtime.Token t = super.nextToken();
+        if (t.getType() == EOF) {
+            emitRemainingDedents();
         }
-        Token next = super.nextToken();
-        return pendingTokens.isEmpty() ? next : pendingTokens.poll();
-    }
-
-    private Token makeToken(int type, String text) {
-        int stop = getCharIndex() - 1;
-        int start = text.isEmpty() ? stop : stop - text.length() + 1;
-        return new CommonToken(_tokenFactorySourcePair, type, DEFAULT_TOKEN_CHANNEL, start, stop);
-    }
-
-    private static int indentWidth(String spaces) {
-        int count = 0;
-        for (char ch : spaces.toCharArray()) {
-            count += (ch == '\t') ? 8 - (count % 8) : 1;
+        if (!pending.isEmpty()) {
+            pending.add(t);
+            return pending.poll();
         }
-        return count;
+        return t;
     }
 
-    private boolean atStartOfInput() {
-        return getCharPositionInLine() == 0 && getLine() == 1;
+    private void handleNewline() {
+        // 1. لو داخل أقواس — تجاهل NEWLINE/INDENT/DEDENT كلياً
+        if (openBrackets > 0) return;
+
+        // 2. ✅ الإصلاح: لو السطر فارغ أو مجرد تعليق — لا تقم بتوليد أي INDENT/DEDENT/NEWLINE
+        int nextChar = _input.LA(1);
+        if (nextChar == '#' || nextChar == '\r' || nextChar == '\n' || nextChar == org.antlr.v4.runtime.IntStream.EOF) {
+            return;
+        }
+
+        org.antlr.v4.runtime.CommonToken nl =
+            new org.antlr.v4.runtime.CommonToken(NEWLINE, "\n");
+        nl.setLine(getLine());
+        nl.setCharPositionInLine(0);
+        pending.add(nl);
+
+        int spaces = 0;
+        boolean seenNewline = false;
+        for (char c : getText().toCharArray()) {
+            if (c == '\r' || c == '\n') { spaces = 0; seenNewline = true; continue; }
+            if (!seenNewline) continue;
+            if (c == ' ')  { spaces++;                        continue; }
+            if (c == '\t') { spaces = ((spaces / 8) + 1) * 8; continue; }
+        }
+
+        int cur = indentStack.peek();
+
+        if (spaces > cur) {
+            indentStack.push(spaces);
+            org.antlr.v4.runtime.CommonToken indent =
+                new org.antlr.v4.runtime.CommonToken(INDENT, "<INDENT>");
+            indent.setLine(getLine());
+            indent.setCharPositionInLine(spaces);
+            pending.add(indent);
+        } else if (spaces < cur) {
+            while (indentStack.size() > 1 && indentStack.peek() > spaces) {
+                indentStack.pop();
+                org.antlr.v4.runtime.CommonToken dedent =
+                    new org.antlr.v4.runtime.CommonToken(DEDENT, "<DEDENT>");
+                dedent.setLine(getLine());
+                dedent.setCharPositionInLine(spaces);
+                pending.add(dedent);
+            }
+        }
+    }
+
+    private void emitRemainingDedents() {
+        while (indentStack.size() > 1) {
+            indentStack.pop();
+            org.antlr.v4.runtime.CommonToken dedent =
+                new org.antlr.v4.runtime.CommonToken(DEDENT, "<DEDENT>");
+            pending.add(dedent);
+        }
     }
 }
 
-// Keywords
-FROM    : 'from' ;
-IMPORT  : 'import' ;
-DEF     : 'def' ;
-RETURN  : 'return' ;
-TRUE    : 'True' ;
-FALSE   : 'False' ;
-NONE    : 'None' ;
+tokens { INDENT, DEDENT }
 
-// Operators / punctuation
-ASSIGN  : '=' ;
-PLUS    : '+' ;
-MINUS   : '-' ;
-STAR    : '*' ;
-SLASH   : '/' ;
-DOT     : '.' ;
-COMMA   : ',' ;
-COLON   : ':' ;
-AT      : '@' ;
+// ── Keywords ─────────────────────────────────────────────────
+KW_DEF      : 'def'      ;   KW_CLASS    : 'class'    ;
+KW_RETURN   : 'return'   ;   KW_IMPORT   : 'import'   ;
+KW_FROM     : 'from'     ;   KW_AS       : 'as'       ;
+KW_IF       : 'if'       ;   KW_ELIF     : 'elif'     ;
+KW_ELSE     : 'else'     ;   KW_FOR      : 'for'      ;
+KW_IN       : 'in'       ;   KW_WHILE    : 'while'    ;
+KW_WITH     : 'with'     ;   KW_PASS     : 'pass'     ;
+KW_BREAK    : 'break'    ;   KW_CONTINUE : 'continue' ;
+KW_AND      : 'and'      ;   KW_OR       : 'or'       ;
+KW_NOT      : 'not'      ;   KW_IS       : 'is'       ;
+KW_RAISE    : 'raise'    ;   KW_TRY      : 'try'      ;
+KW_EXCEPT   : 'except'   ;   KW_FINALLY  : 'finally'  ;
+KW_GLOBAL   : 'global'   ;   KW_DEL      : 'del'      ;
+KW_ASSERT   : 'assert'   ;   KW_LAMBDA   : 'lambda'   ;
+KW_NONLOCAL : 'nonlocal' ;   KW_YIELD    : 'yield'    ;
+KW_ASYNC    : 'async'    ;   KW_AWAIT    : 'await'    ;
+TRUE        : 'True'     ;
+FALSE       : 'False'    ;
+NONE        : 'None'     ;
 
-OPEN_PAREN  : '(' { opened++; } ;
-CLOSE_PAREN : ')' { opened--; } ;
-OPEN_BRACK  : '[' { opened++; } ;
-CLOSE_BRACK : ']' { opened--; } ;
-OPEN_BRACE  : '{' { opened++; } ;
-CLOSE_BRACE : '}' { opened--; } ;
+// ── Operators ─────────────────────────────────────────────────
+AUGASSIGN   : '+=' | '-=' | '*=' | '/=' | '//=' | '%=' | '**='
+            | '&=' | '|=' | '^=' | '>>=' | '<<='               ;
+ARROW       : '->'  ;
+DOUBLESTAR  : '**'  ;
+DOUBLESLASH : '//'  ;
+LSHIFT      : '<<'  ;
+RSHIFT      : '>>'  ;
+EQEQ        : '==' ;   NEQ     : '!=' ;
+LTE         : '<=' ;   GTE     : '>=' ;
+EQ          : '='  ;   LT      : '<'  ;   GT      : '>'  ;
+PLUS        : '+'  ;   MINUS   : '-'  ;
+STAR        : '*'  ;   SLASH   : '/'  ;   PERCENT : '%'  ;
+AMP         : '&'  ;   PIPE    : '|'  ;   CARET   : '^'  ;
+TILDE       : '~'  ;   AT      : '@'  ;
+ELLIPSIS    : '...' ;
+DOT         : '.'  ;   COLON   : ':'  ;   SEMI    : ';'  ;
+COMMA       : ','  ;
 
-// Literals
+// ✅ الأقواس — تزيد وتنقص الـ counter
+LPAREN   : '(' { openBrackets++; } ;
+RPAREN   : ')' { openBrackets--; } ;
+LBRACKET : '[' { openBrackets++; } ;
+RBRACKET : ']' { openBrackets--; } ;
+LBRACE   : '{' { openBrackets++; } ;
+RBRACE   : '}' { openBrackets--; } ;
+
+// ── String literals ───────────────────────────────────────────
 STRING
-    : '"' ( '\\' . | ~["\\\r\n] )* '"'
-    | '\'' ( '\\' . | ~['\\\r\n] )* '\''
+    : STRING_PREFIX? ( TRIPLE_DQ | TRIPLE_SQ | DQ_STR | SQ_STR )
+    ;
+fragment STRING_PREFIX : [fFbBuUrR] | 'fr' | 'rf' | 'br' | 'rb' ;
+fragment TRIPLE_DQ     : '"""' .*? '"""'                         ;
+fragment TRIPLE_SQ     : '\'\'\'' .*? '\'\'\''                   ;
+fragment DQ_STR        : '"'  ( '\\' . | ~["\\\r\n] )* '"'      ;
+fragment SQ_STR        : '\'' ( '\\' . | ~['\\\r\n] )* '\''     ;
+
+// ── Number literals ───────────────────────────────────────────
+NUMBER
+    : '0' [xX] [0-9a-fA-F]+ [lL]?
+    | '0' [oO] [0-7]+        [lL]?
+    | '0' [bB] [01]+         [lL]?
+    | [0-9]+ [jJ]
+    | [0-9]* '.' [0-9]+ ([eE][+-]?[0-9]+)? [jJ]?
+    | [0-9]+ '.' [0-9]* ([eE][+-]?[0-9]+)? [jJ]?
+    | [0-9]+  [eE][+-]?[0-9]+               [jJ]?
+    | [0-9]+ [lL]?
     ;
 
-FLOAT_NUMBER : DIGITS '.' DIGITS ;
-INTEGER      : DIGITS ;
+IDENT : [a-zA-Z_\u0080-\uffff] [a-zA-Z0-9_\u0080-\uffff]* ;
 
-NAME : [a-zA-Z_] [a-zA-Z_0-9]* ;
-
-fragment DIGITS : [0-9]+ ;
-fragment SPACES : [ \t]+ ;
-
-COMMENT : '#' ~[\r\n\f]* -> skip ;
-
-NEWLINE
-    : ( {atStartOfInput()}? SPACES
-      | ( '\r'? '\n' | '\r' | '\f' ) SPACES?
-      )
-      {
-        String text = getText();
-        String spaces = text.replaceAll("[\r\n\f]+", "");
-        int next = _input.LA(1);
-        if (opened > 0 || next == '\r' || next == '\n' || next == '\f' || next == '#') {
-            skip();
-        } else {
-            emit(makeToken(NEWLINE, "\n"));
-            int indent = indentWidth(spaces);
-            int previous = indents.isEmpty() ? 0 : indents.peek();
-            if (indent == previous) {
-                skip();
-            } else if (indent > previous) {
-                indents.push(indent);
-                emit(makeToken(INDENT, spaces));
-            } else {
-                while (!indents.isEmpty() && indents.peek() > indent) {
-                    emit(makeToken(DEDENT, ""));
-                    indents.pop();
-                }
-            }
-        }
-      }
+// ── Indentation ───────────────────────────────────────────────
+NEWLINE_WS
+    : ('\r'? '\n') [ \t]* { handleNewline(); }
+      -> skip
     ;
 
-WS : [ \t]+ -> skip ;
+NEWLINE : '\r'? '\n' -> skip ;
+
+WS            : [ \t]+          -> channel(HIDDEN) ;
+COMMENT       : '#' ~[\r\n]*    -> channel(HIDDEN) ;
+LINE_CONTINUE : '\\' '\r'? '\n' -> skip            ;
