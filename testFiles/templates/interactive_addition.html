@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}حاسبة ديناميكية{% endblock %}
+{% block content %}
+<section class="calculator-card" aria-labelledby="calculator-title">
+    <h2 id="calculator-title">حاسبة جمع رقمين</h2>
+    <p>غيّر القيم وسيُحدَّث الناتج فورًا داخل المتصفح.</p>
+
+    <form id="addition-form" novalidate>
+        <label for="first-number">الرقم الأول</label>
+        <input id="first-number" type="number" value="12" step="any" required />
+
+        <label for="second-number">الرقم الثاني</label>
+        <input id="second-number" type="number" value="30" step="any" required />
+
+        <button id="calculate-button" type="submit">احسب المجموع</button>
+    </form>
+
+    <p id="calculation-result" class="calculation-result" aria-live="polite">المجموع: 42</p>
+</section>
+<script src="/static/interactive_addition.js"></script>
+{% endblock %}

@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "name": "Laptop Updated",
+        "price": 1300.0,
+        "image": "laptop.jpg",
+        "details": "Updated"
+    },
+    {
+        "id": 2,
+        "name": "Headphones",
+        "price": 150,
+        "image": "headphone.jpg",
+        "details": "Headphones details"
+    }
+]

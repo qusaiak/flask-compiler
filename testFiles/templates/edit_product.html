@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+	<meta charset="UTF-8">
+	<title>تعديل المنتج</title>
+</head>
+<body>
+<h2>تعديل المنتج</h2>
+<form action="/edit/{{ product.id }}" method="POST" enctype="multipart/form-data">
+	<label>اسم المنتج:</label>
+	<input type="text" name="name" value="{{ product.name }}" required />
+
+	<label>السعر:</label>
+	<input type="number" step="any" name="price" value="{{ product.price }}" required />
+
+	<label>صورة جديدة (اختياري):</label>
+	<input type="file" name="image_file" accept="image/*" />
+
+	<label>التفاصيل:</label>
+	<textarea name="details">{{ product.details }}</textarea>
+
+	<button type="submit">حفظ التعديلات</button>
+</form>
+<br>
+<a href="/products">العودة للمنتجات</a>
+</body>
+</html>

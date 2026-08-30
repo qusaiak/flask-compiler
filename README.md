@@ -1,126 +1,98 @@
-# flask-compiler
+# Flask–Jinja Compiler — Final Code Generation Project
 
-A compiler for Flask projects (**Python + Jinja2 + HTML + CSS**) built with **Java 17**,
-**Maven** and **ANTLR4**. It lexes and parses the four languages, builds **two AST trees**
-(Python AST and Jinja AST, with HTML embedded as text in the Jinja AST), constructs symbol
-tables, performs semantic analysis, transfers the Python data array into the Jinja tree, and
-generates a runnable Flask product-management project.
+## فكرة المشروع
 
-## Compiler pipeline
+هذا المشروع يطبق مترجمًا تعليميًا يجمع بين تحليل Python وFlask وتحليل قوالب Jinja/HTML، ثم يولد صفحات HTML ثابتة مع نسخ ملفات Flask وCSS وJavaScript كملفات داعمة.
 
-```
-Input (app.py, templates, html, css)
-   |
-   v  Lexer            (ANTLR4 lexers: Python / Jinja / HTML / CSS)
-   v  Parser           (ANTLR4 parsers -> parse trees)
-   v  AST              (Python AST + Jinja AST)
-   v  Symbol Table     (scoped symbols for Python and Jinja)
-   v  Semantic Analysis(5 checks + bonus, never stops on first error)
-   v  Data Transfer    (Python arrays -> Jinja tree binding)
-   v  Code Generation  (FlaskGenerator)
-   |
-   v
-generated/  (runnable Flask project)
+## مسار المترجم
+
+```text
+app.py
+→ Python Lexer / Parser
+→ Python AST
+→ Python Semantic Analysis
+→ Context Data
+→ Jinja/HTML Lexer / Parser
+→ Jinja/HTML AST
+→ Jinja Semantic Analysis
+→ HTML Code Generation
 ```
 
-## Requirements
-- JDK 17+ (developed/tested with JDK 21)
-- Maven 3.8+
-- Python 3 + Flask (only to *run the generated project*; not needed to build the compiler)
+يستخدم `SymbolTable` في التحليل الدلالي فقط، بينما تأتي بيانات التوليد من Context المستخرج من Python.
 
-## Build
-```bash
-mvn clean compile
-```
-This runs the `antlr4-maven-plugin` (generates lexers/parsers from
-`src/main/antlr4/com/flaskcompiler/grammar/`) and compiles the Java sources.
+## التشغيل
 
-## Run the compiler
-```bash
-mvn exec:java
-```
-The pipeline parses `examples/input-project/`, prints each stage, and writes the generated
-Flask project to `generated/`.
+يتطلب المشروع JDK 21 أو أحدث وMaven 3.8 أو أحدث. يمكن فتح المشروع في IntelliJ ثم تنفيذ `Build → Rebuild Project` وتشغيل `Main.java`.
 
-## Run the generated Flask app
-```bash
-cd generated
-pip install -r requirements.txt
-python app.py
-```
-Then open http://127.0.0.1:5000/
+يقرأ `Main` ملف `testFiles/app.py` ويعالج القوالب النهائية الأربعة:
 
-## Project layout
-```
-flask-compiler/
-├── pom.xml
-├── README.md
-├── examples/
-│   ├── input-project/            # compiler INPUT
-│   │   ├── app.py                #   Python: products array + 4 routes
-│   │   ├── templates/            #   Jinja2 + HTML templates
-│   │   └── static/               #   sample.html, style.css
-│   └── errors/                   # semantic-error test cases
-├── generated/                    # compiler OUTPUT (runnable Flask app)
-└── src/main/
-    ├── antlr4/com/flaskcompiler/grammar/
-    │   ├── PythonLexer.g4  PythonParser.g4
-    │   ├── JinjaLexer.g4   JinjaParser.g4
-    │   ├── HtmlLexer.g4    HtmlParser.g4
-    │   └── CssLexer.g4     CssParser.g4
-    └── java/com/flaskcompiler/
-        ├── Main.java             # pipeline driver
-        ├── ast/                  # Node, Visitor, AstPrinter; python/ and jinja/ nodes + builders
-        ├── symbol/               # Symbol, Scope, SymbolTable, printer, collectors
-        ├── semantic/             # SemanticError, SemanticAnalyzer
-        ├── codegen/              # FlaskGenerator
-        └── transfer/             # ContextModel, DataExtractor, JinjaContextBinder, BoundTemplate
+```text
+testFiles/templates/index.jinja
+testFiles/templates/add_product.jinja
+testFiles/templates/edit_product.jinja
+testFiles/templates/product_detail.jinja
 ```
 
-## Languages supported (input grammars)
-- **Python** (minimal Flask subset): imports, assignments, lists, dicts, function defs,
-  `@app.route` decorators, `render_template`, return, calls, simple expressions.
-- **Jinja2**: `{{ var }}`, `{{ obj.prop }}`, `{% for %}`, `{% if %}`, `{% extends %}`,
-  `{% block %}`, with embedded HTML kept as text.
-- **HTML** (standalone): tags, attributes, self-closing tags, nesting, text.
-- **CSS** (standalone): element/`.class`/`#id` selectors, declarations, colors, dimensions.
+يبدأ كل تشغيل بمسح `output/`، ثم يعيد توليد الصفحات ونسخ ملفات الدعم.
 
-## AST
-Two trees rooted at `Node` (abstract: `nodeName`, `line`, `children`, `printNode()`,
-`printChildren()`, `printTree()`, `accept(Visitor)`):
-- **Python AST**: `ProgramNode, ImportNode, AssignmentNode, VariableNode, ListNode, DictNode,
-  FunctionNode, RouteNode (extends FunctionNode), CallNode, ReturnNode, LiteralNode,
-  PropertyAccessNode`.
-- **Jinja AST**: `TemplateNode, BlockNode, ForNode, IfNode, ExpressionNode,
-  VariableReferenceNode, HtmlContentNode`.
+## مخرجات التوليد
 
-OOP requirements satisfied: inheritance (node families), polymorphism (`accept`), plus stored
-node name and line number on every node.
-
-## Semantic checks
-1. Undefined variable (Python)
-2. Duplicate route (Python)
-3. Missing template (Python)
-4. Undefined template variable (Jinja)
-5. Loop over non-iterable (Jinja)
-- Bonus: duplicate parameter, duplicate block
-
-Run on `examples/errors/` each case reports its error in the format:
-```
-[Semantic Error]
-line=8
-node=render_template
-message=Missing template: abc.html
+```text
+output/index.html
+output/add_product.html
+output/edit_product.html
+output/app.py
+output/style.css
+output/script.js
 ```
 
-## Generated interfaces
-- `/` display products
-- `/add` add product
-- `/product/<id>` product details
-- `/delete/<id>` delete product
+ويحفظ تقارير المترجم في:
 
-All pages are reachable via navigation links.
+```text
+compiler_output/ast_python.json
+compiler_output/ast_jinja.json
+compiler_output/semantic_report.txt
+compiler_output/generation_log.txt
+```
 
-## Notes
-- Maven was installed locally to build; the ANTLR runtime is the only runtime dependency.
-- The compiler only *generates* the Flask project; it never executes Flask or renders templates.
+## اختبار الأخطاء الدلالية
+
+شغّل `SemanticTestRunner.java` من IntelliJ. يفحص ملفات الاختبار التالية دون تعديل `output/`:
+
+```text
+testFiles/semantic_python_errors.py
+testFiles/semantic_html_errors.html
+testFiles/semantic_css_errors.css
+testFiles/templates/semantic_v3.html
+```
+
+ويغطي أخطاء Python وHTML وCSS وJinja، وقد كشف في آخر تشغيل 5 أخطاء Python و2 HTML و2 CSS و7 Jinja، ثم ينشئ:
+
+```text
+compiler_output/semantic_test_report.txt
+```
+
+## تشغيل تطبيق Flask
+
+```text
+cd testFiles
+python runtime_app.py
+```
+
+ثم افتح:
+
+```text
+http://127.0.0.1:5000/
+```
+
+يحتوي التطبيق على عرض المنتجات وإضافة منتج وعرض التفاصيل وتعديل المنتج وحذفه. تحفظ البيانات في `testFiles/products.json`، وتحتاج ملفات HTML المولدة إلى إعادة تشغيل `Main` حتى تتزامن مع البيانات الجديدة.
+
+## الاختبار الوظيفي
+
+```text
+python testFiles/test_runtime.py
+```
+
+## التسليم
+
+يجب أن يحتوي الأرشيف على الكود المصدري، ملفات الإدخال والقوالب، `output/`، `compiler_output/`، `FINAL_REPORT.md`، `DELIVERY_REPORT.md`، و`TEAM_INFO.txt`. يجب تعبئة أسماء أعضاء المجموعة ورابط GitHub الحقيقي في `TEAM_INFO.txt` قبل الرفع.

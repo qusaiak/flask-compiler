@@ -51,7 +51,10 @@ public abstract class ASTNode {
     protected int line;
     protected int col;
 
+    // الباني (Constructor) إن لم يكن موجوداً بهذا الشكل
 
+
+    // الدوال التي يعترض عليها الكومبايلر:
     public int getLine() {
         return line;
     }

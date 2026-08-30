@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Jinja Filter Test{% endblock %}
+{% block content %}
+<section class="filter-results">
+  <p id="upper">{{ product.name|upper }}</p>
+  <p id="length">{{ products|length }}</p>
+  <p id="replace">{{ product.name|replace("a", "@") }}</p>
+  <p id="truncate">{{ product.details|truncate(12) }}</p>
+  <p id="default">{{ product.name|default("Unknown") }}</p>
+</section>
+{% endblock %}

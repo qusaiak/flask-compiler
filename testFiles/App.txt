@@ -1,0 +1,22 @@
+from flask import Flask, render_template, request, redirect, url_for
+
+app = Flask(__name__)
+
+@app.route('/products')
+def show_products():
+    return render_template('products.txt', products=products)
+
+@app.route('/add')
+def add_product():
+    return render_template('AddProducts.txt')
+
+@app.route('/product')
+def product_detail():
+    return render_template('product_detail.txt', product=product)
+
+@app.route('/delete')
+def delete_product():
+    return redirect(url_for('show_products'))
+
+
+

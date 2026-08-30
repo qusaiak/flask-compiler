@@ -1,0 +1,70 @@
+=== Python — testFiles/app.py ===
+--- Symbol Table ---
+- app | PYTHON_VAR | line 3 | used=false
+- p1 | PYTHON_VAR | line 5 | used=false
+- p2 | PYTHON_VAR | line 6 | used=false
+- p3 | PYTHON_VAR | line 7 | used=false
+- products | PYTHON_VAR | line 9 | used=false
+- find_product | PYTHON_FUNC | line 11 | used=false
+- product_id | PYTHON_PARAMETER | line 11 | used=false
+- p | PYTHON_LOOP_VARIABLE | line 12 | used=false
+- get_next_id | PYTHON_FUNC | line 17 | used=false
+- max_id | PYTHON_LOCAL | line 18 | used=false
+- p | PYTHON_LOOP_VARIABLE | line 19 | used=false
+- max_id | PYTHON_LOCAL | line 21 | used=false
+- remove_product | PYTHON_FUNC | line 24 | used=false
+- product_id | PYTHON_PARAMETER | line 24 | used=false
+- filtered | PYTHON_LOCAL | line 25 | used=false
+- p | PYTHON_LOOP_VARIABLE | line 26 | used=false
+- home | PYTHON_FUNC | line 32 | used=false
+- show_products | PYTHON_FUNC | line 36 | used=false
+- add_product | PYTHON_FUNC | line 40 | used=false
+- new_id | PYTHON_LOCAL | line 42 | used=false
+- name_val | PYTHON_LOCAL | line 43 | used=false
+- price_val | PYTHON_LOCAL | line 44 | used=false
+- img_val | PYTHON_LOCAL | line 45 | used=false
+- det_val | PYTHON_LOCAL | line 46 | used=false
+- new_product | PYTHON_LOCAL | line 47 | used=false
+- edit_product | PYTHON_FUNC | line 53 | used=false
+- product_id | PYTHON_PARAMETER | line 53 | used=false
+- product | PYTHON_LOCAL | line 54 | used=false
+- product_detail | PYTHON_FUNC | line 66 | used=false
+- product_id | PYTHON_LOCAL | line 67 | used=false
+- product | PYTHON_LOCAL | line 68 | used=false
+- delete_product | PYTHON_FUNC | line 72 | used=false
+- product_id | PYTHON_LOCAL | line 74 | used=false
+- products | PYTHON_LOCAL | line 76 | used=false
+--- Semantic Analysis ---
+0 semantic errors
+
+=== Jinja — testFiles/templates/index.jinja ===
+--- Symbol Table ---
+- title | TEMPLATE_BLOCK | line 2 | used=false
+- styles | TEMPLATE_BLOCK | line 3 | used=false
+- content | TEMPLATE_BLOCK | line 4 | used=false
+- product | LOOP_VARIABLE | line 6 | used=true
+--- Semantic Analysis ---
+0 semantic errors
+
+=== Jinja — testFiles/templates/add_product.jinja ===
+--- Symbol Table ---
+- title | TEMPLATE_BLOCK | line 2 | used=false
+- styles | TEMPLATE_BLOCK | line 3 | used=false
+- content | TEMPLATE_BLOCK | line 4 | used=false
+--- Semantic Analysis ---
+0 semantic errors
+
+=== Jinja — testFiles/templates/edit_product.jinja ===
+--- Symbol Table ---
+(no symbols)
+--- Semantic Analysis ---
+0 semantic errors
+
+=== Jinja — testFiles/templates/product_detail.jinja ===
+--- Symbol Table ---
+- title | TEMPLATE_BLOCK | line 2 | used=false
+- styles | TEMPLATE_BLOCK | line 3 | used=false
+- content | TEMPLATE_BLOCK | line 4 | used=false
+--- Semantic Analysis ---
+0 semantic errors
+

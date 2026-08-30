@@ -1,0 +1,75 @@
+{# testFiles/product_detail.html #}
+{% extends "base.html" %}
+{% block title %}Product Detail{% endblock %}
+{% block content %}
+{% if product %}
+<div class="detail-container">
+	<div class="detail-card">
+		<img src="{{ product.image }}" alt="{{ product.name }}" class="detail-img"/>
+		<div class="detail-info">
+			<h1 class="detail-title">{{ product.name }}</h1>
+			<p class="detail-price">{{ product.price }} $</p>
+			<p class="detail-description">{{ product.details }}</p>
+			<div class="detail-actions">
+				<a href="/products" class="btn">Back to Products</a>
+				<!-- 🟢 تعديل 2: تمرير id المنتج لرابط الحذف -->
+				<a href="/delete?id={{ product.id }}" class="btn btn-danger">Delete Product</a>
+			</div>
+		</div>
+	</div>
+</div>
+{% else %}
+<div class="detail-container">
+	<p class="not-found">Product not found.</p>
+</div>
+{% endif %}
+{% endblock %}
+{% block styles %}
+<style>
+	.detail-container {
+		max-width: 900px;
+		margin: 40px auto;
+		padding: 20px;
+	}
+	.detail-card {
+		display: flex;
+		gap: 32px;
+		background: #1D1D20;
+		border-radius: 8px;
+		padding: 24px;
+	}
+	.detail-img {
+		width: 300px;
+		height: 300px;
+		object-fit: cover;
+		border-radius: 4px;
+	}
+	.detail-title {
+		color: #fbfbff;
+		font-size: 2rem;
+	}
+	.detail-price {
+		color: #ffd400;
+		font-size: 1.5rem;
+		font-weight: bold;
+	}
+	.detail-description {
+		color: #909094;
+		line-height: 1.6;
+	}
+	.btn {
+		padding: 10px 20px;
+		background: #A1C9F4;
+		border-radius: 4px;
+	}
+	.btn-danger {
+		background: #f04438;
+		color: #fff;
+	}
+	.not-found {
+		color: #FF9F9B;
+		font-size: 1.2rem;
+		text-align: center;
+	}
+</style>
+{% endblock %}

@@ -1,0 +1,35 @@
+{# 1. خطأ 6: محاولة تعريف متغير محجوز في Flask #}
+{% set request = "my_data" %}
+
+{# 2. خطأ 2: إعادة تعريف متغير في نفس النطاق #}
+{% set name = "Ali" %}
+{% set name = "Ahmad" %}
+
+{# 3. خطأ 8: متغير تم تعريفه ولم يُستخدم أبداً #}
+{% set unused_var = "123" %}
+
+{# 4. خطأ 1: استخدام متغير غير معرف #}
+<p>Welcome, {{ undefined_user }}</p>
+
+{# 5. خطأ 7: استخدام فلتر Jinja غير معروف #}
+<p>{{ name|invalid_filter }}</p>
+
+{# 6. خطأ 3: قائمة غير معرفة في حلقة For #}
+{% for item in missing_list %}
+<span>{{ item }}</span>
+{% endfor %}
+
+{# 7. خطأ 9: استخدام متغير حلقة التكرار خارج نطاقها #}
+{% for x in valid_list %}
+<p>{{ x }}</p>
+{% endfor %}
+<p>Outside loop: {{ x }}</p>
+
+{# 8. خطأ 4: متغير غير معرف داخل شرط If #}
+{% if is_admin %}
+<h1>Admin Panel</h1>
+{% endif %}
+
+{# 9. خطأ 5: إعادة تعريف نفس البلوك #}
+{% block content %}<p>Block 1</p>{% endblock %}
+{% block content %}<p>Block 2</p>{% endblock %}

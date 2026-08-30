@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Add Product{% endblock %}
+{% block styles %}<link rel="stylesheet" href="style.css" />{% endblock %}
+{% block content %}
+<h1>Add New Product</h1>
+<form action="/add" method="POST">
+    <p>Product Name - Price - Image - Details</p>
+    <textarea name="name" />
+    <textarea name="price" />
+    <textarea name="image" />
+    <textarea name="details" />
+    <button type="submit">Add Product</button>
+</form>
+{% endblock %}

@@ -1,2 +1,0 @@
-name = "Test"
-x = y
