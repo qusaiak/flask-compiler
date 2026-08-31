@@ -16,6 +16,7 @@ public class CssFileNode extends ASTNode {
         this.rules = new ArrayList<>();
     }
 
+
     public void addRule(ASTNode rule) {
         if (rule != null) {
             this.rules.add(rule);

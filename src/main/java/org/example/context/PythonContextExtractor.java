@@ -17,21 +17,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * يبني Context Data لكل قالب Jinja انطلاقاً من AST الحقيقي لملف app.py
- * (بعد بناء الشجرة عبر PythonASTBuilder) بدلاً من قراءة app.py كنص خام عبر Regex.
- *
- * الفكرة: نحاكي render_template(templateName, key=value, ...) بشكل ساكن (Static):
- *  1) نجمع التعريفات العامة أعلى الملف: p1 = {...}, products = [p1, p2, p3] ...
- *  2) نبحث في كامل الشجرة (بما فيها أجسام الدوال routes) عن كل استدعاء render_template(...)
- *  3) لكل استدعاء: نحدد اسم القالب (المعامل الأول)، ثم نحلّ قيمة كل معامل مفتاحي
- *     بالرجوع إلى التعريفات العامة التي جمعناها في الخطوة 1.
- *
- * قيم غير قابلة للحساب سكونياً (نتيجة استدعاء دالة مثل find_product(product_id))
- * تُستبدل بأفضل تقدير: أول عنصر من قائمة عامة اسمها هو صيغة الجمع لاسم المعامل
- * (مثال: المعامل product بدون قيمة ساكنة → أول عنصر من القائمة العامة products).
- * هذا تقدير توضيحي فقط لغرض توليد صفحة HTML ساكنة للعرض، وليس تنفيذاً فعلياً لبايثون.
- */
+
 public final class PythonContextExtractor {
 
     private PythonContextExtractor() {
@@ -41,10 +27,7 @@ public final class PythonContextExtractor {
         return extract(pythonModuleAst, null);
     }
 
-    /**
-     * يستخرج Context من AST أولاً، ثم يستخدم المصدر كنقطة تحقق احتياطية عندما
-     * تكون نسخة AST القديمة قد أسقطت قيم literals أثناء البناء.
-     */
+
     public static Map<String, Map<String, Object>> extract(ASTNode pythonModuleAst, String sourceCode) {
         Map<String, Object> globalVariables = new LinkedHashMap<>();
         Map<String, List<Object>> globalLists = new LinkedHashMap<>();
@@ -133,7 +116,6 @@ public final class PythonContextExtractor {
         return raw.contains(".") ? Double.parseDouble(raw) : Long.parseLong(raw);
     }
 
-    /** يمر فقط على التعريفات المباشرة (module-level): p1 = {...}, products = [p1, p2, p3]. */
     private static void collectGlobalAssignments(
             ASTNode module,
             Map<String, Object> globalVariables,
@@ -155,7 +137,6 @@ public final class PythonContextExtractor {
         }
     }
 
-    /** يبحث بعمق في كامل الشجرة (module-level وأجسام الدوال routes) عن استدعاءات render_template(...). */
     private static void collectRenderTemplateCalls(
             ASTNode node,
             Map<String, Object> globalVariables,
@@ -222,7 +203,6 @@ public final class PythonContextExtractor {
         return (candidate != null && !candidate.isEmpty()) ? candidate.get(0) : null;
     }
 
-    @SuppressWarnings("unchecked")
     private static String identifierText(ASTNode node) {
         if (node instanceof IdentifierNode identifier) {
             return identifier.getName();
@@ -263,7 +243,6 @@ public final class PythonContextExtractor {
         if (valueNode instanceof IdentifierNode identifier) {
             return globalVariables.get(identifier.getName());
         }
-        // BinaryOpNode / CallNode / UnaryOpNode ... : قيم ديناميكية لا تُحسب سكونياً (مثل نتيجة استدعاء دالة).
         return null;
     }
 

@@ -7,3 +7,6 @@ result = unknown_function()
 return value
 break
 continue
+
+type_error_value = "price" + 10
+age: int = "twenty"

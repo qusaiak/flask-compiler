@@ -1,5 +1,8 @@
 package org.example;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
+import com.google.gson.reflect.TypeToken;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.example.ast.ASTNode;
@@ -7,8 +10,8 @@ import org.example.codegen.CodeGenerator;
 import org.example.context.PythonContextExtractor;
 import org.example.reporting.CompilerReportWriter;
 import org.example.semantic.PythonSemanticAnalyzer;
-import org.example.semantic.SemanticAnalyzer;
-import org.example.semantic.SymbolTable;
+
+
 import org.example.gen.FlaskLexer;
 import org.example.gen.FlaskParser;
 import org.example.gen.python.pythonLexer;
@@ -17,37 +20,41 @@ import org.example.visitor.ASTBuilder;
 import org.example.visitor.PythonASTBuilder;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.io.UncheckedIOException;
+import java.lang.reflect.Type;
 import java.nio.file.*;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.StandardOpenOption;
+
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.regex.*;
+
 import java.util.stream.Collectors;
 
 public class Main {
 
-    /**
-     * Context Data الحقيقية المستخرجة من AST ملف app.py (بعد Semantic Analysis)،
-     * مفهرسة باسم ملف القالب كما ورد في استدعاء render_template(...) الفعلي.
-     * تُملأ مرة واحدة في compilePython() وتُستخدم لاحقاً عند توليد كل قالب Jinja.
-     */
+
     private static final Map<String, Map<String, Object>> templateContexts = new LinkedHashMap<>();
+
 
     public static void main(String[] args) {
         System.out.println("════════════════════════════════════════════════════════════════════════════════");
         System.out.println("   Flask & Jinja2 Compiler — Full Pipeline");
         System.out.println("════════════════════════════════════════════════════════════════════════════════\n");
 
+
         String pythonFile = "testFiles/app.py";
+        String runtimePythonFile = "testFiles/runtime_app.py";
         String cssFile = "testFiles/static/style.css";
         String jsFile = "testFiles/static/interactive_addition.js";
+        String productsJsonFile = resolveProductsJsonPath(args);
 
         cleanOutputDirectory();
 
+
         System.out.println("══ [STAGE 1] Python Analysis ══");
         compilePython(pythonFile);
+        loadProductsFromJson(productsJsonFile);
         System.out.println("  Python context keys: " + templateContexts.keySet() + "\n");
 
         System.out.println("══ [STAGE 2] Jinja Template Analysis & Code Generation ══");
@@ -56,7 +63,7 @@ public class Main {
         }
 
         System.out.println("══ [STAGE 3] Copying Support Files ══");
-        copySupportFiles(pythonFile, cssFile, jsFile);
+        copySupportFiles(runtimePythonFile, cssFile, jsFile, productsJsonFile);
 
         CompilerReportWriter.flush();
 
@@ -67,7 +74,15 @@ public class Main {
         System.out.println("════════════════════════════════════════════════════════════════════════════════");
     }
 
-    /** Selects the final demonstration templates in a fixed order. */
+    private static String resolveProductsJsonPath(String[] args) {
+        for (int index = 0; index < args.length - 1; index++) {
+            if ("--data".equals(args[index]) || "-data".equals(args[index])) {
+                return args[index + 1];
+            }
+        }
+        return "testFiles/products.json";
+    }
+
     private static List<String> listJinjaTemplateFiles(String templatesDirectory) {
         List<String> finalTemplates = List.of(
                 "index.jinja",
@@ -105,6 +120,56 @@ public class Main {
             System.err.println("  [!] تعذّر تنظيف output/: " + exception.getMessage());
         }
     }
+
+    private static void loadProductsFromJson(String filePath) {
+        Path jsonPath = Path.of(filePath);
+        if (!Files.isRegularFile(jsonPath)) {
+            System.out.println("  [!] JSON data file not found: " + filePath);
+            CompilerReportWriter.logGeneration(
+                    "[" + LocalDateTime.now() + "] لم يتم العثور على مصدر البيانات: " + filePath);
+            return;
+        }
+
+        try (Reader reader = Files.newBufferedReader(jsonPath)) {
+            Gson gson = new Gson();
+            Type listType = new TypeToken<List<Map<String, Object>>>() {}.getType();
+            List<Map<String, Object>> products = gson.fromJson(reader, listType);
+            if (products == null) {
+                products = new ArrayList<>();
+            }
+
+            Map<String, Object> firstProduct = products.isEmpty()
+                    ? null
+                    : products.get(0);
+            for (String templateName : List.of(
+                    "index.jinja",
+                    "add_product.jinja",
+                    "edit_product.jinja",
+                    "product_detail.jinja")) {
+                Map<String, Object> context = templateContexts.computeIfAbsent(
+                        templateName, ignored -> new LinkedHashMap<>());
+                context.put("products", products);
+                if (firstProduct != null) {
+                    context.put("product", firstProduct);
+                } else {
+                    context.remove("product");
+                }
+            }
+
+            System.out.println("  Loaded " + products.size()
+                    + " product(s) from " + filePath + " (JSON overrides app.py data)");
+            CompilerReportWriter.logGeneration(
+                    "[" + LocalDateTime.now() + "] تحميل " + products.size()
+                            + " منتج/منتجات من " + filePath
+                            + " وربطها مباشرةً بـJinja Context");
+        } catch (IOException | JsonParseException | ClassCastException exception) {
+            System.err.println("  [!] Invalid products JSON: " + exception.getMessage());
+            CompilerReportWriter.logGeneration(
+                    "[" + LocalDateTime.now() + "] فشل قراءة " + filePath
+                            + ": " + exception.getMessage());
+        }
+    }
+
 
     private static void compilePython(String filePath) {
         System.out.println("  File: " + filePath);
@@ -150,7 +215,6 @@ public class Main {
                 System.out.println("  Python errors: " + errors.size());
 
                 Map<String, Map<String, Object>> extractedContexts = PythonContextExtractor.extract(ast, code);
-                // Only the selected demonstration templates participate in final generation.
                 extractedContexts.entrySet().removeIf(entry -> !Set.of(
                         "index.jinja", "add_product.jinja", "edit_product.jinja", "product_detail.jinja"
                 ).contains(entry.getKey()));
@@ -172,7 +236,6 @@ public class Main {
         long startTime = System.currentTimeMillis();
 
         try {
-            // Normalize line endings before lexing.
             String code = Files.readString(Path.of(filePath))
                     .replace("\r\n", "\n")
                     .replace("\r", "\n");
@@ -223,7 +286,6 @@ public class Main {
 
             if (!semanticErrors.isEmpty()) {
                 System.out.println("  [!] " + semanticErrors.size() + " semantic error(s) — skipping code generation");
-                // Remove stale output for this template, but continue compiling the others.
                 try {
                     Files.deleteIfExists(Paths.get("output", outFileName));
                 } catch (IOException ignored) {
@@ -264,22 +326,28 @@ public class Main {
         }
     }
 
-    private static void copySupportFiles(String pythonFile, String cssFile, String jsFile) {
+    private static void copySupportFiles(String runtimePythonFile, String cssFile, String jsFile, String productsJsonFile) {
         try {
             Files.createDirectories(Paths.get("output"));
-            copyRuntimeBackend(pythonFile, "output/app.py");
+            copyRuntimeBackend(runtimePythonFile, "output/app.py");
             copyFile(cssFile, "output/style.css");
             copyFile(jsFile, "output/script.js");
+            copyFile(productsJsonFile, "output/products.json");
         } catch (IOException e) {
             System.err.println("  [!] Error creating output directory: " + e.getMessage());
         }
     }
 
-    /** Adapts the Flask runtime to serve the generated HTML pages from output/. */
     private static void copyRuntimeBackend(String src, String dest) {
         try {
             String code = Files.readString(Path.of(src));
-            code = code.replace("'index.jinja'", "'index.html'")
+            code = code.replace("template_folder=str(APP_ROOT / \"templates\")",
+                            "template_folder=str(APP_ROOT)")
+                    .replace("static_folder=str(APP_ROOT / \"static\")",
+                            "static_folder=str(APP_ROOT), static_url_path=\"\"")
+                    .replace("render_template(\"products.html\"", "render_template(\"index.html\"")
+                    .replace("render_template('products.html'", "render_template('index.html'")
+                    .replace("'index.jinja'", "'index.html'")
                     .replace("'add_product.jinja'", "'add_product.html'")
                     .replace("'edit_product.jinja'", "'edit_product.html'")
                     .replace("'product_detail.jinja'", "'product_detail.html'")
@@ -315,6 +383,7 @@ public class Main {
 
     private static String getOutputFileName(String templatePath) {
         String name = Path.of(templatePath).getFileName().toString();
+
         int dot = name.lastIndexOf('.');
         if (dot >= 0) name = name.substring(0, dot);
         return name + ".html";

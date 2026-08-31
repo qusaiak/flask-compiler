@@ -10,6 +10,7 @@ import org.example.gen.FlaskParserBaseVisitor;
 public class ASTBuilder extends FlaskParserBaseVisitor<ASTNode> {
 
 
+
     @Override
     public ASTNode visit(org.antlr.v4.runtime.tree.ParseTree tree) {
         if (tree == null) return null;
@@ -60,6 +61,9 @@ public class ASTBuilder extends FlaskParserBaseVisitor<ASTNode> {
         }
     }
 
+    // ════════════════════════════════════════════════════════════
+    // ROOT & BASICS
+    // ════════════════════════════════════════════════════════════
     @Override
     public ASTNode visitFlaskTemplate(FlaskParser.FlaskTemplateContext ctx) {
         HtmlFileNode root = new HtmlFileNode(
@@ -123,6 +127,7 @@ public class ASTBuilder extends FlaskParserBaseVisitor<ASTNode> {
     public ASTNode visitJ2CommentNode(FlaskParser.J2CommentNodeContext ctx) {
         return null;
     }
+
 
     @Override
     public ASTNode visitNormalElement(FlaskParser.NormalElementContext ctx) {
@@ -470,6 +475,8 @@ public class ASTBuilder extends FlaskParserBaseVisitor<ASTNode> {
         int col = ctx.getStart().getCharPositionInLine();
         HtmlElementNode script = new HtmlElementNode("script", false, line, col);
 
+        // SCRIPT_OPEN يحتفظ بوسم الفتح كاملًا في lexer الحالي، بينما لا تعرض
+        // grammar السمات كعقد مستقلة. نستخرج src من النص الخام دون تعديل ANTLR.
         FlaskParser.ScriptElementContext scriptContext = ctx.scriptElement();
         String openTag = scriptContext.SCRIPT_OPEN().getText();
         java.util.regex.Matcher srcMatcher = java.util.regex.Pattern
@@ -491,6 +498,9 @@ public class ASTBuilder extends FlaskParserBaseVisitor<ASTNode> {
         return script;
     }
 
+    // ════════════════════════════════════════════════════════════
+    // JINJA2 STATEMENTS
+    // ════════════════════════════════════════════════════════════
     @Override
     public ASTNode visitJ2ForStmt(FlaskParser.J2ForStmtContext ctx) {
         int line = ctx.getStart().getLine();

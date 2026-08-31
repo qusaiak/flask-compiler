@@ -7,6 +7,9 @@ lexer grammar FlaskLexer;
 WS : [ \t\r\n\u000C]+ -> skip ;
 PERCENT: '%';
 
+// ════════════════════════════════════════════════════════════════════
+// CSS TOKENS — في DEFAULT MODE (للـ CSS files المباشرة)
+// ════════════════════════════════════════════════════════════════════
 CSS_COMMENT         : '/*' .*? '*/' -> skip ;
 CSS_AT_MEDIA        : '@media'      ;
 CSS_AT_KEYFRAMES    : '@keyframes'  ;
@@ -44,6 +47,9 @@ CSS_STRING_DQ       : '"' ( ~["\\\r\n] | '\\' . )* '"' ;
 CSS_STRING_SQ       : '\'' ( ~['\\\r\n] | '\\' . )* '\'' ;
 CSS_IDENT           : '-'? [a-zA-Z_][a-zA-Z0-9_\-]* ;
 
+// ════════════════════════════════════════════════════════════════════
+// JINJA & HTML TOKENS
+// ════════════════════════════════════════════════════════════════════
 JINJA_STMT_OPEN : '{%' '-'? [ \t\r\n]* -> pushMode(JINJA2_STMT_MODE) ;
 JINJA_VAR_OPEN  : '{{' '-'? [ \t\r\n]* -> pushMode(JINJA2_VAR_MODE)  ;
 JINJA_COMMENT   : '{#' .*? '#}'     -> skip                        ;
@@ -59,6 +65,9 @@ HTML_CLOSE_TAG  : '</' [a-zA-Z][a-zA-Z0-9\-]* -> pushMode(TAG_MODE) ;
 
 HTML_TEXT       : ~[<{%]+ ;
 
+// ════════════════════════════════════════════════════════════════════
+// TAG_MODE
+// ════════════════════════════════════════════════════════════════════
 mode TAG_MODE;
 
 TAG_WS               : [ \t\r\n\u000C]+ -> channel(HIDDEN);
@@ -74,6 +83,9 @@ TAG_JINJA_STMT_OPEN : '{%' '-'? [ \t]* -> pushMode(JINJA2_STMT_MODE) ;
 TAG_SELF_CLOSE      : '/>' -> popMode ;
 TAG_CLOSE           : '>' -> popMode ;
 
+// ════════════════════════════════════════════════════════════════════
+// CSS_MODE
+// ════════════════════════════════════════════════════════════════════
 mode CSS_MODE;
 CSS_MODE_WS         : [ \t\r\n\u000C]+ -> channel(HIDDEN) ;
 STYLE_CLOSE         : '</style>'    -> popMode  ;
@@ -114,16 +126,23 @@ CSS_MODE_STRING_DQ  : '"' ( ~["\\\r\n] | '\\' . )* '"' ;
 CSS_MODE_STRING_SQ  : '\'' ( ~['\\\r\n] | '\\' . )* '\'' ;
 CSS_MODE_IDENT      : '-'? [a-zA-Z_][a-zA-Z0-9_\-]* ;
 
+// ════════════════════════════════════════════════════════════════════
+// SCRIPT_MODE
+// ════════════════════════════════════════════════════════════════════
 mode SCRIPT_MODE;
 SCRIPT_WS           : [ \t\r\n\u000C]+ -> skip;
 SCRIPT_CLOSE        : '</script>' -> popMode ;
 SCRIPT_TEXT         : ~[<]+       ;
 SCRIPT_LT           : '<'         ;
 
+// ════════════════════════════════════════════════════════════════════
+// JINJA2_STMT_MODE
+// ════════════════════════════════════════════════════════════════════
 mode JINJA2_STMT_MODE;
 J2S_WS              : [ \t\r\n]+ -> channel(HIDDEN) ;
 JINJA_STMT_CLOSE    : [ \t\r]* '-'? '%}' -> popMode ;
 
+// --- الكلمات المفتاحية أولاً حصراً وقبل أي ID ---
 J2S_FOR             : 'for'            ;
 J2S_ENDFOR          : 'endfor'         ;
 J2S_IF              : 'if'             ;
@@ -156,6 +175,7 @@ J2S_TRUE            : 'true'  | 'True' ;
 J2S_FALSE           : 'false' | 'False';
 J2S_NONE            : 'none'  | 'None' ;
 
+// --- الرموز والأرقام والمعرفات ---
 J2S_EQ              : '==' ;
 J2S_NEQ             : '!=' ;
 J2S_LTE             : '<=' ;
@@ -185,10 +205,14 @@ J2S_FLOAT           : [0-9]+ '.' [0-9]+ ;
 J2S_INT             : [0-9]+              ;
 J2S_ID              : [a-zA-Z_][a-zA-Z0-9_]* ;
 
+// ════════════════════════════════════════════════════════════════════
+// JINJA2_VAR_MODE
+// ════════════════════════════════════════════════════════════════════
 mode JINJA2_VAR_MODE;
 J2V_WS              : [ \t\r\n]+ -> channel(HIDDEN) ;
 JINJA_VAR_CLOSE     : [ \t\r]* '-'? '}}' -> popMode ;
 
+// --- الكلمات المفتاحية أولاً حصراً وقبل أي ID ---
 J2V_NOT             : 'not'   ;
 J2V_AND             : 'and'   ;
 J2V_OR              : 'or'    ;
@@ -198,6 +222,7 @@ J2V_TRUE            : 'true'  | 'True'  ;
 J2V_FALSE           : 'false' | 'False' ;
 J2V_NONE            : 'none'  | 'None'  ;
 
+// --- الرموز والأرقام والمعرفات ---
 J2V_EQ              : '==' ;
 J2V_NEQ             : '!=' ;
 J2V_LTE             : '<=' ;

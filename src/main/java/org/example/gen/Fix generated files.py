@@ -1,6 +1,6 @@
 import os
 
-# Run from the generated-source directory; paths are relative to the working directory.
+# المجلد الحالي = مجلد gen
 target_dir = "."
 package_line = "package org.example.gen;\n"
 
@@ -24,11 +24,13 @@ for fname in files_to_fix:
 
     modified = False
 
+    # 1. أضف package لو ناقص
     if "package org.example.gen" not in content:
         content = package_line + content
         modified = True
         print(f"ADDED package: {fname}")
 
+    # 2. صحح implements غلط
     if "implements org.gen.FlaskParserVisitor" in content:
         content = content.replace(
             "implements org.gen.FlaskParserVisitor",
@@ -37,6 +39,7 @@ for fname in files_to_fix:
         modified = True
         print(f"FIXED implements: {fname}")
 
+    # 3. صحح imports غلط
     if "import org.gen." in content:
         content = content.replace("import org.gen.", "import org.example.gen.")
         modified = True

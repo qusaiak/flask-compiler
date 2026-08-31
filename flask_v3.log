@@ -1,0 +1,7 @@
+PASS	GET /products
+PASS	GET /add
+PASS	GET /product?id=1
+PASS	GET /edit/1
+PASS	POST /edit/1
+PASS	POST /add
+PASS	GET /delete?id=3

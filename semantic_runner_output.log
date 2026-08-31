@@ -1,0 +1,62 @@
+============================================================
+   Semantic Error Handling Test
+   This test does not modify output/
+============================================================
+
+
+--- Testing: testFiles/templates/semantic_test.html ---
+Semantic Error [6]: Cannot override built-in Flask/Jinja variable 'request' at line 2
+Semantic Error: Variable 'name' is already defined in this scope at line 6
+Semantic Error: Variable 'undefined_user' is used at line 9 but never defined!
+Semantic Error: Variable 'missing_list' is used at line 12 but never defined!
+Semantic Error: Variable 'is_admin' is used at line 17 but never defined!
+Semantic Error [5]: Block 'content' is already defined in this scope at line 26
+Semantic Error [8]: Variable 'name' defined at line 5 is never used!
+PASS: detected 4 semantic error(s)
+  - Semantic Error: Variable 'undefined_user' is used at line 9 but never defined!
+  - Semantic Error: Variable 'missing_list' is used at line 12 but never defined!
+  - Semantic Error: Variable 'is_admin' is used at line 17 but never defined!
+  - Semantic Error [5]: Block 'content' is already defined in this scope at line 26
+Generation would be skipped for this invalid template.
+
+--- Testing: testFiles/templates/semantic_v3.html ---
+Semantic Error [6]: Cannot override built-in Flask/Jinja variable 'request' at line 2
+Semantic Error: Variable 'name' is already defined in this scope at line 6
+Semantic Error: Variable 'undefined_user' is used at line 12 but never defined!
+Semantic Error [7]: Unknown Jinja filter 'invalid_filter' used at line 15
+Semantic Error: Variable 'missing_list' is used at line 18 but never defined!
+Semantic Error: Variable 'valid_list' is used at line 23 but never defined!
+Semantic Error [9]: Loop variable 'x' used outside its For loop scope at line 26
+Semantic Error: Variable 'is_admin' is used at line 29 but never defined!
+Semantic Error [5]: Block 'content' is already defined in this scope at line 35
+Semantic Error [8]: Variable 'unused_var' defined at line 9 is never used!
+PASS: detected 7 semantic error(s)
+  - Semantic Error: Variable 'undefined_user' is used at line 12 but never defined!
+  - Semantic Error [7]: Unknown Jinja filter 'invalid_filter' used at line 15
+  - Semantic Error: Variable 'missing_list' is used at line 18 but never defined!
+  - Semantic Error: Variable 'valid_list' is used at line 23 but never defined!
+  - Semantic Error [9]: Loop variable 'x' used outside its For loop scope at line 26
+  - Semantic Error: Variable 'is_admin' is used at line 29 but never defined!
+  - Semantic Error [5]: Block 'content' is already defined in this scope at line 35
+Generation would be skipped for this invalid template.
+
+--- Testing: testFiles/templates/test_template.html ---
+Semantic Error [6]: Cannot override built-in Flask/Jinja variable 'request' at line 2
+Semantic Error: Variable 'name' is already defined in this scope at line 6
+Semantic Error: Variable 'undefined_user' is used at line 8 but never defined!
+Semantic Error: Variable 'missing_list' is used at line 11 but never defined!
+Semantic Error: Variable 'is_admin' is used at line 16 but never defined!
+Semantic Error [5]: Block 'content' is already defined in this scope at line 25
+Semantic Error [8]: Variable 'name' defined at line 5 is never used!
+PASS: detected 4 semantic error(s)
+  - Semantic Error: Variable 'undefined_user' is used at line 8 but never defined!
+  - Semantic Error: Variable 'missing_list' is used at line 11 but never defined!
+  - Semantic Error: Variable 'is_admin' is used at line 16 but never defined!
+  - Semantic Error [5]: Block 'content' is already defined in this scope at line 25
+Generation would be skipped for this invalid template.
+============================================================
+Semantic test complete
+Total semantic errors detected: 15
+Report: compiler_output/semantic_test_report.txt
+output/ was not modified and no HTML was generated for test files.
+============================================================

@@ -1,0 +1,1238 @@
+════════════════════════════════════════════════════════════════════════════════
+   Flask & Jinja2 Compiler — Full Pipeline
+════════════════════════════════════════════════════════════════════════════════
+
+══ [STAGE 1] Python Analysis ══
+  File: testFiles/app.py
+  [1/3] Lexical Analysis OK
+  [2/3] Parsing OK
+  [3/3] AST Built OK
+  AST:
+     └── Module "" (line:1)
+         ├── FromImport "from flask" (line:1)
+         │   ├── Identifier "Flask" (line:1)
+         │   ├── Identifier "render_template" (line:1)
+         │   ├── Identifier "request" (line:1)
+         │   ├── Identifier "redirect" (line:1)
+         │   └── Identifier "url_for" (line:1)
+         ├── Assignment "=" (line:3)
+         │   ├── Identifier "app" (line:3)
+         │   └── Call "()" (line:3)
+         │       ├── Identifier "Flask" (line:3)
+         │       ├── Identifier "__name__" (line:3)
+         │       └── BinOp "=" (line:3)
+         │           ├── Identifier "template_folder" (line:3)
+         │           └── Literal "string: '.'" (line:3)
+         ├── Assignment "=" (line:5)
+         │   └── Identifier "p1" (line:5)
+         ├── Assignment "=" (line:6)
+         │   └── Identifier "p2" (line:6)
+         ├── Assignment "=" (line:7)
+         │   └── Identifier "p3" (line:7)
+         ├── Assignment "=" (line:9)
+         │   └── Identifier "products" (line:9)
+         ├── FunctionDef "find_product" (line:11)
+         │   ├── Identifier "product_id" (line:11)
+         │   ├── For "in" (line:12)
+         │   │   ├── Identifier "p" (line:12)
+         │   │   ├── Identifier "products" (line:12)
+         │   │   └── If "if" (line:13)
+         │   │       ├── BinOp "==" (line:13)
+         │   │       │   ├── Subscript "[]" (line:13)
+         │   │       │   │   ├── Identifier "p" (line:13)
+         │   │       │   │   └── Literal "string: "id"" (line:13)
+         │   │       │   └── Identifier "product_id" (line:13)
+         │   │       └── Return "return" (line:14)
+         │   │           └── Identifier "p" (line:14)
+         │   └── Return "return" (line:15)
+         │       └── Literal "None: None" (line:15)
+         ├── FunctionDef "get_next_id" (line:17)
+         │   ├── Assignment "=" (line:18)
+         │   │   ├── Identifier "max_id" (line:18)
+         │   │   └── Literal "number: 0" (line:18)
+         │   ├── For "in" (line:19)
+         │   │   ├── Identifier "p" (line:19)
+         │   │   ├── Identifier "products" (line:19)
+         │   │   └── If "if" (line:20)
+         │   │       ├── BinOp ">" (line:20)
+         │   │       │   ├── Subscript "[]" (line:20)
+         │   │       │   │   ├── Identifier "p" (line:20)
+         │   │       │   │   └── Literal "string: "id"" (line:20)
+         │   │       │   └── Identifier "max_id" (line:20)
+         │   │       └── Assignment "=" (line:21)
+         │   │           ├── Identifier "max_id" (line:21)
+         │   │           └── Subscript "[]" (line:21)
+         │   │               ├── Identifier "p" (line:21)
+         │   │               └── Literal "string: "id"" (line:21)
+         │   └── Return "return" (line:22)
+         │       └── BinOp "+" (line:22)
+         │           ├── Identifier "max_id" (line:22)
+         │           └── Literal "number: 1" (line:22)
+         ├── FunctionDef "remove_product" (line:24)
+         │   ├── Identifier "product_id" (line:24)
+         │   ├── Assignment "=" (line:25)
+         │   │   ├── Identifier "filtered" (line:25)
+         │   │   └── List "[]" (line:25)
+         │   ├── For "in" (line:26)
+         │   │   ├── Identifier "p" (line:26)
+         │   │   ├── Identifier "products" (line:26)
+         │   │   └── If "if" (line:27)
+         │   │       ├── BinOp "!=" (line:27)
+         │   │       │   ├── Subscript "[]" (line:27)
+         │   │       │   │   ├── Identifier "p" (line:27)
+         │   │       │   │   └── Literal "string: "id"" (line:27)
+         │   │       │   └── Identifier "product_id" (line:27)
+         │   │       └── Call "()" (line:28)
+         │   │           ├── Attribute ".append" (line:28)
+         │   │           │   └── Identifier "filtered" (line:28)
+         │   │           └── Identifier "p" (line:28)
+         │   └── Return "return" (line:29)
+         │       └── Identifier "filtered" (line:29)
+         ├── FunctionDef "home" (line:32)
+         │   ├── Return "return" (line:33)
+         │   │   └── Call "()" (line:33)
+         │   │       ├── Identifier "redirect" (line:33)
+         │   │       └── Call "()" (line:33)
+         │   │           ├── Identifier "url_for" (line:33)
+         │   │           └── Literal "string: 'show_products'" (line:33)
+         │   └── Decorator "@app.route" (line:31)
+         │       └── Literal "string: '/'" (line:31)
+         ├── FunctionDef "show_products" (line:36)
+         │   ├── Return "return" (line:37)
+         │   │   └── Call "()" (line:37)
+         │   │       ├── Identifier "render_template" (line:37)
+         │   │       ├── Literal "string: 'products.html'" (line:37)
+         │   │       └── BinOp "=" (line:37)
+         │   │           ├── Identifier "products" (line:37)
+         │   │           └── Identifier "products" (line:37)
+         │   └── Decorator "@app.route" (line:35)
+         │       └── Literal "string: '/products'" (line:35)
+         ├── FunctionDef "add_product" (line:40)
+         │   ├── If "if" (line:41)
+         │   │   ├── BinOp "==" (line:41)
+         │   │   │   ├── Attribute ".method" (line:41)
+         │   │   │   │   └── Identifier "request" (line:41)
+         │   │   │   └── Literal "string: 'POST'" (line:41)
+         │   │   ├── Assignment "=" (line:42)
+         │   │   │   ├── Identifier "new_id" (line:42)
+         │   │   │   └── Call "()" (line:42)
+         │   │   │       └── Identifier "get_next_id" (line:42)
+         │   │   ├── Assignment "=" (line:43)
+         │   │   │   ├── Identifier "name_val" (line:43)
+         │   │   │   └── Call "()" (line:43)
+         │   │   │       ├── Attribute ".get" (line:43)
+         │   │   │       │   └── Attribute ".form" (line:43)
+         │   │   │       │       └── Identifier "request" (line:43)
+         │   │   │       ├── Literal "string: 'name'" (line:43)
+         │   │   │       └── Literal "string: ''" (line:43)
+         │   │   ├── Assignment "=" (line:44)
+         │   │   │   ├── Identifier "price_val" (line:44)
+         │   │   │   └── Call "()" (line:44)
+         │   │   │       ├── Attribute ".get" (line:44)
+         │   │   │       │   └── Attribute ".form" (line:44)
+         │   │   │       │       └── Identifier "request" (line:44)
+         │   │   │       ├── Literal "string: 'price'" (line:44)
+         │   │   │       └── Literal "number: 0" (line:44)
+         │   │   ├── Assignment "=" (line:45)
+         │   │   │   ├── Identifier "img_val" (line:45)
+         │   │   │   └── Call "()" (line:45)
+         │   │   │       ├── Attribute ".get" (line:45)
+         │   │   │       │   └── Attribute ".form" (line:45)
+         │   │   │       │       └── Identifier "request" (line:45)
+         │   │   │       ├── Literal "string: 'image'" (line:45)
+         │   │   │       └── Literal "string: 'https://via.placeholder.com/150'" (line:45)
+         │   │   ├── Assignment "=" (line:46)
+         │   │   │   ├── Identifier "det_val" (line:46)
+         │   │   │   └── Call "()" (line:46)
+         │   │   │       ├── Attribute ".get" (line:46)
+         │   │   │       │   └── Attribute ".form" (line:46)
+         │   │   │       │       └── Identifier "request" (line:46)
+         │   │   │       ├── Literal "string: 'details'" (line:46)
+         │   │   │       └── Literal "string: ''" (line:46)
+         │   │   ├── Assignment "=" (line:47)
+         │   │   │   └── Identifier "new_product" (line:47)
+         │   │   ├── Call "()" (line:48)
+         │   │   │   ├── Attribute ".append" (line:48)
+         │   │   │   │   └── Identifier "products" (line:48)
+         │   │   │   └── Identifier "new_product" (line:48)
+         │   │   └── Return "return" (line:49)
+         │   │       └── Call "()" (line:49)
+         │   │           ├── Identifier "redirect" (line:49)
+         │   │           └── Call "()" (line:49)
+         │   │               ├── Identifier "url_for" (line:49)
+         │   │               └── Literal "string: 'show_products'" (line:49)
+         │   ├── Return "return" (line:50)
+         │   │   └── Call "()" (line:50)
+         │   │       ├── Identifier "render_template" (line:50)
+         │   │       └── Literal "string: 'AddProducts.html'" (line:50)
+         │   └── Decorator "@app.route" (line:39)
+         │       ├── Literal "string: '/add'" (line:39)
+         │       └── BinOp "=" (line:39)
+         │           └── Identifier "methods" (line:39)
+         ├── FunctionDef "edit_product" (line:53)
+         │   ├── Identifier "product_id" (line:53)
+         │   ├── Assignment "=" (line:54)
+         │   │   ├── Identifier "product" (line:54)
+         │   │   └── Call "()" (line:54)
+         │   │       ├── Identifier "find_product" (line:54)
+         │   │       └── Identifier "product_id" (line:54)
+         │   ├── If "if" (line:55)
+         │   │   ├── BinOp "is" (line:55)
+         │   │   │   ├── Identifier "product" (line:55)
+         │   │   │   └── Literal "None: None" (line:55)
+         │   │   └── Return "return" (line:56)
+         │   │       └── Literal "string: 'Product not found'" (line:56)
+         │   ├── If "if" (line:57)
+         │   │   ├── BinOp "==" (line:57)
+         │   │   │   ├── Attribute ".method" (line:57)
+         │   │   │   │   └── Identifier "request" (line:57)
+         │   │   │   └── Literal "string: 'POST'" (line:57)
+         │   │   ├── Assignment "=" (line:58)
+         │   │   │   ├── Subscript "[]" (line:58)
+         │   │   │   │   ├── Identifier "product" (line:58)
+         │   │   │   │   └── Literal "string: 'name'" (line:58)
+         │   │   │   └── Call "()" (line:58)
+         │   │   │       ├── Attribute ".get" (line:58)
+         │   │   │       │   └── Attribute ".form" (line:58)
+         │   │   │       │       └── Identifier "request" (line:58)
+         │   │   │       ├── Literal "string: 'name'" (line:58)
+         │   │   │       └── Subscript "[]" (line:58)
+         │   │   │           ├── Identifier "product" (line:58)
+         │   │   │           └── Literal "string: 'name'" (line:58)
+         │   │   ├── Assignment "=" (line:59)
+         │   │   │   ├── Subscript "[]" (line:59)
+         │   │   │   │   ├── Identifier "product" (line:59)
+         │   │   │   │   └── Literal "string: 'price'" (line:59)
+         │   │   │   └── Call "()" (line:59)
+         │   │   │       ├── Attribute ".get" (line:59)
+         │   │   │       │   └── Attribute ".form" (line:59)
+         │   │   │       │       └── Identifier "request" (line:59)
+         │   │   │       ├── Literal "string: 'price'" (line:59)
+         │   │   │       └── Subscript "[]" (line:59)
+         │   │   │           ├── Identifier "product" (line:59)
+         │   │   │           └── Literal "string: 'price'" (line:59)
+         │   │   ├── Assignment "=" (line:60)
+         │   │   │   ├── Subscript "[]" (line:60)
+         │   │   │   │   ├── Identifier "product" (line:60)
+         │   │   │   │   └── Literal "string: 'image'" (line:60)
+         │   │   │   └── Call "()" (line:60)
+         │   │   │       ├── Attribute ".get" (line:60)
+         │   │   │       │   └── Attribute ".form" (line:60)
+         │   │   │       │       └── Identifier "request" (line:60)
+         │   │   │       ├── Literal "string: 'image'" (line:60)
+         │   │   │       └── Subscript "[]" (line:60)
+         │   │   │           ├── Identifier "product" (line:60)
+         │   │   │           └── Literal "string: 'image'" (line:60)
+         │   │   ├── Assignment "=" (line:61)
+         │   │   │   ├── Subscript "[]" (line:61)
+         │   │   │   │   ├── Identifier "product" (line:61)
+         │   │   │   │   └── Literal "string: 'details'" (line:61)
+         │   │   │   └── Call "()" (line:61)
+         │   │   │       ├── Attribute ".get" (line:61)
+         │   │   │       │   └── Attribute ".form" (line:61)
+         │   │   │       │       └── Identifier "request" (line:61)
+         │   │   │       ├── Literal "string: 'details'" (line:61)
+         │   │   │       └── Subscript "[]" (line:61)
+         │   │   │           ├── Identifier "product" (line:61)
+         │   │   │           └── Literal "string: 'details'" (line:61)
+         │   │   └── Return "return" (line:62)
+         │   │       └── Call "()" (line:62)
+         │   │           ├── Identifier "redirect" (line:62)
+         │   │           └── Call "()" (line:62)
+         │   │               ├── Identifier "url_for" (line:62)
+         │   │               └── Literal "string: 'show_products'" (line:62)
+         │   ├── Return "return" (line:63)
+         │   │   └── Call "()" (line:63)
+         │   │       ├── Identifier "render_template" (line:63)
+         │   │       ├── Literal "string: 'edit_product.html'" (line:63)
+         │   │       └── BinOp "=" (line:63)
+         │   │           ├── Identifier "product" (line:63)
+         │   │           └── Identifier "product" (line:63)
+         │   └── Decorator "@app.route" (line:52)
+         │       ├── Literal "string: '/edit/<int:product_id>'" (line:52)
+         │       └── BinOp "=" (line:52)
+         │           └── Identifier "methods" (line:52)
+         ├── FunctionDef "product_detail" (line:66)
+         │   ├── Assignment "=" (line:67)
+         │   │   ├── Identifier "product_id" (line:67)
+         │   │   └── Call "()" (line:67)
+         │   │       ├── Attribute ".get" (line:67)
+         │   │       │   └── Attribute ".args" (line:67)
+         │   │       │       └── Identifier "request" (line:67)
+         │   │       ├── Literal "string: 'id'" (line:67)
+         │   │       └── BinOp "=" (line:67)
+         │   │           ├── Identifier "type" (line:67)
+         │   │           └── Identifier "int" (line:67)
+         │   ├── Assignment "=" (line:68)
+         │   │   ├── Identifier "product" (line:68)
+         │   │   └── Call "()" (line:68)
+         │   │       ├── Identifier "find_product" (line:68)
+         │   │       └── Identifier "product_id" (line:68)
+         │   ├── Return "return" (line:69)
+         │   │   └── Call "()" (line:69)
+         │   │       ├── Identifier "render_template" (line:69)
+         │   │       ├── Literal "string: 'product_detail.html'" (line:69)
+         │   │       └── BinOp "=" (line:69)
+         │   │           ├── Identifier "product" (line:69)
+         │   │           └── Identifier "product" (line:69)
+         │   └── Decorator "@app.route" (line:65)
+         │       └── Literal "string: '/product'" (line:65)
+         ├── FunctionDef "delete_product" (line:72)
+         │   ├── Global "global" (line:73)
+         │   │   └── Identifier "products" (line:73)
+         │   ├── Assignment "=" (line:74)
+         │   │   ├── Identifier "product_id" (line:74)
+         │   │   └── Call "()" (line:74)
+         │   │       ├── Attribute ".get" (line:74)
+         │   │       │   └── Attribute ".args" (line:74)
+         │   │       │       └── Identifier "request" (line:74)
+         │   │       ├── Literal "string: 'id'" (line:74)
+         │   │       └── BinOp "=" (line:74)
+         │   │           ├── Identifier "type" (line:74)
+         │   │           └── Identifier "int" (line:74)
+         │   ├── If "if" (line:75)
+         │   │   ├── BinOp "isnot" (line:75)
+         │   │   │   ├── Identifier "product_id" (line:75)
+         │   │   │   └── Literal "None: None" (line:75)
+         │   │   └── Assignment "=" (line:76)
+         │   │       ├── Identifier "products" (line:76)
+         │   │       └── Call "()" (line:76)
+         │   │           ├── Identifier "remove_product" (line:76)
+         │   │           └── Identifier "product_id" (line:76)
+         │   ├── Return "return" (line:77)
+         │   │   └── Call "()" (line:77)
+         │   │       ├── Identifier "redirect" (line:77)
+         │   │       └── Call "()" (line:77)
+         │   │           ├── Identifier "url_for" (line:77)
+         │   │           └── Literal "string: 'show_products'" (line:77)
+         │   └── Decorator "@app.route" (line:71)
+         │       └── Literal "string: '/delete'" (line:71)
+         └── Call "()" (line:79)
+             ├── Attribute ".run" (line:79)
+             │   └── Identifier "app" (line:79)
+             └── BinOp "=" (line:79)
+                 ├── Identifier "debug" (line:79)
+                 └── Literal "bool: True" (line:79)
+
+  Running Python Semantic Analysis...
+
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║                              SYMBOL TABLE                                    ║
+  ╠══════════════════════════════╦══════════════════════════╦════════════════════╣
+  ║ Variable Name                ║ Category                 ║ Defined at Line    ║
+  ╠══════════════════════════════╬══════════════════════════╬════════════════════╣
+  ║ app                          ║ PYTHON_VAR               ║ 3                  ║
+  ║ p1                           ║ PYTHON_VAR               ║ 5                  ║
+  ║ p2                           ║ PYTHON_VAR               ║ 6                  ║
+  ║ p3                           ║ PYTHON_VAR               ║ 7                  ║
+  ║ products                     ║ PYTHON_VAR               ║ 9                  ║
+  ║ find_product                 ║ PYTHON_FUNC              ║ 11                 ║
+  ║ product_id                   ║ PYTHON_PARAMETER         ║ 11                 ║
+  ║ p                            ║ PYTHON_LOOP_VARIABLE     ║ 12                 ║
+  ║ get_next_id                  ║ PYTHON_FUNC              ║ 17                 ║
+  ║ max_id                       ║ PYTHON_LOCAL             ║ 18                 ║
+  ║ p                            ║ PYTHON_LOOP_VARIABLE     ║ 19                 ║
+  ║ max_id                       ║ PYTHON_LOCAL             ║ 21                 ║
+  ║ remove_product               ║ PYTHON_FUNC              ║ 24                 ║
+  ║ product_id                   ║ PYTHON_PARAMETER         ║ 24                 ║
+  ║ filtered                     ║ PYTHON_LOCAL             ║ 25                 ║
+  ║ p                            ║ PYTHON_LOOP_VARIABLE     ║ 26                 ║
+  ║ home                         ║ PYTHON_FUNC              ║ 32                 ║
+  ║ show_products                ║ PYTHON_FUNC              ║ 36                 ║
+  ║ add_product                  ║ PYTHON_FUNC              ║ 40                 ║
+  ║ new_id                       ║ PYTHON_LOCAL             ║ 42                 ║
+  ║ name_val                     ║ PYTHON_LOCAL             ║ 43                 ║
+  ║ price_val                    ║ PYTHON_LOCAL             ║ 44                 ║
+  ║ img_val                      ║ PYTHON_LOCAL             ║ 45                 ║
+  ║ det_val                      ║ PYTHON_LOCAL             ║ 46                 ║
+  ║ new_product                  ║ PYTHON_LOCAL             ║ 47                 ║
+  ║ edit_product                 ║ PYTHON_FUNC              ║ 53                 ║
+  ║ product_id                   ║ PYTHON_PARAMETER         ║ 53                 ║
+  ║ product                      ║ PYTHON_LOCAL             ║ 54                 ║
+  ║ product_detail               ║ PYTHON_FUNC              ║ 66                 ║
+  ║ product_id                   ║ PYTHON_LOCAL             ║ 67                 ║
+  ║ product                      ║ PYTHON_LOCAL             ║ 68                 ║
+  ║ delete_product               ║ PYTHON_FUNC              ║ 72                 ║
+  ║ product_id                   ║ PYTHON_LOCAL             ║ 74                 ║
+  ║ products                     ║ PYTHON_LOCAL             ║ 76                 ║
+  ╚══════════════════════════════╩══════════════════════════╩════════════════════╝
+
+  Python errors: 0
+
+  Python context keys: [products.html, AddProducts.html, edit_product.html, product_detail.html]
+
+══ [STAGE 2] Jinja Template Analysis & Code Generation ══
+  File: testFiles/templates/AddProducts.html
+  [!] Jinja Error at line 25:22 — extraneous input 'Price' expecting {JINJA_STMT_OPEN, JINJA_VAR_OPEN, JINJA_COMMENT, HTML_DOCTYPE, HTML_COMMENT, STYLE_OPEN, SCRIPT_OPEN, HTML_OPEN_TAG, HTML_CLOSE_TAG, HTML_TEXT}
+  [!] Jinja Error at line 34:24 — extraneous input 'Details' expecting {JINJA_STMT_OPEN, JINJA_VAR_OPEN, JINJA_COMMENT, HTML_DOCTYPE, HTML_COMMENT, STYLE_OPEN, SCRIPT_OPEN, HTML_OPEN_TAG, HTML_CLOSE_TAG, HTML_TEXT}
+  [!] Jinja Error at line 40:3 — no viable alternative at input '{% endblock'
+  AST:
+     └── HtmlFile "template" (line:1)
+         ├── JinjaExtends "Jinja Extends" (line:1)
+         │   └── HtmlText "base.html" (line:1)
+         ├── JinjaBlock "title" (line:3)
+         │   └── HtmlText "Add Product" (line:3)
+         ├── JinjaBlock "styles" (line:5)
+         │   └── HtmlElement "style" (line:6)
+         │       ├── CssRule ".form-container" (line:7)
+         │       │   ├── CssSelector ".form-container" (line:7)
+         │       │   ├── CssDeclaration "max-width" (line:7)
+         │       │   │   └── HtmlText "600px" (line:7)
+         │       │   ├── CssDeclaration "margin" (line:7)
+         │       │   │   └── HtmlText "40px auto" (line:7)
+         │       │   ├── CssDeclaration "padding" (line:7)
+         │       │   │   └── HtmlText "24px" (line:7)
+         │       │   ├── CssDeclaration "background" (line:7)
+         │       │   │   └── HtmlText "#1D1D20" (line:7)
+         │       │   └── CssDeclaration "border-radius" (line:7)
+         │       │       └── HtmlText "8px" (line:7)
+         │       ├── CssRule ".form-group" (line:8)
+         │       │   ├── CssSelector ".form-group" (line:8)
+         │       │   └── CssDeclaration "margin-bottom" (line:8)
+         │       │       └── HtmlText "16px" (line:8)
+         │       ├── CssRule "label" (line:9)
+         │       │   ├── CssSelector "label" (line:9)
+         │       │   ├── CssDeclaration "display" (line:9)
+         │       │   │   └── HtmlText "block" (line:9)
+         │       │   ├── CssDeclaration "color" (line:9)
+         │       │   │   └── HtmlText "#909094" (line:9)
+         │       │   └── CssDeclaration "margin-bottom" (line:9)
+         │       │       └── HtmlText "4px" (line:9)
+         │       ├── CssRule ".form-input" (line:10)
+         │       │   ├── CssSelector ".form-input" (line:10)
+         │       │   ├── CssDeclaration "width" (line:10)
+         │       │   │   └── HtmlText "100%" (line:10)
+         │       │   ├── CssDeclaration "padding" (line:10)
+         │       │   │   └── HtmlText "8px 12px" (line:10)
+         │       │   ├── CssDeclaration "background" (line:10)
+         │       │   │   └── HtmlText "#2a2a2e" (line:10)
+         │       │   ├── CssDeclaration "color" (line:10)
+         │       │   │   └── HtmlText "#fbfbff" (line:10)
+         │       │   ├── CssDeclaration "border" (line:10)
+         │       │   │   └── HtmlText "1px solid #444" (line:10)
+         │       │   ├── CssDeclaration "border-radius" (line:10)
+         │       │   │   └── HtmlText "4px" (line:10)
+         │       │   └── CssDeclaration "box-sizing" (line:10)
+         │       │       └── HtmlText "border-box" (line:10)
+         │       └── CssRule ".btn" (line:11)
+         │           ├── CssSelector ".btn" (line:11)
+         │           ├── CssDeclaration "padding" (line:11)
+         │           │   └── HtmlText "10px 24px" (line:11)
+         │           ├── CssDeclaration "background" (line:11)
+         │           │   └── HtmlText "#17b26a" (line:11)
+         │           ├── CssDeclaration "color" (line:11)
+         │           │   └── HtmlText "#fff" (line:11)
+         │           ├── CssDeclaration "border" (line:11)
+         │           │   └── HtmlText "none" (line:11)
+         │           ├── CssDeclaration "border-radius" (line:11)
+         │           │   └── HtmlText "4px" (line:11)
+         │           └── CssDeclaration "cursor" (line:11)
+         │               └── HtmlText "pointer" (line:11)
+         └── JinjaBlock "content" (line:15)
+             └── HtmlElement "div" (line:16)
+                 ├── HtmlElement "h1" (line:17)
+                 │   └── HtmlText "Add New Product" (line:17)
+                 └── HtmlElement "form" (line:19)
+                     └── HtmlElement "div" (line:20)
+                         ├── HtmlElement "label" (line:21)
+                         │   └── HtmlText "Product Name" (line:21)
+                         ├── HtmlElement "input" (line:22)
+                         └── HtmlElement "div" (line:24)
+                             ├── HtmlElement "label" (line:25)
+                             ├── HtmlElement "input" (line:26)
+                             └── HtmlElement "div" (line:28)
+                                 ├── HtmlElement "label" (line:29)
+                                 │   └── HtmlText "Product Image (from device)" (line:29)
+                                 ├── HtmlElement "input" (line:31)
+                                 ├── HtmlElement "div" (line:33)
+                                 │   ├── HtmlElement "label" (line:34)
+                                 │   └── HtmlElement "textarea" (line:35)
+                                 └── HtmlElement "button" (line:37)
+                                     └── HtmlText "Add Product" (line:37)
+
+  Running Jinja Semantic Analysis...
+
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║                              SYMBOL TABLE                                    ║
+  ╠══════════════════════════════╦══════════════════════════╦════════════════════╣
+  ║ Variable Name                ║ Category                 ║ Defined at Line    ║
+  ╠══════════════════════════════╬══════════════════════════╬════════════════════╣
+  ║ title                        ║ TEMPLATE_BLOCK           ║ 3                  ║
+  ║ styles                       ║ TEMPLATE_BLOCK           ║ 5                  ║
+  ║ content                      ║ TEMPLATE_BLOCK           ║ 15                 ║
+  ╚══════════════════════════════╩══════════════════════════╩════════════════════╝
+
+  Context keys for AddProducts.html: []
+Static HTML successfully generated at: /home/ubuntu/work/compiler_review/project/FlaskJinjaCompilerUnifiedDynamic/output/AddProducts.html
+  Generated: output/AddProducts.html in 79ms
+
+  File: testFiles/templates/base.html
+  AST:
+     └── HtmlFile "template" (line:1)
+         ├── HtmlDoctype "html" (line:1)
+         └── HtmlElement "html" (line:2)
+             └── HtmlElement "head" (line:3)
+                 └── HtmlElement "meta" (line:4)
+                     └── HtmlElement "meta" (line:5)
+                         ├── HtmlElement "title" (line:6)
+                         │   └── JinjaBlock "title" (line:6)
+                         │       └── HtmlText "متجر المنتجات" (line:6)
+                         ├── HtmlElement "link" (line:7)
+                         │   └── JinjaBlock "styles" (line:8)
+                         └── HtmlElement "body" (line:10)
+                             ├── HtmlElement "nav" (line:11)
+                             │   ├── HtmlElement "h1" (line:12)
+                             │   │   └── HtmlText "متجر المنتجات" (line:12)
+                             │   └── HtmlElement "ul" (line:13)
+                             │       ├── HtmlElement "li" (line:14)
+                             │       │   └── HtmlElement "a" (line:14)
+                             │       │       └── HtmlText "المنتجات" (line:14)
+                             │       └── HtmlElement "li" (line:15)
+                             │           └── HtmlElement "a" (line:15)
+                             │               └── HtmlText "إضافة منتج" (line:15)
+                             └── HtmlElement "main" (line:18)
+                                 └── JinjaBlock "content" (line:19)
+
+  Running Jinja Semantic Analysis...
+
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║                              SYMBOL TABLE                                    ║
+  ╠══════════════════════════════╦══════════════════════════╦════════════════════╣
+  ║ Variable Name                ║ Category                 ║ Defined at Line    ║
+  ╠══════════════════════════════╬══════════════════════════╬════════════════════╣
+  ║ title                        ║ TEMPLATE_BLOCK           ║ 6                  ║
+  ║ styles                       ║ TEMPLATE_BLOCK           ║ 8                  ║
+  ║ content                      ║ TEMPLATE_BLOCK           ║ 19                 ║
+  ╚══════════════════════════════╩══════════════════════════╩════════════════════╝
+
+  Context keys for base.html: []
+Static HTML successfully generated at: /home/ubuntu/work/compiler_review/project/FlaskJinjaCompilerUnifiedDynamic/output/base.html
+  Generated: output/base.html in 5ms
+
+  File: testFiles/templates/edit_product.html
+  AST:
+     └── HtmlFile "template" (line:1)
+         ├── HtmlDoctype "html" (line:1)
+         └── HtmlElement "html" (line:2)
+             └── HtmlElement "head" (line:3)
+                 ├── HtmlElement "meta" (line:4)
+                 │   └── HtmlElement "title" (line:5)
+                 │       └── HtmlText "تعديل المنتج" (line:5)
+                 └── HtmlElement "body" (line:7)
+                     ├── HtmlElement "h2" (line:8)
+                     │   └── HtmlText "تعديل المنتج" (line:8)
+                     ├── HtmlElement "form" (line:9)
+                     │   ├── HtmlElement "label" (line:10)
+                     │   │   └── HtmlText "اسم المنتج:" (line:10)
+                     │   ├── HtmlElement "input (self-closing)" (line:11)
+                     │   ├── HtmlElement "label" (line:13)
+                     │   │   └── HtmlText "السعر:" (line:13)
+                     │   ├── HtmlElement "input (self-closing)" (line:14)
+                     │   ├── HtmlElement "label" (line:16)
+                     │   │   └── HtmlText "صورة جديدة (اختياري):" (line:16)
+                     │   ├── HtmlElement "input (self-closing)" (line:17)
+                     │   ├── HtmlElement "label" (line:19)
+                     │   │   └── HtmlText "التفاصيل:" (line:19)
+                     │   ├── HtmlElement "textarea" (line:20)
+                     │   │   └── JinjaExpr "Jinja Expression" (line:20)
+                     │   │       └── HtmlText "product.details" (line:20)
+                     │   └── HtmlElement "button" (line:22)
+                     │       └── HtmlText "حفظ التعديلات" (line:22)
+                     └── HtmlElement "br" (line:24)
+                         └── HtmlElement "a" (line:25)
+                             └── HtmlText "العودة للمنتجات" (line:25)
+
+  Running Jinja Semantic Analysis...
+
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║                              SYMBOL TABLE                                    ║
+  ╠══════════════════════════════╦══════════════════════════╦════════════════════╣
+  ║ Variable Name                ║ Category                 ║ Defined at Line    ║
+  ╠══════════════════════════════╬══════════════════════════╬════════════════════╣
+  ╚══════════════════════════════╩══════════════════════════╩════════════════════╝
+
+  Context keys for edit_product.html: [product]
+Static HTML successfully generated at: /home/ubuntu/work/compiler_review/project/FlaskJinjaCompilerUnifiedDynamic/output/edit_product.html
+  Generated: output/edit_product.html in 5ms
+
+  File: testFiles/templates/filter_valid.html
+  AST:
+     └── HtmlFile "template" (line:1)
+         ├── JinjaExtends "Jinja Extends" (line:1)
+         │   └── HtmlText "base.html" (line:1)
+         ├── JinjaBlock "title" (line:2)
+         │   └── HtmlText "Jinja Filter Test" (line:2)
+         └── JinjaBlock "content" (line:3)
+             └── HtmlElement "section" (line:4)
+                 ├── HtmlElement "p" (line:5)
+                 │   └── JinjaExpr "Jinja Expression" (line:5)
+                 │       └── HtmlText "product.name|upper" (line:5)
+                 ├── HtmlElement "p" (line:6)
+                 │   └── JinjaExpr "Jinja Expression" (line:6)
+                 │       └── HtmlText "products|length" (line:6)
+                 ├── HtmlElement "p" (line:7)
+                 │   └── JinjaExpr "Jinja Expression" (line:7)
+                 │       └── HtmlText "product.name|replace("a","@")" (line:7)
+                 ├── HtmlElement "p" (line:8)
+                 │   └── JinjaExpr "Jinja Expression" (line:8)
+                 │       └── HtmlText "product.details|truncate(12)" (line:8)
+                 └── HtmlElement "p" (line:9)
+                     └── JinjaExpr "Jinja Expression" (line:9)
+                         └── HtmlText "product.name|default("Unknown")" (line:9)
+
+  Running Jinja Semantic Analysis...
+
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║                              SYMBOL TABLE                                    ║
+  ╠══════════════════════════════╦══════════════════════════╦════════════════════╣
+  ║ Variable Name                ║ Category                 ║ Defined at Line    ║
+  ╠══════════════════════════════╬══════════════════════════╬════════════════════╣
+  ║ title                        ║ TEMPLATE_BLOCK           ║ 2                  ║
+  ║ content                      ║ TEMPLATE_BLOCK           ║ 3                  ║
+  ╚══════════════════════════════╩══════════════════════════╩════════════════════╝
+
+  Context keys for filter_valid.html: []
+Static HTML successfully generated at: /home/ubuntu/work/compiler_review/project/FlaskJinjaCompilerUnifiedDynamic/output/filter_valid.html
+  Generated: output/filter_valid.html in 3ms
+
+  File: testFiles/templates/if_else_fallback.html
+  AST:
+     └── HtmlFile "template" (line:1)
+         └── JinjaIf "Jinja If: product" (line:1)
+             ├── HtmlText "product" (line:1)
+             ├── HtmlElement "p" (line:2)
+             │   └── HtmlText "Product exists." (line:2)
+             └── JinjaElse "Jinja Else Statement" (line:3)
+                 └── HtmlElement "p" (line:4)
+                     └── HtmlText "Product not found." (line:4)
+
+  Running Jinja Semantic Analysis...
+
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║                              SYMBOL TABLE                                    ║
+  ╠══════════════════════════════╦══════════════════════════╦════════════════════╣
+  ║ Variable Name                ║ Category                 ║ Defined at Line    ║
+  ╠══════════════════════════════╬══════════════════════════╬════════════════════╣
+  ╚══════════════════════════════╩══════════════════════════╩════════════════════╝
+
+  Context keys for if_else_fallback.html: []
+Static HTML successfully generated at: /home/ubuntu/work/compiler_review/project/FlaskJinjaCompilerUnifiedDynamic/output/if_else_fallback.html
+  Generated: output/if_else_fallback.html in 3ms
+
+  File: testFiles/templates/interactive_addition.html
+  AST:
+     └── HtmlFile "template" (line:1)
+         ├── JinjaExtends "Jinja Extends" (line:1)
+         │   └── HtmlText "base.html" (line:1)
+         ├── JinjaBlock "title" (line:2)
+         │   └── HtmlText "حاسبة ديناميكية" (line:2)
+         └── JinjaBlock "content" (line:3)
+             ├── HtmlElement "section" (line:4)
+             │   ├── HtmlElement "h2" (line:5)
+             │   │   └── HtmlText "حاسبة جمع رقمين" (line:5)
+             │   ├── HtmlElement "p" (line:6)
+             │   │   └── HtmlText "غيّر القيم وسيُحدَّث الناتج فورًا داخل المتصفح." (line:6)
+             │   ├── HtmlElement "form" (line:8)
+             │   │   ├── HtmlElement "label" (line:9)
+             │   │   │   └── HtmlText "الرقم الأول" (line:9)
+             │   │   ├── HtmlElement "input (self-closing)" (line:10)
+             │   │   ├── HtmlElement "label" (line:12)
+             │   │   │   └── HtmlText "الرقم الثاني" (line:12)
+             │   │   ├── HtmlElement "input (self-closing)" (line:13)
+             │   │   └── HtmlElement "button" (line:15)
+             │   │       └── HtmlText "احسب المجموع" (line:15)
+             │   └── HtmlElement "p" (line:18)
+             │       └── HtmlText "المجموع: 42" (line:18)
+             └── HtmlElement "script" (line:20)
+
+  Running Jinja Semantic Analysis...
+
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║                              SYMBOL TABLE                                    ║
+  ╠══════════════════════════════╦══════════════════════════╦════════════════════╣
+  ║ Variable Name                ║ Category                 ║ Defined at Line    ║
+  ╠══════════════════════════════╬══════════════════════════╬════════════════════╣
+  ║ title                        ║ TEMPLATE_BLOCK           ║ 2                  ║
+  ║ content                      ║ TEMPLATE_BLOCK           ║ 3                  ║
+  ╚══════════════════════════════╩══════════════════════════╩════════════════════╝
+
+  Context keys for interactive_addition.html: []
+Static HTML successfully generated at: /home/ubuntu/work/compiler_review/project/FlaskJinjaCompilerUnifiedDynamic/output/interactive_addition.html
+  Generated: output/interactive_addition.html in 3ms
+
+  File: testFiles/templates/product_detail.html
+  AST:
+     └── HtmlFile "template" (line:2)
+         ├── JinjaExtends "Jinja Extends" (line:2)
+         │   └── HtmlText "base.html" (line:2)
+         ├── JinjaBlock "title" (line:3)
+         │   └── HtmlText "Product Detail" (line:3)
+         ├── JinjaBlock "content" (line:4)
+         │   └── JinjaIf "Jinja If: product" (line:5)
+         │       ├── HtmlText "product" (line:5)
+         │       ├── HtmlElement "div" (line:6)
+         │       │   └── HtmlElement "div" (line:7)
+         │       │       ├── HtmlElement "img (self-closing)" (line:8)
+         │       │       └── HtmlElement "div" (line:9)
+         │       │           ├── HtmlElement "h1" (line:10)
+         │       │           │   └── JinjaExpr "Jinja Expression" (line:10)
+         │       │           │       └── HtmlText "product.name" (line:10)
+         │       │           ├── HtmlElement "p" (line:11)
+         │       │           │   ├── JinjaExpr "Jinja Expression" (line:11)
+         │       │           │   │   └── HtmlText "product.price" (line:11)
+         │       │           │   └── HtmlText "$" (line:11)
+         │       │           ├── HtmlElement "p" (line:12)
+         │       │           │   └── JinjaExpr "Jinja Expression" (line:12)
+         │       │           │       └── HtmlText "product.details" (line:12)
+         │       │           └── HtmlElement "div" (line:13)
+         │       │               ├── HtmlElement "a" (line:14)
+         │       │               │   └── HtmlText "Back to Products" (line:14)
+         │       │               └── HtmlElement "a" (line:16)
+         │       │                   └── HtmlText "Delete Product" (line:16)
+         │       └── JinjaElse "Jinja Else Statement" (line:21)
+         │           └── HtmlElement "div" (line:22)
+         │               └── HtmlElement "p" (line:23)
+         │                   └── HtmlText "Product not found." (line:23)
+         └── JinjaBlock "styles" (line:27)
+             └── HtmlElement "style" (line:28)
+                 ├── CssRule ".detail-container" (line:29)
+                 │   ├── CssSelector ".detail-container" (line:29)
+                 │   ├── CssDeclaration "max-width" (line:30)
+                 │   │   └── HtmlText "900px" (line:30)
+                 │   ├── CssDeclaration "margin" (line:31)
+                 │   │   └── HtmlText "40px auto" (line:31)
+                 │   └── CssDeclaration "padding" (line:32)
+                 │       └── HtmlText "20px" (line:32)
+                 ├── CssRule ".detail-card" (line:34)
+                 │   ├── CssSelector ".detail-card" (line:34)
+                 │   ├── CssDeclaration "display" (line:35)
+                 │   │   └── HtmlText "flex" (line:35)
+                 │   ├── CssDeclaration "gap" (line:36)
+                 │   │   └── HtmlText "32px" (line:36)
+                 │   ├── CssDeclaration "background" (line:37)
+                 │   │   └── HtmlText "#1D1D20" (line:37)
+                 │   ├── CssDeclaration "border-radius" (line:38)
+                 │   │   └── HtmlText "8px" (line:38)
+                 │   └── CssDeclaration "padding" (line:39)
+                 │       └── HtmlText "24px" (line:39)
+                 ├── CssRule ".detail-img" (line:41)
+                 │   ├── CssSelector ".detail-img" (line:41)
+                 │   ├── CssDeclaration "width" (line:42)
+                 │   │   └── HtmlText "300px" (line:42)
+                 │   ├── CssDeclaration "height" (line:43)
+                 │   │   └── HtmlText "300px" (line:43)
+                 │   ├── CssDeclaration "object-fit" (line:44)
+                 │   │   └── HtmlText "cover" (line:44)
+                 │   └── CssDeclaration "border-radius" (line:45)
+                 │       └── HtmlText "4px" (line:45)
+                 ├── CssRule ".detail-title" (line:47)
+                 │   ├── CssSelector ".detail-title" (line:47)
+                 │   ├── CssDeclaration "color" (line:48)
+                 │   │   └── HtmlText "#fbfbff" (line:48)
+                 │   └── CssDeclaration "font-size" (line:49)
+                 │       └── HtmlText "2rem" (line:49)
+                 ├── CssRule ".detail-price" (line:51)
+                 │   ├── CssSelector ".detail-price" (line:51)
+                 │   ├── CssDeclaration "color" (line:52)
+                 │   │   └── HtmlText "#ffd400" (line:52)
+                 │   ├── CssDeclaration "font-size" (line:53)
+                 │   │   └── HtmlText "1.5rem" (line:53)
+                 │   └── CssDeclaration "font-weight" (line:54)
+                 │       └── HtmlText "bold" (line:54)
+                 ├── CssRule ".detail-description" (line:56)
+                 │   ├── CssSelector ".detail-description" (line:56)
+                 │   ├── CssDeclaration "color" (line:57)
+                 │   │   └── HtmlText "#909094" (line:57)
+                 │   └── CssDeclaration "line-height" (line:58)
+                 │       └── HtmlText "1.6" (line:58)
+                 ├── CssRule ".btn" (line:60)
+                 │   ├── CssSelector ".btn" (line:60)
+                 │   ├── CssDeclaration "padding" (line:61)
+                 │   │   └── HtmlText "10px 20px" (line:61)
+                 │   ├── CssDeclaration "background" (line:62)
+                 │   │   └── HtmlText "#A1C9F4" (line:62)
+                 │   └── CssDeclaration "border-radius" (line:63)
+                 │       └── HtmlText "4px" (line:63)
+                 ├── CssRule ".btn-danger" (line:65)
+                 │   ├── CssSelector ".btn-danger" (line:65)
+                 │   ├── CssDeclaration "background" (line:66)
+                 │   │   └── HtmlText "#f04438" (line:66)
+                 │   └── CssDeclaration "color" (line:67)
+                 │       └── HtmlText "#fff" (line:67)
+                 └── CssRule ".not-found" (line:69)
+                     ├── CssSelector ".not-found" (line:69)
+                     ├── CssDeclaration "color" (line:70)
+                     │   └── HtmlText "#FF9F9B" (line:70)
+                     ├── CssDeclaration "font-size" (line:71)
+                     │   └── HtmlText "1.2rem" (line:71)
+                     └── CssDeclaration "text-align" (line:72)
+                         └── HtmlText "center" (line:72)
+
+  Running Jinja Semantic Analysis...
+
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║                              SYMBOL TABLE                                    ║
+  ╠══════════════════════════════╦══════════════════════════╦════════════════════╣
+  ║ Variable Name                ║ Category                 ║ Defined at Line    ║
+  ╠══════════════════════════════╬══════════════════════════╬════════════════════╣
+  ║ title                        ║ TEMPLATE_BLOCK           ║ 3                  ║
+  ║ content                      ║ TEMPLATE_BLOCK           ║ 4                  ║
+  ║ styles                       ║ TEMPLATE_BLOCK           ║ 27                 ║
+  ╚══════════════════════════════╩══════════════════════════╩════════════════════╝
+
+  Context keys for product_detail.html: [product]
+Static HTML successfully generated at: /home/ubuntu/work/compiler_review/project/FlaskJinjaCompilerUnifiedDynamic/output/product_detail.html
+  Generated: output/product_detail.html in 6ms
+
+  File: testFiles/templates/products.html
+  [!] Jinja Error at line 9:64 — no viable alternative at input 'grid-template-columns: repeat(auto-fill, minmax(250px, 1fr'
+  [!] Jinja Error at line 9:64 — extraneous input 'fr' expecting CSS_MODE_RPAREN
+  [!] Jinja Error at line 9:68 — missing CSS_MODE_LBRACE at ';'
+  [!] Jinja Error at line 10:8 — missing CSS_MODE_RBRACE at 'gap'
+  [!] Jinja Error at line 10:13 — mismatched input '20px' expecting CSS_MODE_IDENT
+  [!] Jinja Error at line 56:21 — extraneous input 'a' expecting CSS_MODE_LBRACE
+  [!] Jinja Error at line 67:21 — missing CSS_MODE_LBRACE at 'a'
+  [!] Jinja Error at line 67:29 — mismatched input '{' expecting {CSS_MODE_RBRACE, CSS_MODE_SEMICOLON, CSS_MODE_COMMA, CSS_MODE_SLASH, CSS_MODE_IMPORTANT, CSS_MODE_HEX_COLOR, CSS_MODE_DIMENSION, CSS_MODE_NUMBER, CSS_MODE_URL, CSS_MODE_VAR, CSS_MODE_STRING_DQ, CSS_MODE_STRING_SQ, CSS_MODE_IDENT}
+  [!] Jinja Error at line 68:17 — mismatched input '0.85' expecting CSS_MODE_IDENT
+  AST:
+     └── HtmlFile "template" (line:2)
+         ├── JinjaExtends "Jinja Extends" (line:2)
+         │   └── HtmlText "base.html" (line:2)
+         ├── JinjaBlock "title" (line:3)
+         │   └── HtmlText "المنتجات" (line:3)
+         ├── JinjaBlock "styles" (line:5)
+         │   └── HtmlElement "style" (line:6)
+         │       ├── CssRule ".products-grid" (line:7)
+         │       │   ├── CssSelector ".products-grid" (line:7)
+         │       │   └── CssDeclaration "display" (line:8)
+         │       │       └── HtmlText "grid" (line:8)
+         │       ├── CssRule "grid-template-columns: repeat(auto-fill, minmax(250px, 1fr))" (line:9)
+         │       │   └── CssSelector "grid-template-columns: repeat(auto-fill, minmax(250px, 1fr))" (line:9)
+         │       ├── CssRule "gap: 20px;" (line:10)
+         │       │   ├── CssSelector "gap: 20px;" (line:10)
+         │       │   └── CssDeclaration "padding" (line:11)
+         │       │       └── HtmlText "20px" (line:11)
+         │       ├── CssRule ".product-card" (line:13)
+         │       │   ├── CssSelector ".product-card" (line:13)
+         │       │   ├── CssDeclaration "background" (line:14)
+         │       │   │   └── HtmlText "#1D1D20" (line:14)
+         │       │   ├── CssDeclaration "border-radius" (line:15)
+         │       │   │   └── HtmlText "8px" (line:15)
+         │       │   ├── CssDeclaration "overflow" (line:16)
+         │       │   │   └── HtmlText "hidden" (line:16)
+         │       │   ├── CssDeclaration "display" (line:17)
+         │       │   │   └── HtmlText "flex" (line:17)
+         │       │   ├── CssDeclaration "flex-direction" (line:18)
+         │       │   │   └── HtmlText "column" (line:18)
+         │       │   ├── CssDeclaration "justify-content" (line:19)
+         │       │   │   └── HtmlText "space-between" (line:19)
+         │       │   ├── CssDeclaration "padding" (line:20)
+         │       │   │   └── HtmlText "16px" (line:20)
+         │       │   └── CssDeclaration "box-shadow" (line:21)
+         │       │       └── HtmlText "0 4px 6px rgba(0, 0, 0, 0.3)" (line:21)
+         │       ├── CssRule ".product-image" (line:23)
+         │       │   ├── CssSelector ".product-image" (line:23)
+         │       │   ├── CssDeclaration "width" (line:24)
+         │       │   │   └── HtmlText "100%" (line:24)
+         │       │   ├── CssDeclaration "height" (line:25)
+         │       │   │   └── HtmlText "180px" (line:25)
+         │       │   ├── CssDeclaration "object-fit" (line:26)
+         │       │   │   └── HtmlText "cover" (line:26)
+         │       │   ├── CssDeclaration "border-radius" (line:27)
+         │       │   │   └── HtmlText "4px" (line:27)
+         │       │   └── CssDeclaration "background-color" (line:28)
+         │       │       └── HtmlText "#2a2a2e" (line:28)
+         │       ├── CssRule ".product-info" (line:30)
+         │       │   ├── CssSelector ".product-info" (line:30)
+         │       │   ├── CssDeclaration "display" (line:31)
+         │       │   │   └── HtmlText "flex" (line:31)
+         │       │   ├── CssDeclaration "flex-direction" (line:32)
+         │       │   │   └── HtmlText "column" (line:32)
+         │       │   ├── CssDeclaration "flex-grow" (line:33)
+         │       │   │   └── HtmlText "1" (line:33)
+         │       │   └── CssDeclaration "margin-top" (line:34)
+         │       │       └── HtmlText "12px" (line:34)
+         │       ├── CssRule ".product-name" (line:36)
+         │       │   ├── CssSelector ".product-name" (line:36)
+         │       │   ├── CssDeclaration "color" (line:37)
+         │       │   │   └── HtmlText "#fbfbff" (line:37)
+         │       │   ├── CssDeclaration "font-size" (line:38)
+         │       │   │   └── HtmlText "18px" (line:38)
+         │       │   └── CssDeclaration "margin" (line:39)
+         │       │       └── HtmlText "0 0 8px 0" (line:39)
+         │       ├── CssRule ".product-price" (line:41)
+         │       │   ├── CssSelector ".product-price" (line:41)
+         │       │   ├── CssDeclaration "color" (line:42)
+         │       │   │   └── HtmlText "#17b26a" (line:42)
+         │       │   ├── CssDeclaration "font-size" (line:43)
+         │       │   │   └── HtmlText "16px" (line:43)
+         │       │   ├── CssDeclaration "font-weight" (line:44)
+         │       │   │   └── HtmlText "bold" (line:44)
+         │       │   └── CssDeclaration "margin-bottom" (line:45)
+         │       │       └── HtmlText "12px" (line:45)
+         │       ├── CssRule ".product-actions" (line:47)
+         │       │   ├── CssSelector ".product-actions" (line:47)
+         │       │   ├── CssDeclaration "display" (line:48)
+         │       │   │   └── HtmlText "flex" (line:48)
+         │       │   ├── CssDeclaration "gap" (line:49)
+         │       │   │   └── HtmlText "6px" (line:49)
+         │       │   ├── CssDeclaration "align-items" (line:50)
+         │       │   │   └── HtmlText "center" (line:50)
+         │       │   ├── CssDeclaration "justify-content" (line:51)
+         │       │   │   └── HtmlText "space-between" (line:51)
+         │       │   ├── CssDeclaration "margin-top" (line:52)
+         │       │   │   └── HtmlText "auto" (line:52)
+         │       │   ├── CssDeclaration "padding-top" (line:53)
+         │       │   │   └── HtmlText "12px" (line:53)
+         │       │   └── CssDeclaration "border-top" (line:54)
+         │       │       └── HtmlText "1px solid #2a2a2e" (line:54)
+         │       ├── CssRule ".product-actions" (line:56)
+         │       │   ├── CssSelector ".product-actions" (line:56)
+         │       │   ├── CssDeclaration "flex" (line:57)
+         │       │   │   └── HtmlText "1" (line:57)
+         │       │   ├── CssDeclaration "text-align" (line:58)
+         │       │   │   └── HtmlText "center" (line:58)
+         │       │   ├── CssDeclaration "padding" (line:59)
+         │       │   │   └── HtmlText "6px 4px" (line:59)
+         │       │   ├── CssDeclaration "border-radius" (line:60)
+         │       │   │   └── HtmlText "4px" (line:60)
+         │       │   ├── CssDeclaration "text-decoration" (line:61)
+         │       │   │   └── HtmlText "none" (line:61)
+         │       │   ├── CssDeclaration "font-size" (line:62)
+         │       │   │   └── HtmlText "13px" (line:62)
+         │       │   ├── CssDeclaration "font-weight" (line:63)
+         │       │   │   └── HtmlText "500" (line:63)
+         │       │   ├── CssDeclaration "color" (line:64)
+         │       │   │   └── HtmlText "white" (line:64)
+         │       │   └── CssDeclaration "transition" (line:65)
+         │       │       └── HtmlText "opacity 0.2s" (line:65)
+         │       ├── CssRule ".product-actions" (line:67)
+         │       │   ├── CssSelector ".product-actions" (line:67)
+         │       │   └── CssDeclaration "a" (line:67)
+         │       │       └── HtmlText "hover" (line:67)
+         │       ├── CssRule "opacity: 0.85; } .btn-detail" (line:68)
+         │       │   ├── CssSelector "opacity: 0.85; } .btn-detail" (line:68)
+         │       │   └── CssDeclaration "background" (line:70)
+         │       │       └── HtmlText "#007bff" (line:70)
+         │       ├── CssRule ".btn-edit" (line:71)
+         │       │   ├── CssSelector ".btn-edit" (line:71)
+         │       │   └── CssDeclaration "background" (line:71)
+         │       │       └── HtmlText "#ff9800" (line:71)
+         │       └── CssRule ".btn-delete" (line:72)
+         │           ├── CssSelector ".btn-delete" (line:72)
+         │           └── CssDeclaration "background" (line:72)
+         │               └── HtmlText "#dc3545" (line:72)
+         └── JinjaBlock "content" (line:76)
+             └── HtmlElement "div" (line:77)
+                 └── JinjaFor "product in products" (line:78)
+                     └── HtmlElement "div" (line:79)
+                         ├── HtmlElement "img (self-closing)" (line:80)
+                         └── HtmlElement "div" (line:81)
+                             ├── HtmlElement "h3" (line:82)
+                             │   └── JinjaExpr "Jinja Expression" (line:82)
+                             │       └── HtmlText "product.name" (line:82)
+                             ├── HtmlElement "p" (line:83)
+                             │   ├── HtmlText "$" (line:83)
+                             │   └── JinjaExpr "Jinja Expression" (line:83)
+                             │       └── HtmlText "product.price" (line:83)
+                             └── HtmlElement "div" (line:85)
+                                 ├── HtmlElement "a" (line:86)
+                                 │   └── HtmlText "التفاصيل" (line:86)
+                                 ├── HtmlElement "a" (line:87)
+                                 │   └── HtmlText "تعديل" (line:87)
+                                 └── HtmlElement "a" (line:88)
+                                     └── HtmlText "حذف" (line:88)
+
+  Running Jinja Semantic Analysis...
+
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║                              SYMBOL TABLE                                    ║
+  ╠══════════════════════════════╦══════════════════════════╦════════════════════╣
+  ║ Variable Name                ║ Category                 ║ Defined at Line    ║
+  ╠══════════════════════════════╬══════════════════════════╬════════════════════╣
+  ║ title                        ║ TEMPLATE_BLOCK           ║ 3                  ║
+  ║ styles                       ║ TEMPLATE_BLOCK           ║ 5                  ║
+  ║ content                      ║ TEMPLATE_BLOCK           ║ 76                 ║
+  ║ product                      ║ LOOP_VARIABLE            ║ 78                 ║
+  ╚══════════════════════════════╩══════════════════════════╩════════════════════╝
+
+  Context keys for products.html: [products]
+Static HTML successfully generated at: /home/ubuntu/work/compiler_review/project/FlaskJinjaCompilerUnifiedDynamic/output/products.html
+  Generated: output/products.html in 24ms
+
+  File: testFiles/templates/semantic_test.html
+  AST:
+     └── HtmlFile "template" (line:2)
+         ├── JinjaSet "request" (line:2)
+         │   └── HtmlText ""my_data"" (line:2)
+         ├── JinjaSet "name" (line:5)
+         │   └── HtmlText ""Ali"" (line:5)
+         ├── JinjaSet "name" (line:6)
+         │   └── HtmlText ""Ahmad"" (line:6)
+         ├── HtmlElement "p" (line:9)
+         │   ├── HtmlText "Welcome," (line:9)
+         │   └── JinjaExpr "Jinja Expression" (line:9)
+         │       └── HtmlText "undefined_user" (line:9)
+         ├── JinjaFor "item in missing_list" (line:12)
+         │   └── HtmlElement "span" (line:13)
+         │       └── JinjaExpr "Jinja Expression" (line:13)
+         │           └── HtmlText "item" (line:13)
+         ├── JinjaIf "Jinja If: is_admin" (line:17)
+         │   ├── HtmlText "is_admin" (line:17)
+         │   └── HtmlElement "h1" (line:18)
+         │       └── HtmlText "Admin Panel" (line:18)
+         ├── JinjaBlock "content" (line:22)
+         │   └── HtmlElement "p" (line:23)
+         │       └── HtmlText "Block 1" (line:23)
+         └── JinjaBlock "content" (line:26)
+             └── HtmlElement "p" (line:27)
+                 └── HtmlText "Block 2" (line:27)
+
+  Running Jinja Semantic Analysis...
+Semantic Error [6]: Cannot override built-in Flask/Jinja variable 'request' at line 2
+Semantic Error: Variable 'name' is already defined in this scope at line 6
+Semantic Error: Variable 'undefined_user' is used at line 9 but never defined!
+Semantic Error: Variable 'missing_list' is used at line 12 but never defined!
+Semantic Error: Variable 'is_admin' is used at line 17 but never defined!
+Semantic Error [5]: Block 'content' is already defined in this scope at line 26
+Semantic Error [8]: Variable 'name' defined at line 5 is never used!
+
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║                              SYMBOL TABLE                                    ║
+  ╠══════════════════════════════╦══════════════════════════╦════════════════════╣
+  ║ Variable Name                ║ Category                 ║ Defined at Line    ║
+  ╠══════════════════════════════╬══════════════════════════╬════════════════════╣
+  ║ name                         ║ SET_VAR                  ║ 5                  ║
+  ║ item                         ║ LOOP_VARIABLE            ║ 12                 ║
+  ║ content                      ║ TEMPLATE_BLOCK           ║ 22                 ║
+  ╚══════════════════════════════╩══════════════════════════╩════════════════════╝
+
+  [!] 4 semantic error(s) — skipping code generation
+
+  File: testFiles/templates/semantic_v3.html
+  AST:
+     └── HtmlFile "template" (line:2)
+         ├── JinjaSet "request" (line:2)
+         │   └── HtmlText ""my_data"" (line:2)
+         ├── JinjaSet "name" (line:5)
+         │   └── HtmlText ""Ali"" (line:5)
+         ├── JinjaSet "name" (line:6)
+         │   └── HtmlText ""Ahmad"" (line:6)
+         ├── JinjaSet "unused_var" (line:9)
+         │   └── HtmlText ""123"" (line:9)
+         ├── HtmlElement "p" (line:12)
+         │   ├── HtmlText "Welcome," (line:12)
+         │   └── JinjaExpr "Jinja Expression" (line:12)
+         │       └── HtmlText "undefined_user" (line:12)
+         ├── HtmlElement "p" (line:15)
+         │   └── JinjaExpr "Jinja Expression" (line:15)
+         │       └── HtmlText "name|invalid_filter" (line:15)
+         ├── JinjaFor "item in missing_list" (line:18)
+         │   └── HtmlElement "span" (line:19)
+         │       └── JinjaExpr "Jinja Expression" (line:19)
+         │           └── HtmlText "item" (line:19)
+         ├── JinjaFor "x in valid_list" (line:23)
+         │   └── HtmlElement "p" (line:24)
+         │       └── JinjaExpr "Jinja Expression" (line:24)
+         │           └── HtmlText "x" (line:24)
+         ├── HtmlElement "p" (line:26)
+         │   ├── HtmlText "Outside loop:" (line:26)
+         │   └── JinjaExpr "Jinja Expression" (line:26)
+         │       └── HtmlText "x" (line:26)
+         ├── JinjaIf "Jinja If: is_admin" (line:29)
+         │   ├── HtmlText "is_admin" (line:29)
+         │   └── HtmlElement "h1" (line:30)
+         │       └── HtmlText "Admin Panel" (line:30)
+         ├── JinjaBlock "content" (line:34)
+         │   └── HtmlElement "p" (line:34)
+         │       └── HtmlText "Block 1" (line:34)
+         └── JinjaBlock "content" (line:35)
+             └── HtmlElement "p" (line:35)
+                 └── HtmlText "Block 2" (line:35)
+
+  Running Jinja Semantic Analysis...
+Semantic Error [6]: Cannot override built-in Flask/Jinja variable 'request' at line 2
+Semantic Error: Variable 'name' is already defined in this scope at line 6
+Semantic Error: Variable 'undefined_user' is used at line 12 but never defined!
+Semantic Error [7]: Unknown Jinja filter 'invalid_filter' used at line 15
+Semantic Error: Variable 'missing_list' is used at line 18 but never defined!
+Semantic Error: Variable 'valid_list' is used at line 23 but never defined!
+Semantic Error [9]: Loop variable 'x' used outside its For loop scope at line 26
+Semantic Error: Variable 'is_admin' is used at line 29 but never defined!
+Semantic Error [5]: Block 'content' is already defined in this scope at line 35
+Semantic Error [8]: Variable 'unused_var' defined at line 9 is never used!
+
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║                              SYMBOL TABLE                                    ║
+  ╠══════════════════════════════╦══════════════════════════╦════════════════════╣
+  ║ Variable Name                ║ Category                 ║ Defined at Line    ║
+  ╠══════════════════════════════╬══════════════════════════╬════════════════════╣
+  ║ name                         ║ SET_VAR                  ║ 5                  ║
+  ║ unused_var                   ║ SET_VAR                  ║ 9                  ║
+  ║ item                         ║ LOOP_VARIABLE            ║ 18                 ║
+  ║ x                            ║ LOOP_VARIABLE            ║ 23                 ║
+  ║ content                      ║ TEMPLATE_BLOCK           ║ 34                 ║
+  ╚══════════════════════════════╩══════════════════════════╩════════════════════╝
+
+  [!] 7 semantic error(s) — skipping code generation
+
+  File: testFiles/templates/test_add_products.html
+  AST:
+     └── HtmlFile "template" (line:1)
+         ├── JinjaExtends "Jinja Extends" (line:1)
+         │   └── HtmlText "base.html" (line:1)
+         ├── JinjaBlock "title" (line:3)
+         │   └── HtmlText "Add Product" (line:3)
+         ├── JinjaBlock "styles" (line:5)
+         │   └── HtmlElement "style" (line:6)
+         │       ├── CssRule ".form-container" (line:7)
+         │       │   ├── CssSelector ".form-container" (line:7)
+         │       │   ├── CssDeclaration "max-width" (line:8)
+         │       │   │   └── HtmlText "600px" (line:8)
+         │       │   ├── CssDeclaration "margin" (line:9)
+         │       │   │   └── HtmlText "40px auto" (line:9)
+         │       │   ├── CssDeclaration "padding" (line:10)
+         │       │   │   └── HtmlText "24px" (line:10)
+         │       │   ├── CssDeclaration "background" (line:11)
+         │       │   │   └── HtmlText "#1D1D20" (line:11)
+         │       │   └── CssDeclaration "border-radius" (line:12)
+         │       │       └── HtmlText "8px" (line:12)
+         │       ├── CssRule ".form-group" (line:14)
+         │       │   ├── CssSelector ".form-group" (line:14)
+         │       │   └── CssDeclaration "margin-bottom" (line:15)
+         │       │       └── HtmlText "16px" (line:15)
+         │       ├── CssRule "label" (line:17)
+         │       │   ├── CssSelector "label" (line:17)
+         │       │   ├── CssDeclaration "display" (line:18)
+         │       │   │   └── HtmlText "block" (line:18)
+         │       │   ├── CssDeclaration "color" (line:19)
+         │       │   │   └── HtmlText "#909094" (line:19)
+         │       │   └── CssDeclaration "margin-bottom" (line:20)
+         │       │       └── HtmlText "4px" (line:20)
+         │       ├── CssRule ".form-input" (line:22)
+         │       │   ├── CssSelector ".form-input" (line:22)
+         │       │   ├── CssDeclaration "width" (line:23)
+         │       │   │   └── HtmlText "100%" (line:23)
+         │       │   ├── CssDeclaration "padding" (line:24)
+         │       │   │   └── HtmlText "8px 12px" (line:24)
+         │       │   ├── CssDeclaration "background" (line:25)
+         │       │   │   └── HtmlText "#2a2a2e" (line:25)
+         │       │   ├── CssDeclaration "color" (line:26)
+         │       │   │   └── HtmlText "#fbfbff" (line:26)
+         │       │   ├── CssDeclaration "border" (line:27)
+         │       │   │   └── HtmlText "1px solid #444" (line:27)
+         │       │   └── CssDeclaration "border-radius" (line:28)
+         │       │       └── HtmlText "4px" (line:28)
+         │       └── CssRule ".btn" (line:30)
+         │           ├── CssSelector ".btn" (line:30)
+         │           ├── CssDeclaration "padding" (line:31)
+         │           │   └── HtmlText "10px 24px" (line:31)
+         │           ├── CssDeclaration "background" (line:32)
+         │           │   └── HtmlText "#17b26a" (line:32)
+         │           ├── CssDeclaration "color" (line:33)
+         │           │   └── HtmlText "#fff" (line:33)
+         │           ├── CssDeclaration "border" (line:34)
+         │           │   └── HtmlText "none" (line:34)
+         │           ├── CssDeclaration "border-radius" (line:35)
+         │           │   └── HtmlText "4px" (line:35)
+         │           └── CssDeclaration "cursor" (line:36)
+         │               └── HtmlText "pointer" (line:36)
+         └── JinjaBlock "content" (line:41)
+             └── HtmlElement "div" (line:42)
+                 ├── HtmlElement "h1" (line:43)
+                 │   └── HtmlText "Add New Product" (line:43)
+                 └── HtmlElement "form" (line:44)
+                     ├── HtmlElement "div" (line:45)
+                     │   ├── HtmlElement "label" (line:46)
+                     │   │   └── HtmlText "Product Name" (line:46)
+                     │   └── HtmlElement "input (self-closing)" (line:47)
+                     ├── HtmlElement "div" (line:49)
+                     │   ├── HtmlElement "label" (line:50)
+                     │   │   └── HtmlText "Price:" (line:50)
+                     │   └── HtmlElement "input (self-closing)" (line:51)
+                     ├── HtmlElement "div" (line:53)
+                     │   ├── HtmlElement "label" (line:54)
+                     │   │   └── HtmlText "Image URL" (line:54)
+                     │   └── HtmlElement "input (self-closing)" (line:55)
+                     ├── HtmlElement "div" (line:57)
+                     │   ├── HtmlElement "label" (line:58)
+                     │   │   └── HtmlText "Details:" (line:58)
+                     │   └── HtmlElement "textarea" (line:59)
+                     └── HtmlElement "button" (line:61)
+                         └── HtmlText "Add Product" (line:61)
+
+  Running Jinja Semantic Analysis...
+
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║                              SYMBOL TABLE                                    ║
+  ╠══════════════════════════════╦══════════════════════════╦════════════════════╣
+  ║ Variable Name                ║ Category                 ║ Defined at Line    ║
+  ╠══════════════════════════════╬══════════════════════════╬════════════════════╣
+  ║ title                        ║ TEMPLATE_BLOCK           ║ 3                  ║
+  ║ styles                       ║ TEMPLATE_BLOCK           ║ 5                  ║
+  ║ content                      ║ TEMPLATE_BLOCK           ║ 41                 ║
+  ╚══════════════════════════════╩══════════════════════════╩════════════════════╝
+
+  Context keys for test_add_products.html: []
+Static HTML successfully generated at: /home/ubuntu/work/compiler_review/project/FlaskJinjaCompilerUnifiedDynamic/output/test_add_products.html
+  Generated: output/test_add_products.html in 3ms
+
+  File: testFiles/templates/test_template.html
+  AST:
+     └── HtmlFile "template" (line:2)
+         ├── JinjaSet "request" (line:2)
+         │   └── HtmlText ""my_data"" (line:2)
+         ├── JinjaSet "name" (line:5)
+         │   └── HtmlText ""Ali"" (line:5)
+         ├── JinjaSet "name" (line:6)
+         │   └── HtmlText ""Ahmad"" (line:6)
+         ├── HtmlElement "p" (line:8)
+         │   ├── HtmlText "Welcome," (line:8)
+         │   └── JinjaExpr "Jinja Expression" (line:8)
+         │       └── HtmlText "undefined_user" (line:8)
+         ├── JinjaFor "item in missing_list" (line:11)
+         │   └── HtmlElement "span" (line:12)
+         │       └── JinjaExpr "Jinja Expression" (line:12)
+         │           └── HtmlText "item" (line:12)
+         ├── JinjaIf "Jinja If: is_admin" (line:16)
+         │   ├── HtmlText "is_admin" (line:16)
+         │   └── HtmlElement "h1" (line:17)
+         │       └── HtmlText "Admin Panel" (line:17)
+         ├── JinjaBlock "content" (line:21)
+         │   └── HtmlElement "p" (line:22)
+         │       └── HtmlText "Block 1" (line:22)
+         └── JinjaBlock "content" (line:25)
+             └── HtmlElement "p" (line:26)
+                 └── HtmlText "Block 2" (line:26)
+
+  Running Jinja Semantic Analysis...
+Semantic Error [6]: Cannot override built-in Flask/Jinja variable 'request' at line 2
+Semantic Error: Variable 'name' is already defined in this scope at line 6
+Semantic Error: Variable 'undefined_user' is used at line 8 but never defined!
+Semantic Error: Variable 'missing_list' is used at line 11 but never defined!
+Semantic Error: Variable 'is_admin' is used at line 16 but never defined!
+Semantic Error [5]: Block 'content' is already defined in this scope at line 25
+Semantic Error [8]: Variable 'name' defined at line 5 is never used!
+
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║                              SYMBOL TABLE                                    ║
+  ╠══════════════════════════════╦══════════════════════════╦════════════════════╣
+  ║ Variable Name                ║ Category                 ║ Defined at Line    ║
+  ╠══════════════════════════════╬══════════════════════════╬════════════════════╣
+  ║ name                         ║ SET_VAR                  ║ 5                  ║
+  ║ item                         ║ LOOP_VARIABLE            ║ 11                 ║
+  ║ content                      ║ TEMPLATE_BLOCK           ║ 21                 ║
+  ╚══════════════════════════════╩══════════════════════════╩════════════════════╝
+
+  [!] 4 semantic error(s) — skipping code generation
+
+══ [STAGE 3] Copying Support Files ══
+  Copied: testFiles/app.py → output/app.py
+  Copied: testFiles/static/style.css → output/style.css
+  Copied: testFiles/static/interactive_addition.js → output/script.js
+
+════════════════════════════════════════════════════════════════════════════════
+   Compilation Complete!
+   → output/          : HTML files + app.py + style.css + script.js
+   → compiler_output/ : ast_python.json, ast_jinja.json, semantic_report.txt, generation_log.txt
+════════════════════════════════════════════════════════════════════════════════

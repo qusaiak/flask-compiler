@@ -1,9 +1,11 @@
-[2026-08-25T15:16:01.552593452] تنظيف output/ قبل بدء التوليد
-[2026-08-25T15:16:01.701097281] تحليل testFiles/app.py: استُخرجت Context Data من AST لِـ 4 قالب/قوالب عبر استدعاءات render_template: [index.jinja, add_product.jinja, edit_product.jinja, product_detail.jinja]
-[2026-08-25T15:16:01.767011952] توليد output/index.html من القالب testFiles/templates/index.jinja بمفاتيح Context: [products] (60ms)
-[2026-08-25T15:16:01.781977142] توليد output/add_product.html من القالب testFiles/templates/add_product.jinja بمفاتيح Context: [] (7ms)
-[2026-08-25T15:16:01.788589578] توليد output/edit_product.html من القالب testFiles/templates/edit_product.jinja بمفاتيح Context: [product] (6ms)
-[2026-08-25T15:16:01.793904549] توليد output/product_detail.html من القالب testFiles/templates/product_detail.jinja بمفاتيح Context: [product] (5ms)
-[2026-08-25T15:16:01.794698978] تجهيز backend runtime: testFiles/app.py -> output/app.py مع مواءمة مراجع HTML المولدة
-[2026-08-25T15:16:01.797921564] نسخ ملف داعم دون معالجة: testFiles/static/style.css -> output/style.css
-[2026-08-25T15:16:01.799179652] نسخ ملف داعم دون معالجة: testFiles/static/interactive_addition.js -> output/script.js
+[2026-08-31T11:04:21.655401300] تنظيف output/ قبل بدء التوليد
+[2026-08-31T11:04:22.784993700] تحليل testFiles/app.py: استُخرجت Context Data من AST لِـ 4 قالب/قوالب عبر استدعاءات render_template: [index.jinja, add_product.jinja, edit_product.jinja, product_detail.jinja]
+[2026-08-31T11:04:23.199093200] تحميل 1 منتج/منتجات من testFiles/products.json وربطها مباشرةً بـJinja Context
+[2026-08-31T11:04:24.266020400] توليد output/index.html من القالب testFiles\templates\index.jinja بمفاتيح Context: [products, product] (1026ms)
+[2026-08-31T11:04:24.329556400] توليد output/add_product.html من القالب testFiles\templates\add_product.jinja بمفاتيح Context: [products, product] (37ms)
+[2026-08-31T11:04:24.368810] توليد output/edit_product.html من القالب testFiles\templates\edit_product.jinja بمفاتيح Context: [product, products] (38ms)
+[2026-08-31T11:04:24.404847400] توليد output/product_detail.html من القالب testFiles\templates\product_detail.jinja بمفاتيح Context: [product, products] (35ms)
+[2026-08-31T11:04:24.504762600] تجهيز backend runtime: testFiles/runtime_app.py -> output/app.py مع مواءمة مراجع HTML المولدة
+[2026-08-31T11:04:24.521826600] نسخ ملف داعم دون معالجة: testFiles/static/style.css -> output/style.css
+[2026-08-31T11:04:24.533656300] نسخ ملف داعم دون معالجة: testFiles/static/interactive_addition.js -> output/script.js
+[2026-08-31T11:04:24.546620400] نسخ ملف داعم دون معالجة: testFiles/products.json -> output/products.json

@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FunctionDefNode extends ASTNode {
-    private final String name;
-    private final boolean isAsync;
-    private final List<ASTNode> parameters;
-    private final List<ASTNode> body;
-    private ASTNode returnType;
+    private final String name;              // اسم الدالة
+    private final boolean isAsync;          // هل الدالة غير متزامنة (async def)
+    private final List<ASTNode> parameters; // معاملات الدالة (مثل ParameterNode أو IdentifierNode)
+    private final List<ASTNode> body;       // العبارات البرمجية داخل جسم الدالة
+    private ASTNode returnType;             // نوع القيمة المرجعة (Type Annotation مثل -> int)
 
     public FunctionDefNode(String name, boolean isAsync, int line, int col) {
         super("FunctionDefNode", line, col);
@@ -22,6 +22,9 @@ public class FunctionDefNode extends ASTNode {
         this.returnType = null;
     }
 
+    /**
+     * إضافة معامل (Parameter) للدالة وربطه كابن في الشجرة
+     */
     public void addParameter(ASTNode param) {
         if (param != null) {
             this.parameters.add(param);
@@ -29,6 +32,9 @@ public class FunctionDefNode extends ASTNode {
         }
     }
 
+    /**
+     * تحديد نوع القيمة المرجعة (Return Type Hint) وربطه كابن في الشجرة
+     */
     public void setReturnType(ASTNode returnType) {
         this.returnType = returnType;
         if (returnType != null) {
@@ -36,6 +42,9 @@ public class FunctionDefNode extends ASTNode {
         }
     }
 
+    /**
+     * إضافة عبارة برمجية داخل جسم الدالة وربطها كابن في الشجرة
+     */
     public void addStatement(ASTNode statement) {
         if (statement != null) {
             this.body.add(statement);
@@ -53,6 +62,7 @@ public class FunctionDefNode extends ASTNode {
         return name;
     }
 
+    // Getters
     public String getName() {
         return name;
     }

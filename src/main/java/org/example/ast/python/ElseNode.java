@@ -7,13 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ElseNode extends ASTNode {
-    private final List<ASTNode> body;
+    private final List<ASTNode> body; // العبارات البرمجية المنفذة داخل فرع الـ else
 
     public ElseNode(int line, int col) {
         super("ElseNode", line, col);
         this.body = new ArrayList<>();
     }
 
+    /**
+     * إضافة عبارة برمجية داخل فرع الـ else وربطها كابن في الشجرة
+     */
     public void addStatement(ASTNode statement) {
         if (statement != null) {
             this.body.add(statement);
@@ -31,6 +34,7 @@ public class ElseNode extends ASTNode {
         return "else";
     }
 
+    // Getter
     public List<ASTNode> getBody() {
         return body;
     }

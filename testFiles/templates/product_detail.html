@@ -1,3 +1,4 @@
+{# testFiles/product_detail.html #}
 {% extends "base.html" %}
 {% block title %}Product Detail{% endblock %}
 {% block content %}
@@ -11,6 +12,7 @@
 			<p class="detail-description">{{ product.details }}</p>
 			<div class="detail-actions">
 				<a href="/products" class="btn">Back to Products</a>
+				<!-- 🟢 تعديل 2: تمرير id المنتج لرابط الحذف -->
 				<a href="/delete?id={{ product.id }}" class="btn btn-danger">Delete Product</a>
 			</div>
 		</div>

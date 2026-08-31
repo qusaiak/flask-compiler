@@ -1,0 +1,29 @@
+PASS	runtime_app.py syntax	Python syntax compiles
+PASS	compiler_output/ast_python.json	21163 bytes
+PASS	compiler_output/ast_jinja.json	45369 bytes
+PASS	compiler_output/semantic_report.txt	5864 bytes
+PASS	compiler_output/generation_log.txt	2538 bytes
+PASS	output/app.py	2932 bytes
+PASS	output/style.css	2955 bytes
+PASS	output/script.js	1217 bytes
+PASS	JSON valid: ast_jinja.json	dict
+PASS	JSON valid: ast_python.json	dict
+INFO	render_template targets	products.html, AddProducts.html, edit_product.html, product_detail.html
+PASS	generated page for products.html	output/products.html
+PASS	generated page for AddProducts.html	output/AddProducts.html
+PASS	generated page for edit_product.html	output/edit_product.html
+PASS	generated page for product_detail.html	output/product_detail.html
+PASS	unresolved Jinja in AddProducts.html	0
+PASS	unresolved Jinja in base.html	0
+PASS	unresolved Jinja in edit_product.html	0
+PASS	unresolved Jinja in filter_valid.html	0
+PASS	unresolved Jinja in if_else_fallback.html	0
+PASS	unresolved Jinja in interactive_addition.html	0
+PASS	unresolved Jinja in product_detail.html	0
+WARN	unresolved Jinja in products.html	3
+PASS	unresolved Jinja in test_add_products.html	0
+PASS	runtime route /products	route text present
+PASS	runtime route /add	route text present
+PASS	runtime route /edit	route text present
+PASS	runtime route /delete	route text present
+PASS	runtime route /product	route text present

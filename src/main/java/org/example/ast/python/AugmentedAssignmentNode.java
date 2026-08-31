@@ -4,9 +4,9 @@ import org.example.ast.ASTNode;
 import org.example.ast.ASTVisitor;
 
 public class AugmentedAssignmentNode extends ASTNode {
-    private final ASTNode target;
-    private final String operator;
-    private final ASTNode value;
+    private final ASTNode target;  // المتغير المستهدف (IdentifierNode أو AttributeNode...)
+    private final String operator; // رمز العملية المركبة (+=, -=, *=, /= ...)
+    private final ASTNode value;   // القيمة/التعبير الأيمن
 
     public AugmentedAssignmentNode(ASTNode target, String operator, ASTNode value, int line, int col) {
         super("AugmentedAssignmentNode", line, col);
@@ -14,6 +14,7 @@ public class AugmentedAssignmentNode extends ASTNode {
         this.operator = operator;
         this.value = value;
 
+        // ربط الطرفين كأبناء في الشجرة
         this.addChild(target);
         this.addChild(value);
     }
@@ -28,6 +29,7 @@ public class AugmentedAssignmentNode extends ASTNode {
         return operator;
     }
 
+    // Getters
     public ASTNode getTarget() {
         return target;
     }

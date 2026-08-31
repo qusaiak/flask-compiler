@@ -1,23 +1,36 @@
 {% extends "base.html" %}
+
 {% block title %}المنتجات{% endblock %}
-{% block styles %}<link rel="stylesheet" href="style.css" />{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="style.css" />
+{% endblock %}
+
 {% block content %}
-<div class="products-grid">
+<div class="products-grid" id="products-grid">
     {% for product in products %}
-    <div class="product-card">
-        <img src="{{ product.image }}" alt="{{ product.name }}" class="product-image" />
-        <div class="product-info">
-            <h3 class="product-name">{{ product.name }}</h3>
-            <p class="product-price">${{ product.price }}</p>
-            <div class="product-actions">
-                <a href="/product?id={{ product.id }}" class="btn-detail">التفاصيل</a>
-                <a href="/edit/{{ product.id }}" class="btn-edit">تعديل</a>
-                <a href="/delete?id={{ product.id }}" class="btn-delete">حذف</a>
+        <div class="product-card">
+            <img src="{{ product.image }}"
+                 alt="{{ product.name }}"
+                 class="product-image" />
+
+            <div class="product-info">
+                <h3 class="product-name">{{ product.name }}</h3>
+                <p class="product-price">${{ product.price }}</p>
+
+                <div class="product-actions">
+                    <a href="/product?id={{ product.id }}" class="btn-detail">التفاصيل</a>
+                    <a href="/edit/{{ product.id }}" class="btn-edit">تعديل</a>
+                    <a href="/delete?id={{ product.id }}" class="btn-delete">حذف</a>
+                </div>
             </div>
         </div>
-    </div>
     {% else %}
-    <p>لا يوجد منتجات حاليًا</p>
+        <p style="color: #909094; text-align: center; grid-column: 1 / -1;">
+            لا يوجد منتجات حاليًا
+        </p>
     {% endfor %}
 </div>
+
+<script src="/script.js" defer></script>
 {% endblock %}

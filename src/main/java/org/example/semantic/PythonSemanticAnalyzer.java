@@ -18,7 +18,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
+/**
+ * تحليل دلالي تعليمي لمسار Python AST.
+ * يدعم نطاق module/function/for ويكشف إعادة التعريف واستدعاء دالة غير معرّفة.
+ */
 public final class PythonSemanticAnalyzer {
     private static final Set<String> BUILTIN_CALLS = Set.of(
             "Flask", "render_template", "redirect", "url_for", "jsonify",
@@ -76,6 +79,8 @@ public final class PythonSemanticAnalyzer {
             for (ASTNode parameter : function.getParameters()) {
                 defineTarget(parameter, "PYTHON_PARAMETER");
             }
+            // بعض عقد ASTBuilder تحفظ جسم الدالة ضمن children مباشرة؛
+            // لذلك نمر على children الفعليين ونتجاوز معاملات الدالة المعالجة أعلاه.
             for (ASTNode child : function.getChildren()) {
                 if (!function.getParameters().contains(child)) {
                     visit(child);

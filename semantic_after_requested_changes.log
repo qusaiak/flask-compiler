@@ -1,0 +1,56 @@
+============================================================
+   Semantic Error Handling Test
+   Python + HTML + CSS + Jinja
+   This test does not modify output/
+============================================================
+
+
+--- [PYTHON] testFiles/semantic_python_errors.py ---
+Semantic Error [P2]: Python symbol 'value' is already defined in this scope at line 5.
+Semantic Error [P3]: Function 'unknown_function' is called at line 6 but is never defined.
+Semantic Error [P4]: return is used outside a function at line 7.
+Semantic Error [P5]: break is used outside a loop at line 8.
+Semantic Error [P6]: continue is used outside a loop at line 9.
+PASS: detected 5 Python semantic errors
+  - Semantic Error [P2]: Python symbol 'value' is already defined in this scope at line 5.
+  - Semantic Error [P3]: Function 'unknown_function' is called at line 6 but is never defined.
+  - Semantic Error [P4]: return is used outside a function at line 7.
+  - Semantic Error [P5]: break is used outside a loop at line 8.
+  - Semantic Error [P6]: continue is used outside a loop at line 9.
+
+--- [HTML] testFiles/semantic_html_errors.html ---
+PASS: detected 2 HTML semantic errors
+  - HTML semantic error: duplicate id 'main'
+  - HTML semantic error: unbalanced div tags (open=1, close=0)
+
+--- [CSS] testFiles/semantic_css_errors.css ---
+PASS: detected 2 CSS semantic errors
+  - CSS semantic error: selector '.card' is declared more than once
+  - CSS semantic error: unknown property 'colour'
+
+--- [JINJA] testFiles/templates/semantic_v3.html ---
+Semantic Error [6]: Cannot override built-in Flask/Jinja variable 'request' at line 2
+Semantic Error: Variable 'name' is already defined in this scope at line 6
+Semantic Error: Variable 'undefined_user' is used at line 12 but never defined!
+Semantic Error [7]: Unknown Jinja filter 'invalid_filter' used at line 15
+Semantic Error: Variable 'missing_list' is used at line 18 but never defined!
+Semantic Error: Variable 'valid_list' is used at line 23 but never defined!
+Semantic Error [9]: Loop variable 'x' used outside its For loop scope at line 26
+Semantic Error: Variable 'is_admin' is used at line 29 but never defined!
+Semantic Error [5]: Block 'content' is already defined in this scope at line 35
+Semantic Error [8]: Variable 'unused_var' defined at line 9 is never used!
+PASS: detected 7 Jinja semantic errors
+  - Semantic Error: Variable 'undefined_user' is used at line 12 but never defined!
+  - Semantic Error [7]: Unknown Jinja filter 'invalid_filter' used at line 15
+  - Semantic Error: Variable 'missing_list' is used at line 18 but never defined!
+  - Semantic Error: Variable 'valid_list' is used at line 23 but never defined!
+  - Semantic Error [9]: Loop variable 'x' used outside its For loop scope at line 26
+  - Semantic Error: Variable 'is_admin' is used at line 29 but never defined!
+  - Semantic Error [5]: Block 'content' is already defined in this scope at line 35
+
+============================================================
+Semantic test complete
+Total errors detected: 16
+Report: compiler_output/semantic_test_report.txt
+output/ was not modified
+============================================================

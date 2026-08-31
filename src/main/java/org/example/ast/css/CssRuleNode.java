@@ -9,12 +9,12 @@ import java.util.List;
 public class CssRuleNode extends ASTNode {
     private final String selector;
     private final List<ASTNode> declarations;
-
     public CssRuleNode(String selector, int line, int col) {
         super("CssRuleNode", line, col);
         this.selector = selector;
         this.declarations = new ArrayList<>();
     }
+
 
     public void addDeclaration(ASTNode declaration) {
         if (declaration != null) {

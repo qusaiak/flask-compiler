@@ -7,15 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RouteNode extends ASTNode {
-    private final ASTNode path;
-    private final List<String> methods;
+    private final ASTNode path;          // مسار الرابط (غالباً LiteralNode يحتوي على النص مثل "/api/v1")
+    private final List<String> methods;  // طرق الاتصال HTTP (مثل GET, POST)
 
     public RouteNode(ASTNode path, List<String> methods, int line, int col) {
         super("RouteNode", line, col);
         this.path = path;
         this.methods = methods != null ? methods : new ArrayList<>();
 
-
+        // ربط مسار الرابط كابن في الشجرة
         if (path != null) {
             this.addChild(path);
         }
@@ -31,6 +31,7 @@ public class RouteNode extends ASTNode {
         return "route";
     }
 
+    // Getters
     public ASTNode getPath() {
         return path;
     }

@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FromImportNode extends ASTNode {
-    private final String module;
-    private final List<ASTNode> names;
+    private final String module;        // اسم الموديول (مثل math أو os.path)
+    private final List<ASTNode> names;  // الأسماء المستوردة (قد تكون IdentifierNode أو AliasNode لـ as أو StarNode)
 
     public FromImportNode(String module, int line, int col) {
         super("FromImportNode", line, col);
@@ -16,6 +16,9 @@ public class FromImportNode extends ASTNode {
         this.names = new ArrayList<>();
     }
 
+    /**
+     * إضافة اسم/عنصر مستورد كـ ASTNode وربطه كابن في الشجرة
+     */
     public void addName(ASTNode name) {
         if (name != null) {
             this.names.add(name);
@@ -33,6 +36,7 @@ public class FromImportNode extends ASTNode {
         return "from " + (module != null ? module : "");
     }
 
+    // Getters
     public String getModule() {
         return module;
     }

@@ -7,13 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FinallyNode extends ASTNode {
-    private final List<ASTNode> body;
+    private final List<ASTNode> body; // العبارات البرمجية المنفذة داخل كتلة finally
 
     public FinallyNode(int line, int col) {
         super("FinallyNode", line, col);
         this.body = new ArrayList<>();
     }
 
+    /**
+     * إضافة عبارة برمجية داخل كتلة finally وربطها كابن في الشجرة
+     */
     public void addStatement(ASTNode statement) {
         if (statement != null) {
             this.body.add(statement);
@@ -31,6 +34,7 @@ public class FinallyNode extends ASTNode {
         return "finally";
     }
 
+    // Getter
     public List<ASTNode> getBody() {
         return body;
     }

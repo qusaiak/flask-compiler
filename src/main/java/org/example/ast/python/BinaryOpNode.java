@@ -4,9 +4,9 @@ import org.example.ast.ASTNode;
 import org.example.ast.ASTVisitor;
 
 public class BinaryOpNode extends ASTNode {
-    private final ASTNode left;
-    private final String operator;
-    private final ASTNode right;
+    private final ASTNode left;     // المعامل الأيسر (قد يكون Literal, Identifier, أو BinaryOpNode آخر)
+    private final String operator;  // رمز العملية (+, -, *, /, %, ==, and ...)
+    private final ASTNode right;    // المعامل الأيمن
 
     public BinaryOpNode(ASTNode left, String operator, ASTNode right, int line, int col) {
         super("BinaryOpNode", line, col);
@@ -14,6 +14,7 @@ public class BinaryOpNode extends ASTNode {
         this.operator = operator;
         this.right = right;
 
+        // ربط المعاملين الأيسر والأيمن كأبناء في الشجرة
         this.addChild(left);
         this.addChild(right);
     }
@@ -28,6 +29,7 @@ public class BinaryOpNode extends ASTNode {
         return operator;
     }
 
+    // Getters
     public ASTNode getLeft() {
         return left;
     }

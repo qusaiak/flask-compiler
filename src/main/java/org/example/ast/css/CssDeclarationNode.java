@@ -6,7 +6,6 @@ import org.example.ast.ASTVisitor;
 public class CssDeclarationNode extends ASTNode {
     private final String property;
     private final ASTNode cssValue;
-
     public CssDeclarationNode(String property, ASTNode cssValue, int line, int col) {
         super("CssDeclarationNode", line, col);
         this.property = property;

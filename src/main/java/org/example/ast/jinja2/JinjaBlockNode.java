@@ -16,6 +16,7 @@ public class JinjaBlockNode extends ASTNode {
         this.children = new ArrayList<>();
     }
 
+
     public void addChildElement(ASTNode child) {
         if (child != null) {
             this.children.add(child);

@@ -9,12 +9,12 @@ import java.util.List;
 public class HtmlFileNode extends ASTNode {
     private final String fileName;
     private final List<ASTNode> children;
-
     public HtmlFileNode(String fileName, int line, int col) {
         super("HtmlFileNode", line, col);
         this.fileName = fileName;
         this.children = new ArrayList<>();
     }
+
 
     public void addChildElement(ASTNode child) {
         if (child != null) {

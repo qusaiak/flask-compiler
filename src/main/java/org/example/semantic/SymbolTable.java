@@ -21,17 +21,17 @@ public class SymbolTable {
     private Scope currentScope;
     private final List<Symbol> allDefinedSymbols = new ArrayList<>();
     private final Set<String> expiredLoopVars = new HashSet<>();
+    private final List<String> semanticErrors = new ArrayList<>();
 
     public SymbolTable() {
         this.currentScope = new Scope(null);
     }
 
-    /**
-     * Creates a child scope for local definitions.
-     */
+
     public void enterScope() {
         currentScope = new Scope(currentScope);
     }
+
 
     public void exitScope() {
         if (currentScope != null) {
@@ -46,21 +46,27 @@ public class SymbolTable {
         }
     }
 
+
     public boolean isExpiredLoopVar(String name) {
         return expiredLoopVars.contains(name);
     }
+
 
     public boolean define(String name, String category, int line) {
         String[] flaskReserved = {"request", "session", "config", "g", "super"};
         for (String fr : flaskReserved) {
             if (fr.equalsIgnoreCase(name)) {
-                System.err.println("Semantic Error [6]: Cannot override built-in Flask/Jinja variable '" + name + "' at line " + line);
+                String error = "Semantic Error [6]: Cannot override built-in Flask/Jinja variable '" + name + "' at line " + line;
+                semanticErrors.add(error);
+                System.err.println(error);
                 return false;
             }
         }
 
         if (isDefinedLocally(name)) {
-            System.err.println("Semantic Error: Variable '" + name + "' is already defined in this scope at line " + line);
+            String error = "Semantic Error: Variable '" + name + "' is already defined in this scope at line " + line;
+            semanticErrors.add(error);
+            System.err.println(error);
             return false;
         }
         Symbol symbol = new Symbol(name, category, line);
@@ -69,9 +75,7 @@ public class SymbolTable {
         return true;
     }
 
-    /**
-     * Searches from the innermost scope outward and marks the resolved symbol used.
-     */
+
     public Symbol lookup(String name) {
         Scope tempScope = currentScope;
         while (tempScope != null) {
@@ -85,32 +89,30 @@ public class SymbolTable {
         return null;
     }
 
-    /**
-     * Reports unused SET_VAR symbols in the current scope and its ancestors.
-     */
     public void checkUnusedVariables() {
         Scope tempScope = currentScope;
         while (tempScope != null) {
             for (Symbol sym : tempScope.symbols.values()) {
                 if (!sym.isUsed() && "SET_VAR".equalsIgnoreCase(sym.getCategory())) {
-                    System.err.println("Semantic Error [8]: Variable '" + sym.getName() + "' defined at line " + sym.getLine() + " is never used!");
+                    String error = "Semantic Error [8]: Variable '" + sym.getName() + "' defined at line " + sym.getLine() + " is never used!";
+                    semanticErrors.add(error);
+                    System.err.println(error);
                 }
             }
             tempScope = tempScope.parent;
         }
     }
 
-    /**
-     * Checks the current scope only, without searching parent scopes.
-     */
+    public List<String> getSemanticErrors() {
+        return List.copyOf(semanticErrors);
+    }
+
+
     public boolean isDefinedLocally(String name) {
         return currentScope.symbols.containsKey(name);
     }
 
-    /**
-     * Returns an immutable snapshot of all symbols, including expired scopes,
-     * for compiler reports.
-     */
+
     public List<Symbol> getAllDefinedSymbols() {
         return List.copyOf(allDefinedSymbols);
     }

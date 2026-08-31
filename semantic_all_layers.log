@@ -1,0 +1,19 @@
+============================================================
+   Semantic Error Handling Test
+   Python + HTML + CSS + Jinja
+   This test does not modify output/
+============================================================
+
+
+--- [PYTHON] testFiles/semantic_python_errors.py ---
+Exception in thread "main" java.lang.NullPointerException: Cannot invoke "org.antlr.v4.runtime.TokenSource.getInputStream()" because the return value of "org.antlr.v4.runtime.Token.getTokenSource()" is null
+	at org.antlr.v4.runtime.DefaultErrorStrategy.getMissingSymbol(DefaultErrorStrategy.java:599)
+	at org.antlr.v4.runtime.DefaultErrorStrategy.recoverInline(DefaultErrorStrategy.java:477)
+	at org.antlr.v4.runtime.Parser.match(Parser.java:208)
+	at org.example.gen.python.pythonParser.suite(pythonParser.java:3517)
+	at org.example.gen.python.pythonParser.funcDef(pythonParser.java:2145)
+	at org.example.gen.python.pythonParser.compoundStmt(pythonParser.java:1822)
+	at org.example.gen.python.pythonParser.statement(pythonParser.java:354)
+	at org.example.gen.python.pythonParser.program(pythonParser.java:235)
+	at org.example.SemanticTestRunner.testPython(SemanticTestRunner.java:77)
+	at org.example.SemanticTestRunner.main(SemanticTestRunner.java:47)

@@ -3,7 +3,7 @@
 {% block styles %}<link rel="stylesheet" href="style.css" />{% endblock %}
 {% block content %}
 <h1>Add New Product</h1>
-<form action="/add" method="POST">
+<form action="/add" method="POST" data-ajax="product-add">
     <p>Product Name - Price - Image - Details</p>
     <textarea name="name" />
     <textarea name="price" />

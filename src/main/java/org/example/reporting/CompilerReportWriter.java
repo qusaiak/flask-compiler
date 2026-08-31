@@ -11,17 +11,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * يجمع أدلة مراحل المترجم أثناء التشغيل كاملاً (كل ملفات app.py وJinja معاً)
- * ثم يكتبها دفعة واحدة في نهاية التشغيل داخل compiler_output/ بالأسماء التالية
- * (مطابقة تماماً لما ورد في وصف المشروع):
- *   - ast_python.json      : شجرة AST لملف app.py وحده.
- *   - ast_jinja.json        : شجرة AST لكل قوالب Jinja التي عُولجت (مصفوفة واحدة).
- *   - semantic_report.txt   : تقرير موحّد لجدول الرموز والأخطاء الدلالية لكل الملفات.
- *   - generation_log.txt    : سجل خطوات مرحلة Code Generation (توليد HTML ونسخ الملفات الداعمة).
- *
- * لا يغيّر التحليل أو التوليد؛ وظيفته توثيق AST والرموز والأخطاء وخطوات التوليد فقط.
- */
+
 public final class CompilerReportWriter {
     private CompilerReportWriter() {
     }
@@ -35,7 +25,6 @@ public final class CompilerReportWriter {
     private static final StringBuilder semanticReport = new StringBuilder();
     private static final List<String> generationLogLines = new ArrayList<>();
 
-    /** يسجّل نتائج تحليل ملف app.py (استدعاء واحد لكل تشغيل عادةً). */
     public static void recordPython(
             String inputPath,
             ASTNode ast,
@@ -47,7 +36,6 @@ public final class CompilerReportWriter {
         appendSemanticSection("Python — " + inputPath, symbolTable, semanticErrors);
     }
 
-    /** يسجّل نتائج تحليل قالب Jinja واحد؛ يُستدعى مرة لكل ملف قالب تتم معالجته. */
     public static void recordJinja(
             String inputPath,
             ASTNode ast,
@@ -90,7 +78,6 @@ public final class CompilerReportWriter {
         semanticReport.append("\n");
     }
 
-    /** يكتب كل ملفات compiler_output/ دفعة واحدة. يُستدعى مرة واحدة في نهاية main(). */
     public static void flush() {
         try {
             Path outputDir = Path.of("compiler_output");

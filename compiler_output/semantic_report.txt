@@ -37,30 +37,30 @@
 --- Semantic Analysis ---
 0 semantic errors
 
-=== Jinja — testFiles/templates/index.jinja ===
+=== Jinja — testFiles\templates\index.jinja ===
+--- Symbol Table ---
+- title | TEMPLATE_BLOCK | line 3 | used=false
+- styles | TEMPLATE_BLOCK | line 5 | used=false
+- content | TEMPLATE_BLOCK | line 9 | used=false
+- product | LOOP_VARIABLE | line 11 | used=true
+--- Semantic Analysis ---
+0 semantic errors
+
+=== Jinja — testFiles\templates\add_product.jinja ===
 --- Symbol Table ---
 - title | TEMPLATE_BLOCK | line 2 | used=false
 - styles | TEMPLATE_BLOCK | line 3 | used=false
 - content | TEMPLATE_BLOCK | line 4 | used=false
-- product | LOOP_VARIABLE | line 6 | used=true
 --- Semantic Analysis ---
 0 semantic errors
 
-=== Jinja — testFiles/templates/add_product.jinja ===
---- Symbol Table ---
-- title | TEMPLATE_BLOCK | line 2 | used=false
-- styles | TEMPLATE_BLOCK | line 3 | used=false
-- content | TEMPLATE_BLOCK | line 4 | used=false
---- Semantic Analysis ---
-0 semantic errors
-
-=== Jinja — testFiles/templates/edit_product.jinja ===
+=== Jinja — testFiles\templates\edit_product.jinja ===
 --- Symbol Table ---
 (no symbols)
 --- Semantic Analysis ---
 0 semantic errors
 
-=== Jinja — testFiles/templates/product_detail.jinja ===
+=== Jinja — testFiles\templates\product_detail.jinja ===
 --- Symbol Table ---
 - title | TEMPLATE_BLOCK | line 2 | used=false
 - styles | TEMPLATE_BLOCK | line 3 | used=false

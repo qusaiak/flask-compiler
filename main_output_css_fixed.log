@@ -1,0 +1,572 @@
+════════════════════════════════════════════════════════════════════════════════
+   Flask & Jinja2 Compiler — Full Pipeline
+════════════════════════════════════════════════════════════════════════════════
+
+  Cleaned output/ before generation
+══ [STAGE 1] Python Analysis ══
+  File: testFiles/app.py
+  [1/3] Lexical Analysis OK
+  [2/3] Parsing OK
+  [3/3] AST Built OK
+  AST:
+     └── Module "" (line:1)
+         ├── FromImport "from flask" (line:1)
+         │   ├── Identifier "Flask" (line:1)
+         │   ├── Identifier "render_template" (line:1)
+         │   ├── Identifier "request" (line:1)
+         │   ├── Identifier "redirect" (line:1)
+         │   └── Identifier "url_for" (line:1)
+         ├── Assignment "=" (line:3)
+         │   ├── Identifier "app" (line:3)
+         │   └── Call "()" (line:3)
+         │       ├── Identifier "Flask" (line:3)
+         │       ├── Identifier "__name__" (line:3)
+         │       └── BinOp "=" (line:3)
+         │           ├── Identifier "template_folder" (line:3)
+         │           └── Literal "string: '.'" (line:3)
+         ├── Assignment "=" (line:5)
+         │   └── Identifier "p1" (line:5)
+         ├── Assignment "=" (line:6)
+         │   └── Identifier "p2" (line:6)
+         ├── Assignment "=" (line:7)
+         │   └── Identifier "p3" (line:7)
+         ├── Assignment "=" (line:9)
+         │   └── Identifier "products" (line:9)
+         ├── FunctionDef "find_product" (line:11)
+         │   ├── Identifier "product_id" (line:11)
+         │   ├── For "in" (line:12)
+         │   │   ├── Identifier "p" (line:12)
+         │   │   ├── Identifier "products" (line:12)
+         │   │   └── If "if" (line:13)
+         │   │       ├── BinOp "==" (line:13)
+         │   │       │   ├── Subscript "[]" (line:13)
+         │   │       │   │   ├── Identifier "p" (line:13)
+         │   │       │   │   └── Literal "string: "id"" (line:13)
+         │   │       │   └── Identifier "product_id" (line:13)
+         │   │       └── Return "return" (line:14)
+         │   │           └── Identifier "p" (line:14)
+         │   └── Return "return" (line:15)
+         │       └── Literal "None: None" (line:15)
+         ├── FunctionDef "get_next_id" (line:17)
+         │   ├── Assignment "=" (line:18)
+         │   │   ├── Identifier "max_id" (line:18)
+         │   │   └── Literal "number: 0" (line:18)
+         │   ├── For "in" (line:19)
+         │   │   ├── Identifier "p" (line:19)
+         │   │   ├── Identifier "products" (line:19)
+         │   │   └── If "if" (line:20)
+         │   │       ├── BinOp ">" (line:20)
+         │   │       │   ├── Subscript "[]" (line:20)
+         │   │       │   │   ├── Identifier "p" (line:20)
+         │   │       │   │   └── Literal "string: "id"" (line:20)
+         │   │       │   └── Identifier "max_id" (line:20)
+         │   │       └── Assignment "=" (line:21)
+         │   │           ├── Identifier "max_id" (line:21)
+         │   │           └── Subscript "[]" (line:21)
+         │   │               ├── Identifier "p" (line:21)
+         │   │               └── Literal "string: "id"" (line:21)
+         │   └── Return "return" (line:22)
+         │       └── BinOp "+" (line:22)
+         │           ├── Identifier "max_id" (line:22)
+         │           └── Literal "number: 1" (line:22)
+         ├── FunctionDef "remove_product" (line:24)
+         │   ├── Identifier "product_id" (line:24)
+         │   ├── Assignment "=" (line:25)
+         │   │   ├── Identifier "filtered" (line:25)
+         │   │   └── List "[]" (line:25)
+         │   ├── For "in" (line:26)
+         │   │   ├── Identifier "p" (line:26)
+         │   │   ├── Identifier "products" (line:26)
+         │   │   └── If "if" (line:27)
+         │   │       ├── BinOp "!=" (line:27)
+         │   │       │   ├── Subscript "[]" (line:27)
+         │   │       │   │   ├── Identifier "p" (line:27)
+         │   │       │   │   └── Literal "string: "id"" (line:27)
+         │   │       │   └── Identifier "product_id" (line:27)
+         │   │       └── Call "()" (line:28)
+         │   │           ├── Attribute ".append" (line:28)
+         │   │           │   └── Identifier "filtered" (line:28)
+         │   │           └── Identifier "p" (line:28)
+         │   └── Return "return" (line:29)
+         │       └── Identifier "filtered" (line:29)
+         ├── FunctionDef "home" (line:32)
+         │   ├── Return "return" (line:33)
+         │   │   └── Call "()" (line:33)
+         │   │       ├── Identifier "redirect" (line:33)
+         │   │       └── Call "()" (line:33)
+         │   │           ├── Identifier "url_for" (line:33)
+         │   │           └── Literal "string: 'show_products'" (line:33)
+         │   └── Decorator "@app.route" (line:31)
+         │       └── Literal "string: '/'" (line:31)
+         ├── FunctionDef "show_products" (line:36)
+         │   ├── Return "return" (line:37)
+         │   │   └── Call "()" (line:37)
+         │   │       ├── Identifier "render_template" (line:37)
+         │   │       ├── Literal "string: 'index.jinja'" (line:37)
+         │   │       └── BinOp "=" (line:37)
+         │   │           ├── Identifier "products" (line:37)
+         │   │           └── Identifier "products" (line:37)
+         │   └── Decorator "@app.route" (line:35)
+         │       └── Literal "string: '/products'" (line:35)
+         ├── FunctionDef "add_product" (line:40)
+         │   ├── If "if" (line:41)
+         │   │   ├── BinOp "==" (line:41)
+         │   │   │   ├── Attribute ".method" (line:41)
+         │   │   │   │   └── Identifier "request" (line:41)
+         │   │   │   └── Literal "string: 'POST'" (line:41)
+         │   │   ├── Assignment "=" (line:42)
+         │   │   │   ├── Identifier "new_id" (line:42)
+         │   │   │   └── Call "()" (line:42)
+         │   │   │       └── Identifier "get_next_id" (line:42)
+         │   │   ├── Assignment "=" (line:43)
+         │   │   │   ├── Identifier "name_val" (line:43)
+         │   │   │   └── Call "()" (line:43)
+         │   │   │       ├── Attribute ".get" (line:43)
+         │   │   │       │   └── Attribute ".form" (line:43)
+         │   │   │       │       └── Identifier "request" (line:43)
+         │   │   │       ├── Literal "string: 'name'" (line:43)
+         │   │   │       └── Literal "string: ''" (line:43)
+         │   │   ├── Assignment "=" (line:44)
+         │   │   │   ├── Identifier "price_val" (line:44)
+         │   │   │   └── Call "()" (line:44)
+         │   │   │       ├── Attribute ".get" (line:44)
+         │   │   │       │   └── Attribute ".form" (line:44)
+         │   │   │       │       └── Identifier "request" (line:44)
+         │   │   │       ├── Literal "string: 'price'" (line:44)
+         │   │   │       └── Literal "number: 0" (line:44)
+         │   │   ├── Assignment "=" (line:45)
+         │   │   │   ├── Identifier "img_val" (line:45)
+         │   │   │   └── Call "()" (line:45)
+         │   │   │       ├── Attribute ".get" (line:45)
+         │   │   │       │   └── Attribute ".form" (line:45)
+         │   │   │       │       └── Identifier "request" (line:45)
+         │   │   │       ├── Literal "string: 'image'" (line:45)
+         │   │   │       └── Literal "string: 'https://via.placeholder.com/150'" (line:45)
+         │   │   ├── Assignment "=" (line:46)
+         │   │   │   ├── Identifier "det_val" (line:46)
+         │   │   │   └── Call "()" (line:46)
+         │   │   │       ├── Attribute ".get" (line:46)
+         │   │   │       │   └── Attribute ".form" (line:46)
+         │   │   │       │       └── Identifier "request" (line:46)
+         │   │   │       ├── Literal "string: 'details'" (line:46)
+         │   │   │       └── Literal "string: ''" (line:46)
+         │   │   ├── Assignment "=" (line:47)
+         │   │   │   └── Identifier "new_product" (line:47)
+         │   │   ├── Call "()" (line:48)
+         │   │   │   ├── Attribute ".append" (line:48)
+         │   │   │   │   └── Identifier "products" (line:48)
+         │   │   │   └── Identifier "new_product" (line:48)
+         │   │   └── Return "return" (line:49)
+         │   │       └── Call "()" (line:49)
+         │   │           ├── Identifier "redirect" (line:49)
+         │   │           └── Call "()" (line:49)
+         │   │               ├── Identifier "url_for" (line:49)
+         │   │               └── Literal "string: 'show_products'" (line:49)
+         │   ├── Return "return" (line:50)
+         │   │   └── Call "()" (line:50)
+         │   │       ├── Identifier "render_template" (line:50)
+         │   │       └── Literal "string: 'add_product.jinja'" (line:50)
+         │   └── Decorator "@app.route" (line:39)
+         │       ├── Literal "string: '/add'" (line:39)
+         │       └── BinOp "=" (line:39)
+         │           └── Identifier "methods" (line:39)
+         ├── FunctionDef "edit_product" (line:53)
+         │   ├── Identifier "product_id" (line:53)
+         │   ├── Assignment "=" (line:54)
+         │   │   ├── Identifier "product" (line:54)
+         │   │   └── Call "()" (line:54)
+         │   │       ├── Identifier "find_product" (line:54)
+         │   │       └── Identifier "product_id" (line:54)
+         │   ├── If "if" (line:55)
+         │   │   ├── BinOp "is" (line:55)
+         │   │   │   ├── Identifier "product" (line:55)
+         │   │   │   └── Literal "None: None" (line:55)
+         │   │   └── Return "return" (line:56)
+         │   │       └── Literal "string: 'Product not found'" (line:56)
+         │   ├── If "if" (line:57)
+         │   │   ├── BinOp "==" (line:57)
+         │   │   │   ├── Attribute ".method" (line:57)
+         │   │   │   │   └── Identifier "request" (line:57)
+         │   │   │   └── Literal "string: 'POST'" (line:57)
+         │   │   ├── Assignment "=" (line:58)
+         │   │   │   ├── Subscript "[]" (line:58)
+         │   │   │   │   ├── Identifier "product" (line:58)
+         │   │   │   │   └── Literal "string: 'name'" (line:58)
+         │   │   │   └── Call "()" (line:58)
+         │   │   │       ├── Attribute ".get" (line:58)
+         │   │   │       │   └── Attribute ".form" (line:58)
+         │   │   │       │       └── Identifier "request" (line:58)
+         │   │   │       ├── Literal "string: 'name'" (line:58)
+         │   │   │       └── Subscript "[]" (line:58)
+         │   │   │           ├── Identifier "product" (line:58)
+         │   │   │           └── Literal "string: 'name'" (line:58)
+         │   │   ├── Assignment "=" (line:59)
+         │   │   │   ├── Subscript "[]" (line:59)
+         │   │   │   │   ├── Identifier "product" (line:59)
+         │   │   │   │   └── Literal "string: 'price'" (line:59)
+         │   │   │   └── Call "()" (line:59)
+         │   │   │       ├── Attribute ".get" (line:59)
+         │   │   │       │   └── Attribute ".form" (line:59)
+         │   │   │       │       └── Identifier "request" (line:59)
+         │   │   │       ├── Literal "string: 'price'" (line:59)
+         │   │   │       └── Subscript "[]" (line:59)
+         │   │   │           ├── Identifier "product" (line:59)
+         │   │   │           └── Literal "string: 'price'" (line:59)
+         │   │   ├── Assignment "=" (line:60)
+         │   │   │   ├── Subscript "[]" (line:60)
+         │   │   │   │   ├── Identifier "product" (line:60)
+         │   │   │   │   └── Literal "string: 'image'" (line:60)
+         │   │   │   └── Call "()" (line:60)
+         │   │   │       ├── Attribute ".get" (line:60)
+         │   │   │       │   └── Attribute ".form" (line:60)
+         │   │   │       │       └── Identifier "request" (line:60)
+         │   │   │       ├── Literal "string: 'image'" (line:60)
+         │   │   │       └── Subscript "[]" (line:60)
+         │   │   │           ├── Identifier "product" (line:60)
+         │   │   │           └── Literal "string: 'image'" (line:60)
+         │   │   ├── Assignment "=" (line:61)
+         │   │   │   ├── Subscript "[]" (line:61)
+         │   │   │   │   ├── Identifier "product" (line:61)
+         │   │   │   │   └── Literal "string: 'details'" (line:61)
+         │   │   │   └── Call "()" (line:61)
+         │   │   │       ├── Attribute ".get" (line:61)
+         │   │   │       │   └── Attribute ".form" (line:61)
+         │   │   │       │       └── Identifier "request" (line:61)
+         │   │   │       ├── Literal "string: 'details'" (line:61)
+         │   │   │       └── Subscript "[]" (line:61)
+         │   │   │           ├── Identifier "product" (line:61)
+         │   │   │           └── Literal "string: 'details'" (line:61)
+         │   │   └── Return "return" (line:62)
+         │   │       └── Call "()" (line:62)
+         │   │           ├── Identifier "redirect" (line:62)
+         │   │           └── Call "()" (line:62)
+         │   │               ├── Identifier "url_for" (line:62)
+         │   │               └── Literal "string: 'show_products'" (line:62)
+         │   ├── Return "return" (line:63)
+         │   │   └── Call "()" (line:63)
+         │   │       ├── Identifier "render_template" (line:63)
+         │   │       ├── Literal "string: 'edit_product.jinja'" (line:63)
+         │   │       └── BinOp "=" (line:63)
+         │   │           ├── Identifier "product" (line:63)
+         │   │           └── Identifier "product" (line:63)
+         │   └── Decorator "@app.route" (line:52)
+         │       ├── Literal "string: '/edit/<int:product_id>'" (line:52)
+         │       └── BinOp "=" (line:52)
+         │           └── Identifier "methods" (line:52)
+         ├── FunctionDef "product_detail" (line:66)
+         │   ├── Assignment "=" (line:67)
+         │   │   ├── Identifier "product_id" (line:67)
+         │   │   └── Call "()" (line:67)
+         │   │       ├── Attribute ".get" (line:67)
+         │   │       │   └── Attribute ".args" (line:67)
+         │   │       │       └── Identifier "request" (line:67)
+         │   │       ├── Literal "string: 'id'" (line:67)
+         │   │       └── BinOp "=" (line:67)
+         │   │           ├── Identifier "type" (line:67)
+         │   │           └── Identifier "int" (line:67)
+         │   ├── Assignment "=" (line:68)
+         │   │   ├── Identifier "product" (line:68)
+         │   │   └── Call "()" (line:68)
+         │   │       ├── Identifier "find_product" (line:68)
+         │   │       └── Identifier "product_id" (line:68)
+         │   ├── Return "return" (line:69)
+         │   │   └── Call "()" (line:69)
+         │   │       ├── Identifier "render_template" (line:69)
+         │   │       ├── Literal "string: 'product_detail.html'" (line:69)
+         │   │       └── BinOp "=" (line:69)
+         │   │           ├── Identifier "product" (line:69)
+         │   │           └── Identifier "product" (line:69)
+         │   └── Decorator "@app.route" (line:65)
+         │       └── Literal "string: '/product'" (line:65)
+         ├── FunctionDef "delete_product" (line:72)
+         │   ├── Global "global" (line:73)
+         │   │   └── Identifier "products" (line:73)
+         │   ├── Assignment "=" (line:74)
+         │   │   ├── Identifier "product_id" (line:74)
+         │   │   └── Call "()" (line:74)
+         │   │       ├── Attribute ".get" (line:74)
+         │   │       │   └── Attribute ".args" (line:74)
+         │   │       │       └── Identifier "request" (line:74)
+         │   │       ├── Literal "string: 'id'" (line:74)
+         │   │       └── BinOp "=" (line:74)
+         │   │           ├── Identifier "type" (line:74)
+         │   │           └── Identifier "int" (line:74)
+         │   ├── If "if" (line:75)
+         │   │   ├── BinOp "isnot" (line:75)
+         │   │   │   ├── Identifier "product_id" (line:75)
+         │   │   │   └── Literal "None: None" (line:75)
+         │   │   └── Assignment "=" (line:76)
+         │   │       ├── Identifier "products" (line:76)
+         │   │       └── Call "()" (line:76)
+         │   │           ├── Identifier "remove_product" (line:76)
+         │   │           └── Identifier "product_id" (line:76)
+         │   ├── Return "return" (line:77)
+         │   │   └── Call "()" (line:77)
+         │   │       ├── Identifier "redirect" (line:77)
+         │   │       └── Call "()" (line:77)
+         │   │           ├── Identifier "url_for" (line:77)
+         │   │           └── Literal "string: 'show_products'" (line:77)
+         │   └── Decorator "@app.route" (line:71)
+         │       └── Literal "string: '/delete'" (line:71)
+         └── Call "()" (line:79)
+             ├── Attribute ".run" (line:79)
+             │   └── Identifier "app" (line:79)
+             └── BinOp "=" (line:79)
+                 ├── Identifier "debug" (line:79)
+                 └── Literal "bool: True" (line:79)
+
+  Running Python Semantic Analysis...
+
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║                              SYMBOL TABLE                                    ║
+  ╠══════════════════════════════╦══════════════════════════╦════════════════════╣
+  ║ Variable Name                ║ Category                 ║ Defined at Line    ║
+  ╠══════════════════════════════╬══════════════════════════╬════════════════════╣
+  ║ app                          ║ PYTHON_VAR               ║ 3                  ║
+  ║ p1                           ║ PYTHON_VAR               ║ 5                  ║
+  ║ p2                           ║ PYTHON_VAR               ║ 6                  ║
+  ║ p3                           ║ PYTHON_VAR               ║ 7                  ║
+  ║ products                     ║ PYTHON_VAR               ║ 9                  ║
+  ║ find_product                 ║ PYTHON_FUNC              ║ 11                 ║
+  ║ product_id                   ║ PYTHON_PARAMETER         ║ 11                 ║
+  ║ p                            ║ PYTHON_LOOP_VARIABLE     ║ 12                 ║
+  ║ get_next_id                  ║ PYTHON_FUNC              ║ 17                 ║
+  ║ max_id                       ║ PYTHON_LOCAL             ║ 18                 ║
+  ║ p                            ║ PYTHON_LOOP_VARIABLE     ║ 19                 ║
+  ║ max_id                       ║ PYTHON_LOCAL             ║ 21                 ║
+  ║ remove_product               ║ PYTHON_FUNC              ║ 24                 ║
+  ║ product_id                   ║ PYTHON_PARAMETER         ║ 24                 ║
+  ║ filtered                     ║ PYTHON_LOCAL             ║ 25                 ║
+  ║ p                            ║ PYTHON_LOOP_VARIABLE     ║ 26                 ║
+  ║ home                         ║ PYTHON_FUNC              ║ 32                 ║
+  ║ show_products                ║ PYTHON_FUNC              ║ 36                 ║
+  ║ add_product                  ║ PYTHON_FUNC              ║ 40                 ║
+  ║ new_id                       ║ PYTHON_LOCAL             ║ 42                 ║
+  ║ name_val                     ║ PYTHON_LOCAL             ║ 43                 ║
+  ║ price_val                    ║ PYTHON_LOCAL             ║ 44                 ║
+  ║ img_val                      ║ PYTHON_LOCAL             ║ 45                 ║
+  ║ det_val                      ║ PYTHON_LOCAL             ║ 46                 ║
+  ║ new_product                  ║ PYTHON_LOCAL             ║ 47                 ║
+  ║ edit_product                 ║ PYTHON_FUNC              ║ 53                 ║
+  ║ product_id                   ║ PYTHON_PARAMETER         ║ 53                 ║
+  ║ product                      ║ PYTHON_LOCAL             ║ 54                 ║
+  ║ product_detail               ║ PYTHON_FUNC              ║ 66                 ║
+  ║ product_id                   ║ PYTHON_LOCAL             ║ 67                 ║
+  ║ product                      ║ PYTHON_LOCAL             ║ 68                 ║
+  ║ delete_product               ║ PYTHON_FUNC              ║ 72                 ║
+  ║ product_id                   ║ PYTHON_LOCAL             ║ 74                 ║
+  ║ products                     ║ PYTHON_LOCAL             ║ 76                 ║
+  ╚══════════════════════════════╩══════════════════════════╩════════════════════╝
+
+  Python errors: 0
+
+  Python context keys: [index.jinja, add_product.jinja, edit_product.jinja]
+
+══ [STAGE 2] Jinja Template Analysis & Code Generation ══
+  File: testFiles/templates/index.jinja
+  AST:
+     └── HtmlFile "template" (line:1)
+         ├── JinjaExtends "Jinja Extends" (line:1)
+         │   └── HtmlText "base.html" (line:1)
+         ├── JinjaBlock "title" (line:2)
+         │   └── HtmlText "المنتجات" (line:2)
+         ├── JinjaBlock "styles" (line:3)
+         │   └── HtmlElement "link (self-closing)" (line:3)
+         └── JinjaBlock "content" (line:4)
+             └── HtmlElement "div" (line:5)
+                 └── JinjaFor "product in products" (line:6)
+                     └── HtmlElement "div" (line:7)
+                         ├── HtmlElement "img (self-closing)" (line:8)
+                         └── HtmlElement "div" (line:9)
+                             ├── HtmlElement "h3" (line:10)
+                             │   └── JinjaExpr "Jinja Expression" (line:10)
+                             │       └── HtmlText "product.name" (line:10)
+                             ├── HtmlElement "p" (line:11)
+                             │   ├── HtmlText "$" (line:11)
+                             │   └── JinjaExpr "Jinja Expression" (line:11)
+                             │       └── HtmlText "product.price" (line:11)
+                             └── HtmlElement "div" (line:12)
+                                 ├── HtmlElement "a" (line:13)
+                                 │   └── HtmlText "التفاصيل" (line:13)
+                                 ├── HtmlElement "a" (line:14)
+                                 │   └── HtmlText "تعديل" (line:14)
+                                 └── HtmlElement "a" (line:15)
+                                     └── HtmlText "حذف" (line:15)
+
+  Running Jinja Semantic Analysis...
+
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║                              SYMBOL TABLE                                    ║
+  ╠══════════════════════════════╦══════════════════════════╦════════════════════╣
+  ║ Variable Name                ║ Category                 ║ Defined at Line    ║
+  ╠══════════════════════════════╬══════════════════════════╬════════════════════╣
+  ║ title                        ║ TEMPLATE_BLOCK           ║ 2                  ║
+  ║ styles                       ║ TEMPLATE_BLOCK           ║ 3                  ║
+  ║ content                      ║ TEMPLATE_BLOCK           ║ 4                  ║
+  ║ product                      ║ LOOP_VARIABLE            ║ 6                  ║
+  ╚══════════════════════════════╩══════════════════════════╩════════════════════╝
+
+  Context keys for index.jinja: [products]
+Static HTML successfully generated at: /home/ubuntu/work/compiler_review/project/FlaskJinjaCompilerUnifiedDynamic/output/index.html
+  Generated: output/index.html in 64ms
+
+  File: testFiles/templates/add_product.jinja
+  [!] Jinja Error at line 25:22 — extraneous input 'Price' expecting {JINJA_STMT_OPEN, JINJA_VAR_OPEN, JINJA_COMMENT, HTML_DOCTYPE, HTML_COMMENT, STYLE_OPEN, SCRIPT_OPEN, HTML_OPEN_TAG, HTML_CLOSE_TAG, HTML_TEXT}
+  [!] Jinja Error at line 34:24 — extraneous input 'Details' expecting {JINJA_STMT_OPEN, JINJA_VAR_OPEN, JINJA_COMMENT, HTML_DOCTYPE, HTML_COMMENT, STYLE_OPEN, SCRIPT_OPEN, HTML_OPEN_TAG, HTML_CLOSE_TAG, HTML_TEXT}
+  [!] Jinja Error at line 40:3 — no viable alternative at input '{% endblock'
+  AST:
+     └── HtmlFile "template" (line:1)
+         ├── JinjaExtends "Jinja Extends" (line:1)
+         │   └── HtmlText "base.html" (line:1)
+         ├── JinjaBlock "title" (line:3)
+         │   └── HtmlText "Add Product" (line:3)
+         ├── JinjaBlock "styles" (line:5)
+         │   └── HtmlElement "style" (line:6)
+         │       ├── CssRule ".form-container" (line:7)
+         │       │   ├── CssSelector ".form-container" (line:7)
+         │       │   ├── CssDeclaration "max-width" (line:7)
+         │       │   │   └── HtmlText "600px" (line:7)
+         │       │   ├── CssDeclaration "margin" (line:7)
+         │       │   │   └── HtmlText "40px auto" (line:7)
+         │       │   ├── CssDeclaration "padding" (line:7)
+         │       │   │   └── HtmlText "24px" (line:7)
+         │       │   ├── CssDeclaration "background" (line:7)
+         │       │   │   └── HtmlText "#1D1D20" (line:7)
+         │       │   └── CssDeclaration "border-radius" (line:7)
+         │       │       └── HtmlText "8px" (line:7)
+         │       ├── CssRule ".form-group" (line:8)
+         │       │   ├── CssSelector ".form-group" (line:8)
+         │       │   └── CssDeclaration "margin-bottom" (line:8)
+         │       │       └── HtmlText "16px" (line:8)
+         │       ├── CssRule "label" (line:9)
+         │       │   ├── CssSelector "label" (line:9)
+         │       │   ├── CssDeclaration "display" (line:9)
+         │       │   │   └── HtmlText "block" (line:9)
+         │       │   ├── CssDeclaration "color" (line:9)
+         │       │   │   └── HtmlText "#909094" (line:9)
+         │       │   └── CssDeclaration "margin-bottom" (line:9)
+         │       │       └── HtmlText "4px" (line:9)
+         │       ├── CssRule ".form-input" (line:10)
+         │       │   ├── CssSelector ".form-input" (line:10)
+         │       │   ├── CssDeclaration "width" (line:10)
+         │       │   │   └── HtmlText "100%" (line:10)
+         │       │   ├── CssDeclaration "padding" (line:10)
+         │       │   │   └── HtmlText "8px 12px" (line:10)
+         │       │   ├── CssDeclaration "background" (line:10)
+         │       │   │   └── HtmlText "#2a2a2e" (line:10)
+         │       │   ├── CssDeclaration "color" (line:10)
+         │       │   │   └── HtmlText "#fbfbff" (line:10)
+         │       │   ├── CssDeclaration "border" (line:10)
+         │       │   │   └── HtmlText "1px solid #444" (line:10)
+         │       │   ├── CssDeclaration "border-radius" (line:10)
+         │       │   │   └── HtmlText "4px" (line:10)
+         │       │   └── CssDeclaration "box-sizing" (line:10)
+         │       │       └── HtmlText "border-box" (line:10)
+         │       └── CssRule ".btn" (line:11)
+         │           ├── CssSelector ".btn" (line:11)
+         │           ├── CssDeclaration "padding" (line:11)
+         │           │   └── HtmlText "10px 24px" (line:11)
+         │           ├── CssDeclaration "background" (line:11)
+         │           │   └── HtmlText "#17b26a" (line:11)
+         │           ├── CssDeclaration "color" (line:11)
+         │           │   └── HtmlText "#fff" (line:11)
+         │           ├── CssDeclaration "border" (line:11)
+         │           │   └── HtmlText "none" (line:11)
+         │           ├── CssDeclaration "border-radius" (line:11)
+         │           │   └── HtmlText "4px" (line:11)
+         │           └── CssDeclaration "cursor" (line:11)
+         │               └── HtmlText "pointer" (line:11)
+         └── JinjaBlock "content" (line:15)
+             └── HtmlElement "div" (line:16)
+                 ├── HtmlElement "h1" (line:17)
+                 │   └── HtmlText "Add New Product" (line:17)
+                 └── HtmlElement "form" (line:19)
+                     └── HtmlElement "div" (line:20)
+                         ├── HtmlElement "label" (line:21)
+                         │   └── HtmlText "Product Name" (line:21)
+                         ├── HtmlElement "input" (line:22)
+                         └── HtmlElement "div" (line:24)
+                             ├── HtmlElement "label" (line:25)
+                             ├── HtmlElement "input" (line:26)
+                             └── HtmlElement "div" (line:28)
+                                 ├── HtmlElement "label" (line:29)
+                                 │   └── HtmlText "Product Image (from device)" (line:29)
+                                 ├── HtmlElement "input" (line:31)
+                                 ├── HtmlElement "div" (line:33)
+                                 │   ├── HtmlElement "label" (line:34)
+                                 │   └── HtmlElement "textarea" (line:35)
+                                 └── HtmlElement "button" (line:37)
+                                     └── HtmlText "Add Product" (line:37)
+
+  Running Jinja Semantic Analysis...
+
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║                              SYMBOL TABLE                                    ║
+  ╠══════════════════════════════╦══════════════════════════╦════════════════════╣
+  ║ Variable Name                ║ Category                 ║ Defined at Line    ║
+  ╠══════════════════════════════╬══════════════════════════╬════════════════════╣
+  ║ title                        ║ TEMPLATE_BLOCK           ║ 3                  ║
+  ║ styles                       ║ TEMPLATE_BLOCK           ║ 5                  ║
+  ║ content                      ║ TEMPLATE_BLOCK           ║ 15                 ║
+  ╚══════════════════════════════╩══════════════════════════╩════════════════════╝
+
+  Context keys for add_product.jinja: []
+Static HTML successfully generated at: /home/ubuntu/work/compiler_review/project/FlaskJinjaCompilerUnifiedDynamic/output/add_product.html
+  Generated: output/add_product.html in 15ms
+
+  File: testFiles/templates/edit_product.jinja
+  AST:
+     └── HtmlFile "template" (line:1)
+         ├── HtmlDoctype "html" (line:1)
+         └── HtmlElement "html" (line:2)
+             └── HtmlElement "head" (line:3)
+                 ├── HtmlElement "meta" (line:4)
+                 │   └── HtmlElement "title" (line:5)
+                 │       └── HtmlText "تعديل المنتج" (line:5)
+                 └── HtmlElement "body" (line:7)
+                     ├── HtmlElement "h2" (line:8)
+                     │   └── HtmlText "تعديل المنتج" (line:8)
+                     ├── HtmlElement "form" (line:9)
+                     │   ├── HtmlElement "label" (line:10)
+                     │   │   └── HtmlText "اسم المنتج:" (line:10)
+                     │   ├── HtmlElement "input (self-closing)" (line:11)
+                     │   ├── HtmlElement "label" (line:13)
+                     │   │   └── HtmlText "السعر:" (line:13)
+                     │   ├── HtmlElement "input (self-closing)" (line:14)
+                     │   ├── HtmlElement "label" (line:16)
+                     │   │   └── HtmlText "صورة جديدة (اختياري):" (line:16)
+                     │   ├── HtmlElement "input (self-closing)" (line:17)
+                     │   ├── HtmlElement "label" (line:19)
+                     │   │   └── HtmlText "التفاصيل:" (line:19)
+                     │   ├── HtmlElement "textarea" (line:20)
+                     │   │   └── JinjaExpr "Jinja Expression" (line:20)
+                     │   │       └── HtmlText "product.details" (line:20)
+                     │   └── HtmlElement "button" (line:22)
+                     │       └── HtmlText "حفظ التعديلات" (line:22)
+                     └── HtmlElement "br" (line:24)
+                         └── HtmlElement "a" (line:25)
+                             └── HtmlText "العودة للمنتجات" (line:25)
+
+  Running Jinja Semantic Analysis...
+
+  ╔══════════════════════════════════════════════════════════════════════════════╗
+  ║                              SYMBOL TABLE                                    ║
+  ╠══════════════════════════════╦══════════════════════════╦════════════════════╣
+  ║ Variable Name                ║ Category                 ║ Defined at Line    ║
+  ╠══════════════════════════════╬══════════════════════════╬════════════════════╣
+  ╚══════════════════════════════╩══════════════════════════╩════════════════════╝
+
+  Context keys for edit_product.jinja: [product]
+Static HTML successfully generated at: /home/ubuntu/work/compiler_review/project/FlaskJinjaCompilerUnifiedDynamic/output/edit_product.html
+  Generated: output/edit_product.html in 4ms
+
+══ [STAGE 3] Copying Support Files ══
+  Copied: testFiles/app.py → output/app.py
+  Copied: testFiles/static/style.css → output/style.css
+  Copied: testFiles/static/interactive_addition.js → output/script.js
+
+════════════════════════════════════════════════════════════════════════════════
+   Compilation Complete!
+   → output/          : HTML files + app.py + style.css + script.js
+   → compiler_output/ : ast_python.json, ast_jinja.json, semantic_report.txt, generation_log.txt
+════════════════════════════════════════════════════════════════════════════════

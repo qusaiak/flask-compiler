@@ -4,112 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="67ddf1c1-5a4e-4498-97d5-fe12589d7801" name="Changes" comment="Fix bugs and update some features">
-      <change beforePath="$PROJECT_DIR$/compiler.py" beforeDir="false" afterPath="$PROJECT_DIR$/compiler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen/FlaskLexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/gen/FlaskLexer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen/FlaskParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/gen/FlaskParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen/org/example/gen/python/pythonLexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/gen/org/example/gen/python/pythonLexer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gen/org/example/gen/python/pythonParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/gen/org/example/gen/python/pythonParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/ASTNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/ASTNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/ASTVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/ASTVisitor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/css/CssAtRuleNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/css/CssAtRuleNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/css/CssDeclarationNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/css/CssDeclarationNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/css/CssFileNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/css/CssFileNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/css/CssRuleNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/css/CssRuleNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/css/CssSelectorNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/css/CssSelectorNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/html/HtmlAttributeNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/html/HtmlAttributeNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/html/HtmlDoctypeNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/html/HtmlDoctypeNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/html/HtmlElementNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/html/HtmlElementNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/html/HtmlFileNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/html/HtmlFileNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/html/HtmlTextNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/html/HtmlTextNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/jinja2/JinjaBlockNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/jinja2/JinjaBlockNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/jinja2/JinjaExprNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/jinja2/JinjaExprNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/jinja2/JinjaExtendsNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/jinja2/JinjaExtendsNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/jinja2/JinjaIfNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/jinja2/JinjaIfNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/jinja2/JinjaSetNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/jinja2/JinjaSetNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/AssignmentNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/AssignmentNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/AttributeNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/AttributeNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/AugmentedAssignmentNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/AugmentedAssignmentNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/AwaitNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/AwaitNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/BinaryOpNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/BinaryOpNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/CallNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/CallNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/ClassDefNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/ClassDefNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/CompareNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/CompareNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/DecoratorNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/DecoratorNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/DeleteNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/DeleteNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/DictNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/DictNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/ElifNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/ElifNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/ElseNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/ElseNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/ExceptNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/ExceptNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/ExpressionNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/ExpressionNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/FinallyNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/FinallyNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/ForNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/ForNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/FromImportNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/FromImportNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/FunctionCallNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/FunctionCallNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/FunctionDefNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/FunctionDefNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/GeneratorNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/GeneratorNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/GlobalNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/GlobalNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/IdentifierNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/IdentifierNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/IfNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/IfNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/ImportNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/ImportNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/KeywordArgumentNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/KeywordArgumentNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/LambdaNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/LambdaNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/ListNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/ListNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/LiteralNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/LiteralNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/ModuleNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/ModuleNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/NonlocalNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/NonlocalNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/PythonFileNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/PythonFileNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/RaiseNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/RaiseNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/ReturnNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/ReturnNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/RouteNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/RouteNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/SubscriptNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/SubscriptNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/TryNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/TryNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/UnaryOpNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/UnaryOpNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/WhileNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/WhileNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/WithNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/WithNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ast/python/YieldNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ast/python/YieldNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/codegen/CodeGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/codegen/CodeGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/gen/Fix generated files.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/gen/Fix generated files.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/gen/FlaskLexer.g4" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/gen/FlaskLexer.g4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/gen/python/pythonLexer.g4" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/gen/python/pythonLexer.g4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/reporting/CompilerReportWriter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/reporting/CompilerReportWriter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/semantic/PythonSemanticAnalyzer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/semantic/PythonSemanticAnalyzer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/semantic/Symbol.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/semantic/Symbol.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/semantic/SymbolTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/semantic/SymbolTable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/visitor/ASTBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/visitor/ASTBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/visitor/PythonASTBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/visitor/PythonASTBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testFiles/product_detail.txt" beforeDir="false" afterPath="$PROJECT_DIR$/testFiles/product_detail.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testFiles/products.txt" beforeDir="false" afterPath="$PROJECT_DIR$/testFiles/products.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testFiles/runtime_app.py" beforeDir="false" afterPath="$PROJECT_DIR$/testFiles/runtime_app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testFiles/templates/AddProducts.html" beforeDir="false" afterPath="$PROJECT_DIR$/testFiles/templates/AddProducts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testFiles/templates/product_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/testFiles/templates/product_detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testFiles/templates/products.html" beforeDir="false" afterPath="$PROJECT_DIR$/testFiles/templates/products.html" afterDir="false" />
-    </list>
+    <list default="true" id="cf456919-72fb-4a80-bdc0-06c5a3603bd4" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;qusaiak&quot;
-  }
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/qusaiak/flask-compiler.git&quot;,
-    &quot;accountId&quot;: &quot;18a86303-9597-4803-8190-00615033dab2&quot;
-  }
-}</component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 2
+  &quot;associatedIndex&quot;: 0
 }</component>
-  <component name="ProjectId" id="3FLyDBXNlRVMlllnVN7BrHYx7L1" />
+  <component name="ProjectId" id="3IPe6eJ1krhVAXWhvJjOxM4aJgC" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -117,20 +28,26 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.SemanticTestRunner.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/xampp/htdocs/Clean-Link&quot;
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\سنة رابعة\FINALLY_COMPILER\FlaskJinjaCompilerUnifiedDynamic_FINAL_v3 (2)\FlaskJinjaCompilerUnifiedDynamic\testFiles\templates" />
+    </key>
+  </component>
   <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.flaskcompiler.Main" />
-      <module name="flask-compiler" />
+      <option name="MAIN_CLASS_NAME" value="org.example.Main" />
+      <module name="cmpiler2Projectv2" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.flaskcompiler.*" />
+          <option name="PATTERN" value="org.example.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -138,91 +55,34 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="duplicate_route" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
-      <module name="flask-compiler" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/examples/errors" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/examples/errors/duplicate_route.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
+    <configuration name="SemanticTestRunner" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.example.SemanticTestRunner" />
+      <module name="cmpiler2Projectv2" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.SemanticTestRunner" />
       </list>
     </recent_temporary>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="67ddf1c1-5a4e-4498-97d5-fe12589d7801" name="Changes" comment="" />
-      <created>1781868522093</created>
+      <changelist id="cf456919-72fb-4a80-bdc0-06c5a3603bd4" name="Changes" comment="" />
+      <created>1787670457108</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1781868522093</updated>
+      <updated>1787670457108</updated>
     </task>
-    <task id="LOCAL-00001" summary="Fix bugs">
-      <option name="closed" value="true" />
-      <created>1787784391327</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1787784391327</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Fix bugs and update some features">
-      <option name="closed" value="true" />
-      <created>1788124203922</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1788124203922</updated>
-    </task>
-    <option name="localTasksCounter" value="3" />
     <servers />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="RECENT_FILTERS">
-      <map>
-        <entry key="User">
-          <value>
-            <list>
-              <RecentGroup>
-                <option name="FILTER_VALUES">
-                  <option value="*" />
-                </option>
-              </RecentGroup>
-            </list>
-          </value>
-        </entry>
-      </map>
-    </option>
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fix bugs" />
-    <MESSAGE value="Fix bugs and update some features" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix bugs and update some features" />
   </component>
 </project>

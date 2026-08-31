@@ -6,11 +6,11 @@ import org.example.ast.ASTVisitor;
 public class HtmlAttributeNode extends ASTNode {
     private final String attrName;
     private final ASTNode attrValue;
-
     public HtmlAttributeNode(String attrName, ASTNode attrValue, int line, int col) {
         super("HtmlAttributeNode", line, col);
         this.attrName = attrName;
         this.attrValue = attrValue;
+
 
         if (attrValue != null) {
             this.addChild(attrValue);

@@ -1,3 +1,4 @@
+{# templates/product_detail.txt #}
 {% extends "base.txt" %}
 {% block title %}Product Detail{% endblock %}
 {% block content %}

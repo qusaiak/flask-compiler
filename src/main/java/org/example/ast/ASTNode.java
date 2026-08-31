@@ -6,7 +6,7 @@ import java.util.List;
 public abstract class ASTNode {
     protected String nodeName;
     protected int lineNumber;
-    protected int columnNumber;
+    protected int columnNumber; // إضافة رقم العمود
     public List<ASTNode> children = new ArrayList<>();
 
     public ASTNode(String nodeName, int lineNumber, int columnNumber) {
@@ -50,7 +50,6 @@ public abstract class ASTNode {
 
     protected int line;
     protected int col;
-
 
 
     public int getLine() {

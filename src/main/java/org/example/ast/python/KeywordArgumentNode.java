@@ -4,8 +4,11 @@ import org.example.ast.ASTNode;
 import org.example.ast.ASTVisitor;
 
 /**
- * Preserves the name-to-value binding in a keyword argument, such as
- * products=items in render_template(...), for template context extraction.
+ * يمثّل معاملاً مفتاحياً (keyword argument) داخل استدعاء دالة، مثل:
+ * render_template('products.html', products=products)
+ * حيث products= هو اسم المعامل (name) وproducts (الثانية) هي عقدة القيمة (value).
+ * قبل إضافة هذه العقدة كان visitArgument في PythonASTBuilder يتجاهل اسم المعامل
+ * ويكتفي بزيارة التعبير، فتُفقد معلومة الربط بين اسم المتغيّر في القالب وقيمته الفعلية.
  */
 public class KeywordArgumentNode extends ASTNode {
     private final String name;

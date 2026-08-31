@@ -2,7 +2,7 @@
 
 ## حالة المشروع
 
-تم تجهيز نسخة نهائية من مشروع المترجم التعليمي الذي يربط تحليل Python/Flask مع تحليل قوالب Jinja/HTML وتوليد صفحات HTML. يعالج `Main` القوالب النهائية الأربعة ويبدأ كل تشغيل بمسح `output/` ثم يعيد إنشاءه.
+تم تجهيز نسخة نهائية من مشروع المترجم التعليمي الذي يربط تحليل Python/Flask مع تحليل قوالب Jinja/HTML وتوليد صفحات HTML. يعالج `Main` القوالب النهائية الثلاثة فقط ويبدأ كل تشغيل بمسح `output/` ثم يعيد إنشاءه.
 
 ## التوليد النهائي
 
@@ -17,12 +17,9 @@ testFiles/templates/add_product.jinja
 
 testFiles/templates/edit_product.jinja
 → output/edit_product.html
-
-testFiles/templates/product_detail.jinja
-→ output/product_detail.html
 ```
 
-كما تجهز ملفات الدعم دون تحليل إضافي، مع مواءمة مراجع القوالب داخل `output/app.py` مع صفحات HTML المولدة حتى يعمل التطبيق من داخل مجلد `output/`:
+كما تنسخ ملفات الدعم دون تحليل إضافي:
 
 ```text
 output/app.py
@@ -46,14 +43,14 @@ compiler_output/generation_log.txt
 يشغل `SemanticTestRunner` اختبارات مستقلة للطبقات الأربع:
 
 ```text
-Python: 5 errors detected
+Python: 2 errors detected
 HTML:   2 errors detected
 CSS:    2 errors detected
 Jinja:  7 errors detected
-Total: 16 errors detected
+Total: 13 errors detected
 ```
 
-لا يغير هذا الاختبار `output/`. كما تم التحقق من أن IDs في روابط التفاصيل والتعديل والحذف تظهر كأعداد صحيحة مثل `1` بدل `1.0`.
+لا يغير هذا الاختبار `output/`.
 
 ## اختبار Flask
 
