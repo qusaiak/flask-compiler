@@ -4,7 +4,7 @@ import org.example.ast.ASTNode;
 import org.example.ast.ASTVisitor;
 
 public class IdentifierNode extends ASTNode {
-    private final String name; // اسم المُعرّف (مثل x, count, calculate_sum)
+    private final String name;
 
     public IdentifierNode(String name, int line, int col) {
         super("IdentifierNode", line, col);
@@ -21,7 +21,6 @@ public class IdentifierNode extends ASTNode {
         return name;
     }
 
-    // Getter
     public String getName() {
         return name;
     }

@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DecoratorNode extends ASTNode {
-    private final String decoratorName;  // اسم الـ Decorator (مثل route أو login_required)
-    private final List<ASTNode> arguments; // وسائط الـ Decorator (مثل المسارات '/' أو المعاملات)
+    private final String decoratorName;
+    private final List<ASTNode> arguments;
 
     public DecoratorNode(String name, int line, int col) {
         super("DecoratorNode", line, col);
@@ -16,9 +16,6 @@ public class DecoratorNode extends ASTNode {
         this.arguments = new ArrayList<>();
     }
 
-    /**
-     * إضافة وسيط (Argument) للـ Decorator وربطه كابن في الشجرة
-     */
     public void addArgument(ASTNode arg) {
         if (arg != null) {
             this.arguments.add(arg);
@@ -36,7 +33,6 @@ public class DecoratorNode extends ASTNode {
         return "@" + decoratorName;
     }
 
-    // Getters
     public String getDecoratorName() {
         return decoratorName;
     }

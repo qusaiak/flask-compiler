@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WithNode extends ASTNode {
-    private final List<ASTNode> items; // عناصر وسياقات التنفيذ (مثل تعبيرات open والمتحول الاختياري as)
-    private final List<ASTNode>  body;  // الأوامر البرمجية داخل كتلة with
+    private final List<ASTNode> items;
+    private final List<ASTNode>  body;
 
     public WithNode(int line, int col) {
         super("WithNode", line, col);
@@ -16,9 +16,6 @@ public class WithNode extends ASTNode {
         this.body  = new ArrayList<>();
     }
 
-    /**
-     * إضافة عنصر سياق (Context Item) وربطه كابن في الشجرة
-     */
     public void addItem(ASTNode item) {
         if (item != null) {
             this.items.add(item);
@@ -26,9 +23,7 @@ public class WithNode extends ASTNode {
         }
     }
 
-    /**
-     * إضافة عبارة برمجية لجسم كتلة with وربطها كابن في الشجرة
-     */
+
     public void addBodyStatement(ASTNode stmt) {
         if (stmt != null) {
             this.body.add(stmt);
@@ -46,7 +41,6 @@ public class WithNode extends ASTNode {
         return "with";
     }
 
-    // Getters
     public List<ASTNode> getItems() {
         return items;
     }

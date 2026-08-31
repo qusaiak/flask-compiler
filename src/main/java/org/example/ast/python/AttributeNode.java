@@ -4,15 +4,14 @@ import org.example.ast.ASTNode;
 import org.example.ast.ASTVisitor;
 
 public class AttributeNode extends ASTNode {
-    private final ASTNode objectNode;   // الكائن الأساسي (قد يكون IdentifierNode أو FunctionCallNode أو AttributeNode)
-    private final String attributeName; // اسم الحقل/الميزة المطلوبة بعد النقطة
+    private final ASTNode objectNode;
+    private final String attributeName;
 
     public AttributeNode(ASTNode objectNode, String attributeName, int line, int col) {
         super("AttributeNode", line, col);
         this.objectNode = objectNode;
         this.attributeName = attributeName;
 
-        // ربط الكائن بالشجرة ليتم طبع أجزائه عبر printFullTree
         this.addChild(objectNode);
     }
 
@@ -26,7 +25,6 @@ public class AttributeNode extends ASTNode {
         return "." + attributeName;
     }
 
-    // Getters لاستخدامها لاحقاً
     public ASTNode getObjectNode() {
         return objectNode;
     }

@@ -6,7 +6,7 @@ import java.util.List;
 public abstract class ASTNode {
     protected String nodeName;
     protected int lineNumber;
-    protected int columnNumber; // إضافة رقم العمود
+    protected int columnNumber;
     public List<ASTNode> children = new ArrayList<>();
 
     public ASTNode(String nodeName, int lineNumber, int columnNumber) {
@@ -51,10 +51,8 @@ public abstract class ASTNode {
     protected int line;
     protected int col;
 
-    // الباني (Constructor) إن لم يكن موجوداً بهذا الشكل
 
 
-    // الدوال التي يعترض عليها الكومبايلر:
     public int getLine() {
         return line;
     }

@@ -4,13 +4,12 @@ import org.example.ast.ASTNode;
 import org.example.ast.ASTVisitor;
 
 public class AwaitNode extends ASTNode {
-    private final ASTNode expression; // التعبير المنتظر (قد يكون FunctionCallNode أو IdentifierNode...)
+    private final ASTNode expression;
 
     public AwaitNode(ASTNode expression, int line, int col) {
         super("AwaitNode", line, col);
         this.expression = expression;
 
-        // ربط التعبير التابع كابن في الشجرة
         this.addChild(expression);
     }
 
@@ -24,7 +23,6 @@ public class AwaitNode extends ASTNode {
         return "await";
     }
 
-    // Getter للحصول على التعبير
     public ASTNode getExpression() {
         return expression;
     }

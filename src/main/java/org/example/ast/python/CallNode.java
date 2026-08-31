@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CallNode extends ASTNode {
-    private final ASTNode functionNode;   // الدالة المستدعاة (قد تكون IdentifierNode, AttributeNode...)
-    private final List<ASTNode> arguments; // قائمة الوسائط الممرّرة للدالة
+    private final ASTNode functionNode;
+    private final List<ASTNode> arguments;
 
     public CallNode(ASTNode functionNode, int line, int col) {
         super("CallNode", line, col);
@@ -19,9 +19,6 @@ public class CallNode extends ASTNode {
         this.addChild(functionNode);
     }
 
-    /**
-     * إضافة وسيط (Argument) للدالة وربطه بالشجرة
-     */
     public void addArgument(ASTNode arg) {
         if (arg != null) {
             this.arguments.add(arg);
@@ -39,7 +36,6 @@ public class CallNode extends ASTNode {
         return "()";
     }
 
-    // Getters
     public ASTNode getFunctionNode() {
         return functionNode;
     }

@@ -4,19 +4,17 @@ import org.example.ast.ASTNode;
 import org.example.ast.ASTVisitor;
 
 public class RaiseNode extends ASTNode {
-    private final ASTNode exception; // تعبير الاستثناء المُثار (مثل CallNode أو IdentifierNode)
-    private final ASTNode cause;     // التعبير المسبب (اللاحقة الاختيارية from ...)
+    private final ASTNode exception;
+    private final ASTNode cause;
 
     public RaiseNode(ASTNode exception, ASTNode cause, int line, int col) {
         super("RaiseNode", line, col);
         this.exception = exception;
         this.cause = cause;
 
-        // ربط الاستثناء كابن في الشجرة
         if (exception != null) {
             this.addChild(exception);
         }
-        // ربط السبب الاختياري كابن في الشجرة إن وجد
         if (cause != null) {
             this.addChild(cause);
         }
@@ -32,7 +30,6 @@ public class RaiseNode extends ASTNode {
         return "raise";
     }
 
-    // Getters
     public ASTNode getException() {
         return exception;
     }

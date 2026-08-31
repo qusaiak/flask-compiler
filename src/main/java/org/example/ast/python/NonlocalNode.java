@@ -14,9 +14,6 @@ public class NonlocalNode extends ASTNode {
         this.names = new ArrayList<>();
     }
 
-    /**
-     * إضافة اسم متغير غير محلي (Nonlocal Name) وربطه كابن في الشجرة
-     */
     public void addName(ASTNode name) {
         if (name != null) {
             this.names.add(name);
@@ -34,7 +31,6 @@ public class NonlocalNode extends ASTNode {
         return "nonlocal";
     }
 
-    // Getter
     public List<ASTNode> getNames() {
         return names;
     }

@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WhileNode extends ASTNode {
-    private final ASTNode condition;         // شرط الحلقة (مثل CompareNode أو IdentifierNode)
-    private final List<ASTNode> body;        // الأوامر البرمجية داخل كتلة while
-    private final List<ASTNode> orelse;      // كتل else الاختيارية المرتبطة بالحلقة
+    private final ASTNode condition;
+    private final List<ASTNode> body;
+    private final List<ASTNode> orelse;
 
     public WhileNode(ASTNode condition, int line, int col) {
         super("WhileNode", line, col);
@@ -17,15 +17,11 @@ public class WhileNode extends ASTNode {
         this.body = new ArrayList<>();
         this.orelse = new ArrayList<>();
 
-        // ربط شرط الحلقة كابن في الشجرة الهرمية
         if (condition != null) {
             this.addChild(condition);
         }
     }
 
-    /**
-     * إضافة عبارة برمجية لجسم الحلقة وربطها كابن في الشجرة
-     */
     public void addBodyStatement(ASTNode stmt) {
         if (stmt != null) {
             this.body.add(stmt);
@@ -33,9 +29,6 @@ public class WhileNode extends ASTNode {
         }
     }
 
-    /**
-     * إضافة عبارة برمجية لكتلة else الاختيارية وربطها كابن في الشجرة
-     */
     public void addElseStatement(ASTNode stmt) {
         if (stmt != null) {
             this.orelse.add(stmt);
@@ -53,7 +46,6 @@ public class WhileNode extends ASTNode {
         return "while";
     }
 
-    // Getters
     public ASTNode getCondition() {
         return condition;
     }

@@ -4,7 +4,7 @@ import org.example.ast.ASTNode;
 import org.example.ast.ASTVisitor;
 
 public class HtmlTextNode extends ASTNode {
-    private final String text; // محتوى النص داخل صفحة الويب
+    private final String text;
 
     public HtmlTextNode(String text, int line, int col) {
         super("HtmlTextNode", line, col);

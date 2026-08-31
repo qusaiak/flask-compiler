@@ -146,10 +146,8 @@ public class pythonLexer extends Lexer {
 	    }
 
 	    private void handleNewline() {
-	        // 1. لو داخل أقواس — تجاهل NEWLINE/INDENT/DEDENT كلياً
 	        if (openBrackets > 0) return;
 
-	        // 2. ✅ الإصلاح: لو السطر فارغ أو مجرد تعليق — لا تقم بتوليد أي INDENT/DEDENT/NEWLINE
 	        int nextChar = _input.LA(1);
 	        if (nextChar == '#' || nextChar == '\r' || nextChar == '\n' || nextChar == org.antlr.v4.runtime.IntStream.EOF) {
 	            return;

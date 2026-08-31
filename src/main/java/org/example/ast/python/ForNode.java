@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ForNode extends ASTNode {
-    private final ASTNode target;     // المتغير أو الهيكل المستهدف (مثل IdentifierNode أو TupleNode)
-    private final ASTNode iterable;   // التعبير القابل للتكرار (مثل CallNode كـ range(10) أو ListNode)
-    private final List<ASTNode> body;     // العبارات البرمجية داخل جسم الحلقة
-    private final List<ASTNode> orelse;   // العبارات البرمجية داخل فرع else الاختياري
+    private final ASTNode target;
+    private final ASTNode iterable;
+    private final List<ASTNode> body;
+    private final List<ASTNode> orelse;
 
     public ForNode(ASTNode target, ASTNode iterable, int line, int col) {
         super("ForNode", line, col);
@@ -19,7 +19,6 @@ public class ForNode extends ASTNode {
         this.body = new ArrayList<>();
         this.orelse = new ArrayList<>();
 
-        // ربط المتغير والتعبير القابل للتكرار كأبناء في الشجرة
         if (target != null) {
             this.addChild(target);
         }
@@ -28,9 +27,6 @@ public class ForNode extends ASTNode {
         }
     }
 
-    /**
-     * إضافة عبارة برمجية داخل جسم حلقة for وربطها كابن في الشجرة
-     */
     public void addStatement(ASTNode statement) {
         if (statement != null) {
             this.body.add(statement);
@@ -38,9 +34,6 @@ public class ForNode extends ASTNode {
         }
     }
 
-    /**
-     * إضافة عبارة برمجية داخل فرع else التابع لحلقة for (اختياري في بايثون)
-     */
     public void addElseStatement(ASTNode statement) {
         if (statement != null) {
             this.orelse.add(statement);
@@ -58,7 +51,6 @@ public class ForNode extends ASTNode {
         return "in";
     }
 
-    // Getters
     public ASTNode getTarget() {
         return target;
     }

@@ -1,4 +1,3 @@
-{# testFiles/products.txt #}
 {% extends "base.txt" %}
 {% block title %}Products{% endblock %}
 {% block content %}

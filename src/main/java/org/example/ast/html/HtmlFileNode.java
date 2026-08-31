@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HtmlFileNode extends ASTNode {
-    private final String fileName;       // اسم أو مسار ملف الـ HTML
-    private final List<ASTNode> children; // العناصر الجذرية داخل الملف (مثل Doctype وعنصر html الرئيسي)
+    private final String fileName;
+    private final List<ASTNode> children;
 
     public HtmlFileNode(String fileName, int line, int col) {
         super("HtmlFileNode", line, col);
@@ -16,9 +16,6 @@ public class HtmlFileNode extends ASTNode {
         this.children = new ArrayList<>();
     }
 
-    /**
-     * إضافة عنصر جذري جديد للملف وربطه في الشجرة الهرمية
-     */
     public void addChildElement(ASTNode child) {
         if (child != null) {
             this.children.add(child);

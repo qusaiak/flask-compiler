@@ -32,7 +32,6 @@ public class ImportNode extends ASTNode {
         return "import";
     }
 
-    // Getter
     public List<ASTNode> getModules() {
         return modules;
     }

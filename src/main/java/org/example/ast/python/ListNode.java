@@ -7,16 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListNode extends ASTNode {
-    private final List<ASTNode> elements; // عناصر القائمة (قد تكون LiteralNode, IdentifierNode, BinaryOpNode...)
+    private final List<ASTNode> elements;
 
     public ListNode(int line, int col) {
         super("ListNode", line, col);
         this.elements = new ArrayList<>();
     }
 
-    /**
-     * إضافة عنصر للقائمة وربطه كابن في الشجرة
-     */
     public void addElement(ASTNode element) {
         if (element != null) {
             this.elements.add(element);
@@ -34,7 +31,6 @@ public class ListNode extends ASTNode {
         return "[]";
     }
 
-    // Getter
     public List<ASTNode> getElements() {
         return elements;
     }

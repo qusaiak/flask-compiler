@@ -4,7 +4,7 @@ import org.example.ast.ASTNode;
 import org.example.ast.ASTVisitor;
 
 public class JinjaExprNode extends ASTNode {
-    private final ASTNode expression; // التعبير البرمجي أو المتغير المراد تقييمه وعرضه (مثل VariableNode أو FunctionCallNode)
+    private final ASTNode expression;
 
     public JinjaExprNode(ASTNode expression, int line, int col) {
         super("JinjaExprNode", line, col);

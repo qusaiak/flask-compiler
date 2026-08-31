@@ -9,7 +9,7 @@ import java.util.List;
 public class JinjaIfNode extends ASTNode {
     private final ASTNode condition;
     private final List<ASTNode> children;
-    private final String kind; // "if" | "elif" | "else"
+    private final String kind;
 
     public JinjaIfNode(ASTNode condition, int line, int col) {
         this("if", condition, line, col);

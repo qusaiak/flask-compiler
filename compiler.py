@@ -2,13 +2,11 @@ import os
 import json
 from pathlib import Path
 
-# إعداد المسارات الأساسية
 ROOT_DIR = Path(__file__).resolve().parent
 TEST_FILES_DIR = ROOT_DIR / "testFiles"
 OUTPUT_DIR = ROOT_DIR / "output"
 COMPILER_OUTPUT_DIR = ROOT_DIR / "compiler_output"
 
-# إنشاء المجلدات إذا لم تكن موجودة
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 COMPILER_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -18,7 +16,6 @@ def run_semantic_analysis_and_checks():
     للاختبار الطبيعي (بدون أخطاء)، اترك القائمة فارغة [].
     """
     semantic_errors = [
-        # --- القسم الأول: أخطاء بايثون / مسارات Flask (5 أخطاء) ---
         {
             "id": 1,
             "section": "Python & Flask Backend",
@@ -55,7 +52,6 @@ def run_semantic_analysis_and_checks():
             "line": 91
         },
 
-        # --- القسم الثاني: أخطاء قوالب Jinja2 / Flask (5 أخطاء) ---
         {
             "id": 6,
             "section": "Flask & Jinja2 Templates",
@@ -99,13 +95,11 @@ def generate_compiler_outputs():
     print("=== [INFO] Starting Compiler & Analysis Phase  ===")
     print("==================================================")
 
-    # 1. فحص ملفات الباك إند
     app_py_path = TEST_FILES_DIR / "app.py"
     if not app_py_path.exists():
         app_py_path = TEST_FILES_DIR / "runtime_app.py"
     backend_name = app_py_path.name if app_py_path.exists() else "app.py"
 
-    # 2. توليد ast_python.json و ast_jinja.json في مجلد compiler_output
     python_ast = {
         "input": f"testFiles/{backend_name}",
         "ast": {
@@ -136,7 +130,6 @@ def generate_compiler_outputs():
         json.dump(jinja_ast, f, ensure_ascii=False, indent=4)
     print("[SUCCESS] Generated: compiler_output/ast_jinja.json")
 
-    # 3. تشغيل التحليل الدلالي وتوليد semantic_report.txt
     semantic_errors = run_semantic_analysis_and_checks()
 
     report_lines = [
@@ -175,15 +168,12 @@ def generate_compiler_outputs():
     semantic_report_path.write_text("\n".join(report_lines), encoding="utf-8")
     print("[SUCCESS] Generated: compiler_output/semantic_report.txt")
 
-    # 4. القاعدة المنظمة لمجلد الخرج (output/):
-    # إذا وُجدت أخطاء دلالية -> لا يتم توليد أو نسخ أي شيء ويبقى المجلد فارغاً.
-    # إذا لم توجد أخطاء -> يتم توليد ملفات الـ HTML ونسخ الملفات المرافقة (app.py, style.css, script.py).
+    # Semantic errors block all generated and copied output.
     if len(semantic_errors) > 0:
         print("[WARNING] Semantic Errors found! Code generation aborted. 'output/' folder will remain empty.")
         for old_file in OUTPUT_DIR.glob("*.*"):
             old_file.unlink()
     else:
-        # توليد ملفات HTML من قوالب Jinja
         templates_dir = TEST_FILES_DIR / "templates"
         if templates_dir.exists():
             for template_file in templates_dir.glob("*.*"):
@@ -194,7 +184,7 @@ def generate_compiler_outputs():
                     out_path.write_text(content, encoding="utf-8")
                     print(f"[COMPILED] output/{out_filename}")
 
-        # نسخ الملفات المرافقة والدعمة (app.py, style.css, script.js) دون معالجة بناءً على الإعلان
+        # Supporting files are copied verbatim, without template processing.
         supporting_files = ["app.py", "style.css", "script.js", "runtime_app.py"]
         for s_file in supporting_files:
             s_path = TEST_FILES_DIR / s_file
@@ -205,7 +195,6 @@ def generate_compiler_outputs():
 
         print("[SUCCESS] Code generation and file copying completed successfully.")
 
-    # 5. توليد generation_log.txt في compiler_output
     log_content = f"""=== Flask & Jinja2 Generation Log ===
 [INFO] Initializing Code Generation Phase...
 [INFO] Semantic Errors Detected: {len(semantic_errors)}

@@ -14,9 +14,6 @@ public class ModuleNode extends ASTNode {
         this.body = new ArrayList<>();
     }
 
-    /**
-     * إضافة عبارة برمجية أو تعريف رئيسي إلى جسم الموديول وربطه كابن في الشجرة
-     */
     public void addStatement(ASTNode statement) {
         if (statement != null) {
             this.body.add(statement);
@@ -34,7 +31,6 @@ public class ModuleNode extends ASTNode {
         return "";
     }
 
-    // Getter
     public List<ASTNode> getBody() {
         return body;
     }

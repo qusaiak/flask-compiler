@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExceptNode extends ASTNode {
-    private final ASTNode exceptionType; // نوع الاستثناء (قد يكون IdentifierNode أو AttributeNode أو null)
-    private final String varName;        // اسم المتغير المقترن بـ as (مثل e في except Exception as e)
-    private final List<ASTNode> body;    // العبارات البرمجية المنفذة داخل كتلة except
+    private final ASTNode exceptionType;
+    private final String varName;
+    private final List<ASTNode> body;
 
     public ExceptNode(ASTNode exceptionType, String varName, int line, int col) {
         super("ExceptNode", line, col);
@@ -17,15 +17,11 @@ public class ExceptNode extends ASTNode {
         this.varName = varName;
         this.body = new ArrayList<>();
 
-        // ربط نوع الاستثناء كابن في الشجرة إن وجد
         if (exceptionType != null) {
             this.addChild(exceptionType);
         }
     }
 
-    /**
-     * إضافة عبارة برمجية داخل كتلة except وربطها كابن في الشجرة
-     */
     public void addStatement(ASTNode statement) {
         if (statement != null) {
             this.body.add(statement);
@@ -46,7 +42,6 @@ public class ExceptNode extends ASTNode {
         return varName != null ? "as " + varName : "except";
     }
 
-    // Getters
     public ASTNode getExceptionType() {
         return exceptionType;
     }

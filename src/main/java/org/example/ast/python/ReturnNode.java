@@ -4,13 +4,12 @@ import org.example.ast.ASTNode;
 import org.example.ast.ASTVisitor;
 
 public class ReturnNode extends ASTNode {
-    private final ASTNode value; // التعبير المُعاد (اختياري، قد يكون null في حالة return الفارغة)
+    private final ASTNode value; // Null for a bare return.
 
     public ReturnNode(ASTNode value, int line, int col) {
         super("ReturnNode", line, col);
         this.value = value;
 
-        // ربط التعبير المُعاد كابن في الشجرة إن وجد
         if (value != null) {
             this.addChild(value);
         }
@@ -26,7 +25,6 @@ public class ReturnNode extends ASTNode {
         return "return";
     }
 
-    // Getter
     public ASTNode getReturnValue() {
         return value;
     }

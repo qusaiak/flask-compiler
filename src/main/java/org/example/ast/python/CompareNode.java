@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CompareNode extends ASTNode {
-    private final ASTNode left;               // التعبير الأيسر الأساسي
-    private final List<String> operators;     // رموز عمليات المقارنة (<, <=, ==, !=, in...)
-    private final List<ASTNode> comparators;  // القيم/التعابير المقارنة الجهة اليمنى
+    private final ASTNode left;
+    private final List<String> operators;
+    private final List<ASTNode> comparators;
 
     public CompareNode(ASTNode left, int line, int col) {
         super("CompareNode", line, col);
@@ -17,15 +17,11 @@ public class CompareNode extends ASTNode {
         this.operators = new ArrayList<>();
         this.comparators = new ArrayList<>();
 
-        // ربط التعبير الأيسر كأول ابن في الشجرة
         if (left != null) {
             this.addChild(left);
         }
     }
 
-    /**
-     * إضافة عملية مقارنة جديدة مع الطرف الأيمن المرفق بها ورسمها في الشجرة
-     */
     public void addComparison(String operator, ASTNode comparator) {
         if (operator != null && comparator != null) {
             this.operators.add(operator);
@@ -44,7 +40,6 @@ public class CompareNode extends ASTNode {
         return String.join(", ", operators);
     }
 
-    // Getters
     public ASTNode getLeft() {
         return left;
     }

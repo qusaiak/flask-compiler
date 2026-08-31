@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CssRuleNode extends ASTNode {
-    private final String selector;             // محدد العناصر (مثل .container, #header, h1)
-    private final List<ASTNode> declarations;  // قائمة التصريحات والخصائص الداخلية (مثل CssDeclarationNode)
+    private final String selector;
+    private final List<ASTNode> declarations;
 
     public CssRuleNode(String selector, int line, int col) {
         super("CssRuleNode", line, col);
@@ -16,9 +16,6 @@ public class CssRuleNode extends ASTNode {
         this.declarations = new ArrayList<>();
     }
 
-    /**
-     * إضافة تصريح أو خصائص تنسيق جديدة للقاعدة وربطها كابن في الشجرة الهرمية
-     */
     public void addDeclaration(ASTNode declaration) {
         if (declaration != null) {
             this.declarations.add(declaration);

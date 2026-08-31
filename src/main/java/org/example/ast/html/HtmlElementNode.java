@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HtmlElementNode extends ASTNode {
-    private final String tagName;             // اسم وسم الـ HTML (مثل div, p, a)
-    private final boolean selfClosing;        // هل الوسم مغلق ذاتياً (مثل <br/>)
-    private final List<ASTNode> attributes;   // قائمة سمات وخصائص العنصر (مثل class, id)
-    private final List<ASTNode> children;     // قائمة العناصر والروابط الداخلية (الأبناء)
+    private final String tagName;
+    private final boolean selfClosing;
+    private final List<ASTNode> attributes;
+    private final List<ASTNode> children;
 
     public HtmlElementNode(String tagName, boolean selfClosing, int line, int col) {
         super("HtmlElementNode", line, col);
@@ -20,9 +20,6 @@ public class HtmlElementNode extends ASTNode {
         this.children = new ArrayList<>();
     }
 
-    /**
-     * إضافة خاصية (Attribute) جديدة للوسم وربطها كابن في الشجرة
-     */
     public void addAttribute(ASTNode attribute) {
         if (attribute != null) {
             this.attributes.add(attribute);
@@ -30,9 +27,6 @@ public class HtmlElementNode extends ASTNode {
         }
     }
 
-    /**
-     * إضافة عنصر فرعي أو نص داخلي (Child) للوسم وربطه في الشجرة الهرمية
-     */
     public void addChildElement(ASTNode child) {
         if (child != null) {
             this.children.add(child);

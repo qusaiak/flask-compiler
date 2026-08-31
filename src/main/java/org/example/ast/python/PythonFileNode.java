@@ -4,7 +4,7 @@ import org.example.ast.ASTNode;
 import org.example.ast.ASTVisitor;
 
 public class PythonFileNode extends ASTNode {
-    private final String fileName; // اسم أو مسار ملف البايثون
+    private final String fileName;
 
     public PythonFileNode(String fileName, int line, int col) {
         super("PythonFileNode", line, col);
@@ -21,7 +21,6 @@ public class PythonFileNode extends ASTNode {
         return fileName;
     }
 
-    // Getter
     public String getFileName() {
         return fileName;
     }

@@ -4,7 +4,7 @@ import org.example.ast.ASTNode;
 import org.example.ast.ASTVisitor;
 
 public class JinjaExtendsNode extends ASTNode {
-    private final ASTNode template; // اسم أو مسار القالب المستهدف وراثته (مثل LiteralNode أو تعبير)
+    private final ASTNode template;
 
     public JinjaExtendsNode(ASTNode template, int line, int col) {
         super("JinjaExtendsNode", line, col);

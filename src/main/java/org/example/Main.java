@@ -2,7 +2,7 @@ package org.example;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.example.ast.ASTNode;           // ✅ هاد الصح
+import org.example.ast.ASTNode;
 import org.example.codegen.CodeGenerator;
 import org.example.context.PythonContextExtractor;
 import org.example.reporting.CompilerReportWriter;
@@ -35,38 +35,29 @@ public class Main {
      */
     private static final Map<String, Map<String, Object>> templateContexts = new LinkedHashMap<>();
 
-    // ════════════════════════════════════════════════════════════════
-    // نقطة الدخول الرئيسية
-    // ════════════════════════════════════════════════════════════════
     public static void main(String[] args) {
         System.out.println("════════════════════════════════════════════════════════════════════════════════");
         System.out.println("   Flask & Jinja2 Compiler — Full Pipeline");
         System.out.println("════════════════════════════════════════════════════════════════════════════════\n");
 
-        // ─── المسارات الرئيسية ───────────────────────────────────────────────────
         String pythonFile = "testFiles/app.py";
         String cssFile = "testFiles/static/style.css";
         String jsFile = "testFiles/static/interactive_addition.js";
 
-        // يبدأ كل تشغيل من output نظيف حتى لا تبقى ملفات من تشغيل سابق.
         cleanOutputDirectory();
 
-        // ─── المرحلة 1: تحليل Python + استخراج Context Data من AST نفسه ────────
         System.out.println("══ [STAGE 1] Python Analysis ══");
         compilePython(pythonFile);
         System.out.println("  Python context keys: " + templateContexts.keySet() + "\n");
 
-        // ─── المرحلة 2: تحليل القوالب النهائية المحددة فقط ───────────────────────
         System.out.println("══ [STAGE 2] Jinja Template Analysis & Code Generation ══");
         for (String template : listJinjaTemplateFiles("testFiles/templates")) {
             compileFlask(template);
         }
 
-        // ─── المرحلة 3: نسخ الملفات الداعمة ────────────────────────────────────
         System.out.println("══ [STAGE 3] Copying Support Files ══");
         copySupportFiles(pythonFile, cssFile, jsFile);
 
-        // ─── كتابة تقارير compiler_output/ دفعة واحدة في نهاية التشغيل ─────────
         CompilerReportWriter.flush();
 
         System.out.println("\n════════════════════════════════════════════════════════════════════════════════");
@@ -76,7 +67,7 @@ public class Main {
         System.out.println("════════════════════════════════════════════════════════════════════════════════");
     }
 
-    /** يعيد القوالب النهائية المطلوبة فقط وبالترتيب المحدد في إعلان المشروع. */
+    /** Selects the final demonstration templates in a fixed order. */
     private static List<String> listJinjaTemplateFiles(String templatesDirectory) {
         List<String> finalTemplates = List.of(
                 "index.jinja",
@@ -90,7 +81,6 @@ public class Main {
                 .collect(Collectors.toList());
     }
 
-    /** يمسح ملفات output القديمة قبل بدء أي عملية توليد جديدة. */
     private static void cleanOutputDirectory() {
         Path outputDirectory = Path.of("output");
         try {
@@ -116,13 +106,9 @@ public class Main {
         }
     }
 
-    // ════════════════════════════════════════════════════════════════
-    // [1] تحليل Python + استخراج Context Data الحقيقية من AST
-    // ════════════════════════════════════════════════════════════════
     private static void compilePython(String filePath) {
         System.out.println("  File: " + filePath);
         try {
-            // نظّف Windows line endings
             String code = Files.readString(Path.of(filePath))
                     .replace("\r\n", "\n")
                     .replace("\r", "\n");
@@ -155,7 +141,6 @@ public class Main {
                 System.out.println("  AST:");
                 printTree(ast, "     ", true);
 
-                // التحليل الدلالي
                 System.out.println("\n  Running Python Semantic Analysis...");
                 org.example.semantic.SymbolTable symbolTable = new org.example.semantic.SymbolTable();
                 PythonSemanticAnalyzer analyzer = new PythonSemanticAnalyzer(symbolTable);
@@ -164,9 +149,8 @@ public class Main {
                 CompilerReportWriter.recordPython(filePath, ast, symbolTable, errors);
                 System.out.println("  Python errors: " + errors.size());
 
-                // استخراج Context Data الحقيقية من AST نفسه (وليس من JSON أو قيم ثابتة).
                 Map<String, Map<String, Object>> extractedContexts = PythonContextExtractor.extract(ast, code);
-                // لا تدخل صفحات الدعم أو الصفحات غير المطلوبة في مرحلة التوليد النهائي.
+                // Only the selected demonstration templates participate in final generation.
                 extractedContexts.entrySet().removeIf(entry -> !Set.of(
                         "index.jinja", "add_product.jinja", "edit_product.jinja", "product_detail.jinja"
                 ).contains(entry.getKey()));
@@ -183,26 +167,21 @@ public class Main {
         }
     }
 
-    // ════════════════════════════════════════════════════════════════
-    // [2] تحليل Jinja وتوليد HTML
-    // ════════════════════════════════════════════════════════════════
     private static void compileFlask(String filePath) {
         System.out.println("  File: " + filePath);
         long startTime = System.currentTimeMillis();
 
         try {
-            // نظّف Windows line endings عشان الـ Lexer ما يتعثر
+            // Normalize line endings before lexing.
             String code = Files.readString(Path.of(filePath))
                     .replace("\r\n", "\n")
                     .replace("\r", "\n");
 
-            // --- Lexer ---
             CharStream cs = CharStreams.fromString(code);
             FlaskLexer lexer = new FlaskLexer(cs);
             lexer.removeErrorListeners();
             CommonTokenStream tokens = new CommonTokenStream(lexer);
 
-            // --- Parser ---
             FlaskParser parser = new FlaskParser(tokens);
             parser.removeErrorListeners();
             parser.addErrorListener(new BaseErrorListener() {
@@ -217,7 +196,6 @@ public class Main {
 
             ParseTree tree = parser.flaskTemplate();
 
-            // --- AST ---
             ASTBuilder visitor = new ASTBuilder();
             ASTNode ast = visitor.visit(tree);
 
@@ -231,7 +209,6 @@ public class Main {
             System.out.println("  AST:");
             printTree(ast, "     ", true);
 
-            // --- Semantic Analysis ---
             System.out.println("\n  Running Jinja Semantic Analysis...");
             org.example.semantic.SymbolTable symbolTable = new org.example.semantic.SymbolTable();
             org.example.semantic.SemanticAnalyzer analyzer = new org.example.semantic.SemanticAnalyzer(symbolTable);
@@ -246,7 +223,7 @@ public class Main {
 
             if (!semanticErrors.isEmpty()) {
                 System.out.println("  [!] " + semanticErrors.size() + " semantic error(s) — skipping code generation");
-                // احذف الملف القديم لو موجود، لكن كمّل بقية القوالب (لا تُنهي التشغيل بالكامل).
+                // Remove stale output for this template, but continue compiling the others.
                 try {
                     Files.deleteIfExists(Paths.get("output", outFileName));
                 } catch (IOException ignored) {
@@ -259,7 +236,6 @@ public class Main {
                 return;
             }
 
-            // --- Code Generation باستخدام Context Data الحقيقية لهذا القالب تحديداً ---
             String templateBaseName = Path.of(filePath).getFileName().toString();
             Map<String, Object> context = templateContexts.getOrDefault(templateBaseName, new LinkedHashMap<>());
             System.out.println("  Context keys for " + templateBaseName + ": " + context.keySet());
@@ -288,9 +264,6 @@ public class Main {
         }
     }
 
-    // ════════════════════════════════════════════════════════════════
-    // [3] نسخ الملفات الداعمة إلى output/ دون أي معالجة إضافية
-    // ════════════════════════════════════════════════════════════════
     private static void copySupportFiles(String pythonFile, String cssFile, String jsFile) {
         try {
             Files.createDirectories(Paths.get("output"));
@@ -302,7 +275,7 @@ public class Main {
         }
     }
 
-    /** يجهز backend runtime ليتعامل مع صفحات HTML المولدة الموجودة في output/. */
+    /** Adapts the Flask runtime to serve the generated HTML pages from output/. */
     private static void copyRuntimeBackend(String src, String dest) {
         try {
             String code = Files.readString(Path.of(src));
@@ -340,12 +313,8 @@ public class Main {
         }
     }
 
-    // ════════════════════════════════════════════════════════════════
-    // helpers
-    // ════════════════════════════════════════════════════════════════
     private static String getOutputFileName(String templatePath) {
         String name = Path.of(templatePath).getFileName().toString();
-        // استبدل الامتداد بـ .html (يدعم .jinja أيضاً وليس فقط .html)
         int dot = name.lastIndexOf('.');
         if (dot >= 0) name = name.substring(0, dot);
         return name + ".html";

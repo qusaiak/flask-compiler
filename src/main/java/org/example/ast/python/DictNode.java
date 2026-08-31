@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DictNode extends ASTNode {
-    private final List<ASTNode> keys;   // قائمة المفاتيح (قد تكون LiteralNode أو IdentifierNode...)
-    private final List<ASTNode> values; // قائمة القيم (قد تكون FunctionCallNode أو BinaryOpNode...)
+    private final List<ASTNode> keys;
+    private final List<ASTNode> values;
 
     public DictNode(int line, int col) {
         super("DictNode", line, col);
@@ -16,15 +16,11 @@ public class DictNode extends ASTNode {
         this.values = new ArrayList<>();
     }
 
-    /**
-     * إضافة زوج (مفتاح وقيمة) كـ ASTNode وربطهما بالشجرة
-     */
     public void addPair(ASTNode key, ASTNode value) {
         if (key != null && value != null) {
             this.keys.add(key);
             this.values.add(value);
 
-            // إضافة المفتاح والقيمة كأبناء لطباعتهم في الشجرة
             this.addChild(key);
             this.addChild(value);
         }
@@ -40,7 +36,6 @@ public class DictNode extends ASTNode {
         return "{}";
     }
 
-    // Getters
     public List<ASTNode> getKeys() {
         return keys;
     }

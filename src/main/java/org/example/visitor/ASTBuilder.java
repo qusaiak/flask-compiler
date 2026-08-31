@@ -9,9 +9,6 @@ import org.example.gen.FlaskParserBaseVisitor;
 
 public class ASTBuilder extends FlaskParserBaseVisitor<ASTNode> {
 
-    // ════════════════════════════════════════════════════════════
-    // HELPER METHODS
-    // ════════════════════════════════════════════════════════════
 
     @Override
     public ASTNode visit(org.antlr.v4.runtime.tree.ParseTree tree) {
@@ -63,9 +60,6 @@ public class ASTBuilder extends FlaskParserBaseVisitor<ASTNode> {
         }
     }
 
-    // ════════════════════════════════════════════════════════════
-    // ROOT & BASICS
-    // ════════════════════════════════════════════════════════════
     @Override
     public ASTNode visitFlaskTemplate(FlaskParser.FlaskTemplateContext ctx) {
         HtmlFileNode root = new HtmlFileNode(
@@ -130,9 +124,6 @@ public class ASTBuilder extends FlaskParserBaseVisitor<ASTNode> {
         return null;
     }
 
-    // ════════════════════════════════════════════════════════════
-    // HTML ELEMENTS
-    // ════════════════════════════════════════════════════════════
     @Override
     public ASTNode visitNormalElement(FlaskParser.NormalElementContext ctx) {
         if (ctx.openTag() == null || ctx.openTag().HTML_OPEN_TAG() == null) return null;
@@ -272,7 +263,6 @@ public class ASTBuilder extends FlaskParserBaseVisitor<ASTNode> {
             }
         }
 
-        // 2. قراءة الـ ELIF إن وجدت
         if (ctx.j2ElifClause() != null) {
             for (FlaskParser.J2ElifClauseContext elifCtx : ctx.j2ElifClause()) {
                 ASTNode elifNode = visit(elifCtx);
@@ -280,7 +270,6 @@ public class ASTBuilder extends FlaskParserBaseVisitor<ASTNode> {
             }
         }
 
-        // 3. قراءة الـ ELSE إن وجدت
         if (ctx.j2ElseClause() != null) {
             ASTNode elseNode = visit(ctx.j2ElseClause());
             if (elseNode != null) node.addChildElement(elseNode);
@@ -298,7 +287,6 @@ public class ASTBuilder extends FlaskParserBaseVisitor<ASTNode> {
 
         JinjaIfNode elifNode = new JinjaIfNode("elif", condNode, line, col);
 
-        // نستخدم ctx.htmlNode() مباشرة
         if (ctx.htmlNode() != null) {
             for (FlaskParser.HtmlNodeContext child : ctx.htmlNode()) {
                 ASTNode c = visit(child);
@@ -315,7 +303,6 @@ public class ASTBuilder extends FlaskParserBaseVisitor<ASTNode> {
 
         JinjaIfNode elseNode = new JinjaIfNode("else", null, line, col);
 
-        // المرور المباشر على الأبناء وتجاهل الكلمات المفتاحية
         if (ctx.children != null) {
             for (org.antlr.v4.runtime.tree.ParseTree child : ctx.children) {
                 if (child instanceof FlaskParser.HtmlNodeContext) {
@@ -329,9 +316,6 @@ public class ASTBuilder extends FlaskParserBaseVisitor<ASTNode> {
 
         return elseNode;
     }
-    // ════════════════════════════════════════════════════════════
-    // CSS (داخل <style>...</style>)
-    // ════════════════════════════════════════════════════════════
     private ASTNode visitCssItemInStyleNode(FlaskParser.CssItemInStyleContext ctx) {
         if (ctx == null) return null;
         if (ctx.cssRuleInStyle() != null) {
@@ -486,8 +470,6 @@ public class ASTBuilder extends FlaskParserBaseVisitor<ASTNode> {
         int col = ctx.getStart().getCharPositionInLine();
         HtmlElementNode script = new HtmlElementNode("script", false, line, col);
 
-        // SCRIPT_OPEN يحتفظ بوسم الفتح كاملًا في lexer الحالي، بينما لا تعرض
-        // grammar السمات كعقد مستقلة. نستخرج src من النص الخام دون تعديل ANTLR.
         FlaskParser.ScriptElementContext scriptContext = ctx.scriptElement();
         String openTag = scriptContext.SCRIPT_OPEN().getText();
         java.util.regex.Matcher srcMatcher = java.util.regex.Pattern
@@ -509,9 +491,6 @@ public class ASTBuilder extends FlaskParserBaseVisitor<ASTNode> {
         return script;
     }
 
-    // ════════════════════════════════════════════════════════════
-    // JINJA2 STATEMENTS
-    // ════════════════════════════════════════════════════════════
     @Override
     public ASTNode visitJ2ForStmt(FlaskParser.J2ForStmtContext ctx) {
         int line = ctx.getStart().getLine();

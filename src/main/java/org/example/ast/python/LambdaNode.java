@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LambdaNode extends ASTNode {
-    private final List<ASTNode> parameters; // معاملات دالة اللامدا (مثل IdentifierNode)
-    private ASTNode body;                   // جسم اللامدا (تعبير برمجي واحد يرجع قيمته)
+    private final List<ASTNode> parameters;
+    private ASTNode body;
 
     public LambdaNode(int line, int col) {
         super("LambdaNode", line, col);
@@ -16,9 +16,6 @@ public class LambdaNode extends ASTNode {
         this.body = null;
     }
 
-    /**
-     * إضافة معامل (Parameter) لدالة اللامدا وربطه كابن في الشجرة
-     */
     public void addParameter(ASTNode param) {
         if (param != null) {
             this.parameters.add(param);
@@ -26,9 +23,6 @@ public class LambdaNode extends ASTNode {
         }
     }
 
-    /**
-     * تحديد التعبير البرمجي الذي يمثل جسم اللامدا وربطه كابن في الشجرة
-     */
     public void setBody(ASTNode body) {
         this.body = body;
         if (body != null) {
@@ -46,7 +40,6 @@ public class LambdaNode extends ASTNode {
         return "lambda";
     }
 
-    // Getters
     public List<ASTNode> getParameters() {
         return parameters;
     }

@@ -7,16 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GlobalNode extends ASTNode {
-    private final List<ASTNode> names; // الأسماء المحددة كـ global (تكون عادة IdentifierNode)
+    private final List<ASTNode> names;
 
     public GlobalNode(int line, int col) {
         super("GlobalNode", line, col);
         this.names = new ArrayList<>();
     }
 
-    /**
-     * إضافة اسم متغير عام (Global Name) وربطه كابن في الشجرة
-     */
     public void addName(ASTNode name) {
         if (name != null) {
             this.names.add(name);
@@ -34,7 +31,6 @@ public class GlobalNode extends ASTNode {
         return "global";
     }
 
-    // Getter
     public List<ASTNode> getNames() {
         return names;
     }

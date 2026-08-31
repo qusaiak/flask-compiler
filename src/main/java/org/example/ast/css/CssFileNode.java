@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CssFileNode extends ASTNode {
-    private final String fileName;       // اسم أو مسار ملف الـ CSS
-    private final List<ASTNode> rules;   // القواعد والتوجيهات الداخلية ضمن الملف
+    private final String fileName;
+    private final List<ASTNode> rules;
 
     public CssFileNode(String fileName, int line, int col) {
         super("CssFileNode", line, col);
@@ -16,9 +16,6 @@ public class CssFileNode extends ASTNode {
         this.rules = new ArrayList<>();
     }
 
-    /**
-     * إضافة قاعدة CSS أو At-Rule جديدة للملف وربطها كابن في الشجرة الهرمية
-     */
     public void addRule(ASTNode rule) {
         if (rule != null) {
             this.rules.add(rule);

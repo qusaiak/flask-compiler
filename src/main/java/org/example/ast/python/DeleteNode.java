@@ -7,16 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DeleteNode extends ASTNode {
-    private final List<ASTNode> targets; // الأهداف المراد حذفها (قد تكون IdentifierNode, AttributeNode, SubscriptNode...)
+    private final List<ASTNode> targets;
 
     public DeleteNode(int line, int col) {
         super("DeleteNode", line, col);
         this.targets = new ArrayList<>();
     }
 
-    /**
-     * إضافة هدف مراد حذفه كـ ASTNode وربطه كابن في الشجرة
-     */
     public void addTarget(ASTNode target) {
         if (target != null) {
             this.targets.add(target);
@@ -34,7 +31,6 @@ public class DeleteNode extends ASTNode {
         return "del";
     }
 
-    // Getter
     public List<ASTNode> getTargets() {
         return targets;
     }

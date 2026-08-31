@@ -59,7 +59,6 @@ public final class CompilerReportWriter {
         appendSemanticSection("Jinja — " + inputPath, symbolTable, semanticErrors);
     }
 
-    /** يضيف سطراً إلى سجل مرحلة التوليد (generation_log.txt). */
     public static void logGeneration(String line) {
         generationLogLines.add(line);
     }

@@ -11,7 +11,6 @@ app = Flask(
     static_folder=str(APP_ROOT / "static"),
 )
 
-# مجلد حفظ الصور المرفوعة
 UPLOAD_FOLDER = APP_ROOT / "static" / "uploads"
 UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = str(UPLOAD_FOLDER)
@@ -29,7 +28,6 @@ def load_products():
             pass
 
     if not products:
-        # القائمة الافتراضية في حال عدم وجود الملف
         products = [
             {
                 "id": 1,
@@ -47,7 +45,6 @@ def load_products():
             },
         ]
 
-    # إعادة ترقيم الـ IDs تصاعدياً (1, 2, 3, ...) لضمان عدم وجود فجوات
     for index, product in enumerate(products, start=1):
         product["id"] = index
 
@@ -85,7 +82,6 @@ def add_product():
         name = request.form.get("name", "").strip()
         details = request.form.get("details", "").strip()
 
-        # معالجة رفع الصورة من الجهاز
         image_filename = "default.jpg"
         if 'image_file' in request.files:
             file = request.files['image_file']
@@ -115,7 +111,6 @@ def add_product():
 
     return render_template("AddProducts.html")
 
-# مسار تعديل المنتج
 @app.route("/edit/<int:product_id>", methods=["GET", "POST"])
 def edit_product(product_id):
     products = load_products()
@@ -133,7 +128,6 @@ def edit_product(product_id):
         except ValueError:
             pass
 
-        # إذا تم اختيار صورة جديدة أثناء التعديل
         if 'image_file' in request.files:
             file = request.files['image_file']
             if file and file.filename != '':

@@ -4,7 +4,7 @@ import org.example.ast.ASTNode;
 import org.example.ast.ASTVisitor;
 
 public class HtmlDoctypeNode extends ASTNode {
-    private final String doctype; // نوع أو نص الإعلان (مثل html)
+    private final String doctype;
 
     public HtmlDoctypeNode(String doctype, int line, int col) {
         super("HtmlDoctypeNode", line, col);

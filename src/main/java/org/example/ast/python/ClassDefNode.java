@@ -8,8 +8,8 @@ import java.util.List;
 
 public class ClassDefNode extends ASTNode {
     private final String className;
-    private final List<ASTNode> bases; // الكلاسات الأب الموروثة (مثل BaseModel, Mixin...)
-    private final List<ASTNode> body;  // محتوى الكلاس (الدوال والمتغيرات المعرفة داخله)
+    private final List<ASTNode> bases;
+    private final List<ASTNode> body;
 
     public ClassDefNode(String className, int line, int col) {
         super("ClassDefNode", line, col);
@@ -18,9 +18,6 @@ public class ClassDefNode extends ASTNode {
         this.body = new ArrayList<>();
     }
 
-    /**
-     * إضافة كلاس أم (Base Class) كـ ASTNode وربطه بالشجرة
-     */
     public void addBase(ASTNode base) {
         if (base != null) {
             this.bases.add(base);
@@ -46,7 +43,6 @@ public class ClassDefNode extends ASTNode {
         return className;
     }
 
-    // Getters
     public String getClassName() {
         return className;
     }

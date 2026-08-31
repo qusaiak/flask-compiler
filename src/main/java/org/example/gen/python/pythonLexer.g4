@@ -27,10 +27,8 @@ lexer grammar pythonLexer;
     }
 
     private void handleNewline() {
-        // 1. لو داخل أقواس — تجاهل NEWLINE/INDENT/DEDENT كلياً
         if (openBrackets > 0) return;
 
-        // 2. ✅ الإصلاح: لو السطر فارغ أو مجرد تعليق — لا تقم بتوليد أي INDENT/DEDENT/NEWLINE
         int nextChar = _input.LA(1);
         if (nextChar == '#' || nextChar == '\r' || nextChar == '\n' || nextChar == org.antlr.v4.runtime.IntStream.EOF) {
             return;
@@ -84,7 +82,7 @@ lexer grammar pythonLexer;
 
 tokens { INDENT, DEDENT }
 
-// ── Keywords ─────────────────────────────────────────────────
+// Keywords
 KW_DEF      : 'def'      ;   KW_CLASS    : 'class'    ;
 KW_RETURN   : 'return'   ;   KW_IMPORT   : 'import'   ;
 KW_FROM     : 'from'     ;   KW_AS       : 'as'       ;
@@ -105,7 +103,7 @@ TRUE        : 'True'     ;
 FALSE       : 'False'    ;
 NONE        : 'None'     ;
 
-// ── Operators ─────────────────────────────────────────────────
+// Operators
 AUGASSIGN   : '+=' | '-=' | '*=' | '/=' | '//=' | '%=' | '**='
             | '&=' | '|=' | '^=' | '>>=' | '<<='               ;
 ARROW       : '->'  ;
@@ -124,7 +122,6 @@ ELLIPSIS    : '...' ;
 DOT         : '.'  ;   COLON   : ':'  ;   SEMI    : ';'  ;
 COMMA       : ','  ;
 
-// ✅ الأقواس — تزيد وتنقص الـ counter
 LPAREN   : '(' { openBrackets++; } ;
 RPAREN   : ')' { openBrackets--; } ;
 LBRACKET : '[' { openBrackets++; } ;
@@ -132,7 +129,7 @@ RBRACKET : ']' { openBrackets--; } ;
 LBRACE   : '{' { openBrackets++; } ;
 RBRACE   : '}' { openBrackets--; } ;
 
-// ── String literals ───────────────────────────────────────────
+// String literals
 STRING
     : STRING_PREFIX? ( TRIPLE_DQ | TRIPLE_SQ | DQ_STR | SQ_STR )
     ;
@@ -142,7 +139,7 @@ fragment TRIPLE_SQ     : '\'\'\'' .*? '\'\'\''                   ;
 fragment DQ_STR        : '"'  ( '\\' . | ~["\\\r\n] )* '"'      ;
 fragment SQ_STR        : '\'' ( '\\' . | ~['\\\r\n] )* '\''     ;
 
-// ── Number literals ───────────────────────────────────────────
+// Number literals
 NUMBER
     : '0' [xX] [0-9a-fA-F]+ [lL]?
     | '0' [oO] [0-7]+        [lL]?
@@ -156,7 +153,7 @@ NUMBER
 
 IDENT : [a-zA-Z_\u0080-\uffff] [a-zA-Z0-9_\u0080-\uffff]* ;
 
-// ── Indentation ───────────────────────────────────────────────
+// Indentation
 NEWLINE_WS
     : ('\r'? '\n') [ \t]* { handleNewline(); }
       -> skip

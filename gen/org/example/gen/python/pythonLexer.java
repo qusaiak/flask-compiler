@@ -1,4 +1,3 @@
-// Generated from D:/compiler_project_finally/FlaskJinjaCompilerUnifiedDynamic/FlaskJinjaCompilerUnifiedDynamic/src/main/java/org/example/gen/python/pythonLexer.g4 by ANTLR 4.13.2
 package org.example.gen.python;
  package org.example.gen.python; 
 import org.antlr.v4.runtime.Lexer;
@@ -146,10 +145,8 @@ public class pythonLexer extends Lexer {
 	    }
 
 	    private void handleNewline() {
-	        // 1. لو داخل أقواس — تجاهل NEWLINE/INDENT/DEDENT كلياً
 	        if (openBrackets > 0) return;
 
-	        // 2. ✅ الإصلاح: لو السطر فارغ أو مجرد تعليق — لا تقم بتوليد أي INDENT/DEDENT/NEWLINE
 	        int nextChar = _input.LA(1);
 	        if (nextChar == '#' || nextChar == '\r' || nextChar == '\n' || nextChar == org.antlr.v4.runtime.IntStream.EOF) {
 	            return;

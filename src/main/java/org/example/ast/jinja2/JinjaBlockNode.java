@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JinjaBlockNode extends ASTNode {
-    private final String blockName;      // اسم كتلة القالب (مثل content, header)
+    private final String blockName;
     private final List<ASTNode> children;
 
     public JinjaBlockNode(String blockName, int line, int col) {
@@ -16,9 +16,6 @@ public class JinjaBlockNode extends ASTNode {
         this.children = new ArrayList<>();
     }
 
-    /**
-     * إضافة عنصر أو محتوى داخلي جديد داخل كتلة Jinja وربطه في الشجرة الهرمية
-     */
     public void addChildElement(ASTNode child) {
         if (child != null) {
             this.children.add(child);

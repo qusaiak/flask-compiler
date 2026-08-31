@@ -4,7 +4,7 @@ import org.example.ast.ASTNode;
 import org.example.ast.ASTVisitor;
 
 public class CssSelectorNode extends ASTNode {
-    private final String selectorText; // نص أو تعبير المحدد (مثل .product-card أو #header)
+    private final String selectorText;
 
     public CssSelectorNode(String selectorText, int line, int col) {
         super("CssSelectorNode", line, col);

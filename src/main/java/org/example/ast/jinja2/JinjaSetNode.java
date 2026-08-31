@@ -4,15 +4,14 @@ import org.example.ast.ASTNode;
 import org.example.ast.ASTVisitor;
 
 public class JinjaSetNode extends ASTNode {
-    private final String varName;   // اسم المتغير المراد إسناد القيمة إليه (مثل title, total)
-    private final ASTNode value;    // القيمة أو التعبير المسند للمتغير (مثل LiteralNode أو تعبير حسابي)
+    private final String varName;
+    private final ASTNode value;
 
     public JinjaSetNode(String varName, ASTNode value, int line, int col) {
         super("JinjaSetNode", line, col);
         this.varName = varName;
         this.value = value;
 
-        // ربط القيمة المسندة كابن في الشجرة الهرمية إن وجدت
         if (value != null) {
             this.addChild(value);
         }

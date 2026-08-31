@@ -125,12 +125,10 @@ public class CodeGenerator {
                 : " " + attribute.getAttrName() + "=\"" + value + "\"";
     }
 
-    /** يحوّل عقدة CssRule إلى selector { property: value; }. */
     private String renderCssRule(CssRuleNode rule) {
         StringBuilder css = new StringBuilder();
         css.append(rule.getSelector()).append(" {\n");
 
-        // ASTBuilder في مشروعك يربط declarations كأبناء، لذلك نمر على children.
         for (ASTNode child : rule.getChildren()) {
             if (child instanceof CssDeclarationNode declaration) {
                 css.append("  ").append(renderCssDeclaration(declaration)).append("\n");
@@ -141,7 +139,6 @@ public class CodeGenerator {
         return css.toString();
     }
 
-    /** يحوّل CssDeclaration إلى property: value; */
     private String renderCssDeclaration(CssDeclarationNode declaration) {
         String value = declaration.getCssValue() == null
                 ? ""
@@ -159,7 +156,6 @@ public class CodeGenerator {
         String iterableExpression = forNode.getIterable().getValue().trim();
         Object source = resolveExpression(iterableExpression);
         if (!(source instanceof Iterable<?> iterable)) {
-            // لا نطبع تعبيرًا خاطئًا ولا ننشئ بطاقة وهمية عندما لا توجد بيانات.
             return "";
         }
 
@@ -225,7 +221,6 @@ public class CodeGenerator {
         return result.toString();
     }
 
-    /** ينفذ if / elif / else ويطبع الفرع المطابق فقط. */
     private String renderJinjaIf(JinjaIfNode ifNode) {
         String type = ifNode.getNodeType();
         if ("JinjaElse".equals(type)) {
@@ -236,7 +231,6 @@ public class CodeGenerator {
             return renderBranchChildren(ifNode);
         }
 
-        // بعد أبناء if يبحث عن أول elif صحيح أو عن else.
         for (ASTNode child : ifNode.getChildren()) {
             if (child instanceof JinjaIfNode branch && child != ifNode.getCondition()) {
                 if ("JinjaElif".equals(branch.getNodeType())) {
@@ -255,11 +249,9 @@ public class CodeGenerator {
     private String renderBranchChildren(JinjaIfNode branch) {
         StringBuilder output = new StringBuilder();
         for (ASTNode child : branch.getChildren()) {
-            // شرط الفرع ليس جزءًا من HTML.
             if (child == branch.getCondition()) {
                 continue;
             }
-            // فروع elif/else يعالجها renderJinjaIf للأب.
             if (child instanceof JinjaIfNode) {
                 continue;
             }
@@ -285,7 +277,6 @@ public class CodeGenerator {
         return true;
     }
 
-    /** يستبدل {{ product.name }} داخل قيم السمات عندما يكون المتغير متاحًا في context. */
     private String renderInlineJinja(String text) {
         Pattern expression = Pattern.compile("\\{\\{\\s*([^}]+?)\\s*}}");
         Matcher matcher = expression.matcher(text);
@@ -300,7 +291,6 @@ public class CodeGenerator {
         return result.toString();
     }
 
-    /** يقيّم تعبيرًا بسيطًا أو سلسلة فلاتر مثل name|upper أو products|join(', '). */
     private Object evaluateJinjaExpression(String expression) {
         List<String> parts = splitPipeline(expression);
         if (parts.isEmpty()) return null;
@@ -481,10 +471,6 @@ public class CodeGenerator {
         return trimmed;
     }
 
-    /**
-     * يمنع تكرار style: إن كان styles block يحمل <style> فعليًا، يكتبه كما هو؛
-     * وإلا يلف CSS الخام في style واحد.
-     */
     private String formatValue(Object value) {
         if (value instanceof Double number && number == Math.rint(number)) {
             return String.valueOf(number.longValue());

@@ -9,7 +9,6 @@ import java.util.Set;
 
 public class SymbolTable {
 
-    // بنية داخلية لتمثيل النطاق (Scope) وربطه بالنطاق الأب
     private static class Scope {
         private final Map<String, Symbol> symbols = new HashMap<>();
         private final Scope parent;
@@ -20,29 +19,22 @@ public class SymbolTable {
     }
 
     private Scope currentScope;
-    // سجل العرض يحفظ الرموز حتى بعد الخروج من النطاق المحلي، مثل product في JinjaFor.
     private final List<Symbol> allDefinedSymbols = new ArrayList<>();
-    // 👈 لتتبع متغيرات For التي انتهى نطاقها (الخطأ 9)
     private final Set<String> expiredLoopVars = new HashSet<>();
 
     public SymbolTable() {
-        // تهيئة النطاق العام (Global Scope) عند البدء
         this.currentScope = new Scope(null);
     }
 
     /**
-     * الدخول إلى نطاق محلي جديد (يستدعى عند دخول For, If, Block)
+     * Creates a child scope for local definitions.
      */
     public void enterScope() {
         currentScope = new Scope(currentScope);
     }
 
-    /**
-     * الخروج من النطاق الحالي والعودة للنطاق الأب
-     */
     public void exitScope() {
         if (currentScope != null) {
-            // حفظ اسم متغير الحلقة قبل تدمير نطاقه لكشف استخدامه الخارجي لاحقاً (الخطأ 9)
             for (Symbol sym : currentScope.symbols.values()) {
                 if ("LOOP_VARIABLE".equalsIgnoreCase(sym.getCategory())) {
                     expiredLoopVars.add(sym.getName());
@@ -54,18 +46,11 @@ public class SymbolTable {
         }
     }
 
-    /**
-     * فحص هل المتغير كان متغير حلقة وانتهى نطاقه (الخطأ 9)
-     */
     public boolean isExpiredLoopVar(String name) {
         return expiredLoopVars.contains(name);
     }
 
-    /**
-     * تعريف متغير جديد في النطاق الحالي
-     */
     public boolean define(String name, String category, int line) {
-        // 👇 الخطأ الدلالي رقم 6: منع إعادة تعريف متغيرات النظام المحجوزة في Flask و Jinja2
         String[] flaskReserved = {"request", "session", "config", "g", "super"};
         for (String fr : flaskReserved) {
             if (fr.equalsIgnoreCase(name)) {
@@ -85,23 +70,23 @@ public class SymbolTable {
     }
 
     /**
-     * البحث عن متغير (يبحث في النطاق الحالي، وإذا لم يجده يصعد تدريجياً للنطاقات العليا)
+     * Searches from the innermost scope outward and marks the resolved symbol used.
      */
     public Symbol lookup(String name) {
         Scope tempScope = currentScope;
         while (tempScope != null) {
             if (tempScope.symbols.containsKey(name)) {
                 Symbol sym = tempScope.symbols.get(name);
-                sym.markUsed(); // 👈 تعليم المتغير كـ "مُستخدم" عند قراءته (الخطأ 8)
+                sym.markUsed();
                 return sym;
             }
             tempScope = tempScope.parent;
         }
-        return null; // المتغير غير معرف نهائياً
+        return null;
     }
 
     /**
-     * 👈 دالة جديدة: فحص المتغيرات التي تم إعلانها ولم تُستدعَ أبداً (الخطأ 8)
+     * Reports unused SET_VAR symbols in the current scope and its ancestors.
      */
     public void checkUnusedVariables() {
         Scope tempScope = currentScope;
@@ -116,15 +101,15 @@ public class SymbolTable {
     }
 
     /**
-     * التحقق مما إذا كان المتغير معرّفاً في النطاق الحالي فقط (دون الصعود للأب)
+     * Checks the current scope only, without searching parent scopes.
      */
     public boolean isDefinedLocally(String name) {
         return currentScope.symbols.containsKey(name);
     }
 
-        /**
-     * يعيد نسخة للقراءة فقط من جميع الرموز التي عُرّفت أثناء التحليل،
-     * بما فيها رموز النطاقات التي انتهت، لاستخدامها في تقارير المترجم.
+    /**
+     * Returns an immutable snapshot of all symbols, including expired scopes,
+     * for compiler reports.
      */
     public List<Symbol> getAllDefinedSymbols() {
         return List.copyOf(allDefinedSymbols);

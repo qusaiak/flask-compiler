@@ -11,9 +11,6 @@ import org.example.gen.python.pythonParserBaseVisitor;
  */
 public class PythonASTBuilder extends pythonParserBaseVisitor<ASTNode> {
 
-    // ---------------------------------------------------------------------
-    // Program / statements
-    // ---------------------------------------------------------------------
 
     @Override
     public ASTNode visitProgram(pythonParser.ProgramContext ctx) {
@@ -72,9 +69,6 @@ public class PythonASTBuilder extends pythonParserBaseVisitor<ASTNode> {
         return visit(ctx.getChild(0));
     }
 
-    // ---------------------------------------------------------------------
-    // Imports
-    // ---------------------------------------------------------------------
 
     @Override
     public ASTNode visitImportStmt(pythonParser.ImportStmtContext ctx) {
@@ -151,10 +145,6 @@ public class PythonASTBuilder extends pythonParserBaseVisitor<ASTNode> {
         return node;
     }
 
-    // ---------------------------------------------------------------------
-    // Assignment / simple statements
-    // ---------------------------------------------------------------------
-
     @Override
     public ASTNode visitAssignStmt(
             pythonParser.AssignStmtContext ctx) {
@@ -167,9 +157,6 @@ public class PythonASTBuilder extends pythonParserBaseVisitor<ASTNode> {
 
         ASTNode value = visit(ctx.expression());
 
-        // a = b = 10
-        // becomes:
-        // a = (b = 10)
         for (int i = ctx.target().size() - 1; i >= 0; i--) {
 
             ASTNode target = visit(
@@ -470,9 +457,6 @@ public class PythonASTBuilder extends pythonParserBaseVisitor<ASTNode> {
         );
     }
 
-    // ---------------------------------------------------------------------
-    // Functions / classes / decorators
-    // ---------------------------------------------------------------------
 
     @Override
     public ASTNode visitDecoratedDef(
@@ -725,9 +709,6 @@ public class PythonASTBuilder extends pythonParserBaseVisitor<ASTNode> {
         return node;
     }
 
-    // ---------------------------------------------------------------------
-    // Control flow
-    // ---------------------------------------------------------------------
 
     @Override
     public ASTNode visitIfStmt(pythonParser.IfStmtContext ctx) {
@@ -996,7 +977,6 @@ public class PythonASTBuilder extends pythonParserBaseVisitor<ASTNode> {
                 ctx.getStart().getCharPositionInLine()
         );
 
-        // try body
         for (pythonParser.StatementContext stmt
                 : ctx.suite().get(0).statement()) {
 
@@ -1009,7 +989,6 @@ public class PythonASTBuilder extends pythonParserBaseVisitor<ASTNode> {
 
         int suiteIndex = 1;
 
-        // except
         for (int i = 0;
              i < ctx.exceptClause().size() &&
                      suiteIndex < ctx.suite().size();
@@ -1049,7 +1028,6 @@ public class PythonASTBuilder extends pythonParserBaseVisitor<ASTNode> {
             node.addHandler(handler);
         }
 
-        // else
         if (ctx.KW_ELSE() != null &&
                 suiteIndex < ctx.suite().size()) {
 
@@ -1066,7 +1044,6 @@ public class PythonASTBuilder extends pythonParserBaseVisitor<ASTNode> {
             suiteIndex++;
         }
 
-        // finally
         if (ctx.KW_FINALLY() != null &&
                 suiteIndex < ctx.suite().size()) {
 
@@ -1084,9 +1061,6 @@ public class PythonASTBuilder extends pythonParserBaseVisitor<ASTNode> {
         return node;
     }
 
-    // ---------------------------------------------------------------------
-    // Expressions
-    // ---------------------------------------------------------------------
 
     @Override
     public ASTNode visitExpression(
@@ -1384,7 +1358,6 @@ public class PythonASTBuilder extends pythonParserBaseVisitor<ASTNode> {
         int col =
                 trailer.getStart().getCharPositionInLine();
 
-        // obj.attribute
         if (trailer.DOT() != null &&
                 trailer.IDENT() != null) {
 
@@ -1396,7 +1369,6 @@ public class PythonASTBuilder extends pythonParserBaseVisitor<ASTNode> {
             );
         }
 
-        // func(...)
         if (trailer.LPAREN() != null) {
 
             CallNode call =
@@ -1423,7 +1395,6 @@ public class PythonASTBuilder extends pythonParserBaseVisitor<ASTNode> {
             return call;
         }
 
-        // obj[expression]
         if (trailer.LBRACKET() != null &&
                 trailer.expression() != null) {
 
@@ -1438,9 +1409,6 @@ public class PythonASTBuilder extends pythonParserBaseVisitor<ASTNode> {
         return base;
     }
 
-    // ---------------------------------------------------------------------
-    // Atom
-    // ---------------------------------------------------------------------
 
     @Override
     public ASTNode visitAtom(pythonParser.AtomContext ctx) {
@@ -1513,8 +1481,7 @@ public class PythonASTBuilder extends pythonParserBaseVisitor<ASTNode> {
             );
         }
 
-                // افحص القوائم والقواميس قبل expression؛ لأن التعبيرات الداخلية
-        // قد تجعل القيمة الكاملة للـliteral تضيع من AST.
+
         if (ctx.LBRACKET() != null) {
             if (ctx.getChildCount() == 2) {
                 return new ListNode(line, column);
@@ -1523,14 +1490,12 @@ public class PythonASTBuilder extends pythonParserBaseVisitor<ASTNode> {
             return visitChildren(ctx);
         }
 
-                // {}
         if (ctx.LBRACE() != null) {
             if (ctx.getChildCount() == 2) {
                 return new DictNode(line, column);
             }
             return visitChildren(ctx);
         }
-        // (expression)
         if (ctx.expression() != null) {
             return visit(ctx.expression());
         }
@@ -1538,9 +1503,6 @@ public class PythonASTBuilder extends pythonParserBaseVisitor<ASTNode> {
     }
 
 
-// ---------------------------------------------------------------------
-// Collections
-// ---------------------------------------------------------------------
 
     @Override
     public ASTNode visitLiteral(pythonParser.LiteralContext ctx) {
@@ -1577,7 +1539,6 @@ public class PythonASTBuilder extends pythonParserBaseVisitor<ASTNode> {
                 ctx.getStart().getCharPositionInLine()
         );
 
-        // expression compFor+
         ASTNode element = visit(ctx.expression());
 
         if (element != null) {
@@ -1637,7 +1598,6 @@ public class PythonASTBuilder extends pythonParserBaseVisitor<ASTNode> {
                 ctx.getStart().getCharPositionInLine()
         );
 
-        // dictItem compFor+
         ASTNode pair = visit(ctx.dictItem());
 
         if (pair instanceof BinaryOpNode) {
@@ -1683,9 +1643,6 @@ public class PythonASTBuilder extends pythonParserBaseVisitor<ASTNode> {
         );
     }
 
-    // ---------------------------------------------------------------------
-    // Lambda / arguments
-    // ---------------------------------------------------------------------
 
     @Override
     public ASTNode visitLambdaExpr(
@@ -1742,7 +1699,6 @@ public class PythonASTBuilder extends pythonParserBaseVisitor<ASTNode> {
                             ? ctx.getChild(0).getText()
                             : "";
 
-            // keyword argument: name=value
             if (ctx.IDENT() != null) {
 
                 return new BinaryOpNode(
@@ -1760,7 +1716,6 @@ public class PythonASTBuilder extends pythonParserBaseVisitor<ASTNode> {
                 );
             }
 
-            // *expr / **expr
             if ("*".equals(prefix) ||
                     "**".equals(prefix)) {
 

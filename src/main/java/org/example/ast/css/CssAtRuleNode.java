@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CssAtRuleNode extends ASTNode {
-    private final String keyword;        // الكلمة المفتاحية (مثل media, keyframes, import)
-    private final ASTNode condition;     // الشرط أو النطاق (مثل LiteralNode أو تعبير معقد)
-    private final List<ASTNode> body;    // الأقسام أو القواعد الفرعية الداخلية (مثل قواعد CSS داخل @media)
+    private final String keyword;
+    private final ASTNode condition;
+    private final List<ASTNode> body;
 
     public CssAtRuleNode(String keyword, ASTNode condition, int line, int col) {
         super("CssAtRuleNode", line, col);
@@ -17,15 +17,11 @@ public class CssAtRuleNode extends ASTNode {
         this.condition = condition;
         this.body = new ArrayList<>();
 
-        // ربط الشرط أو المعامل كابن في الشجرة إن وجد
         if (condition != null) {
             this.addChild(condition);
         }
     }
 
-    /**
-     * إضافة قاعدة أو عنصر فرعي داخل نطاق الـ At-Rule (مثل قواعد CSS داخل استعلام الوسائط)
-     */
     public void addBodyStatement(ASTNode stmt) {
         if (stmt != null) {
             this.body.add(stmt);
